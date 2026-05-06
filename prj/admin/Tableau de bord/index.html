@@ -1,223 +1,161 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ISMO-SkillSwap — Tableau de bord Admin</title>
+  <title>ISMO-SkillSwap – Tableau de bord Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
- 
-  <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo">
-      <span class="logo-icon"><i class="fa-solid fa-layer-group"></i></span>
-      <span class="logo-text">ISMO-<strong>SkillSwap</strong></span>
-    </div>
- 
-    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
-      <i class="fa-solid fa-bars"></i>
-    </button>
- 
-    <nav class="sidebar-nav">
-      <a href="#" class="nav-item active">
-        <i class="fa-solid fa-house"></i>
-        <span>Tableau de bord</span>
-      </a>
-      <a href="#" class="nav-item">
-        <i class="fa-solid fa-users"></i>
-        <span>Utilisateurs</span>
-      </a>
-      <a href="#" class="nav-item">
-        <i class="fa-solid fa-graduation-cap"></i>
-        <span>Compétences</span>
-      </a>
-      <a href="#" class="nav-item">
-        <i class="fa-solid fa-shield-halved"></i>
-        <span>Badges</span>
-      </a>
-      <a href="#" class="nav-item">
-        <i class="fa-solid fa-file-lines"></i>
-        <span>Modération</span>
-      </a>
-      <a href="#" class="nav-item">
-        <i class="fa-solid fa-chart-bar"></i>
-        <span>Statistiques</span>
-      </a>
-      <a href="#" class="nav-item">
-        <i class="fa-solid fa-store"></i>
-        <span>Marketplace</span>
-      </a>
-    </nav>
-  </aside>
- 
-  <!-- OVERLAY (mobile) -->
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
- 
-  <!-- MAIN -->
-  <div class="main-wrapper" id="mainWrapper">
- 
-    <!-- TOPBAR -->
-    <header class="topbar">
-      <button class="menu-btn" id="menuBtn" aria-label="Open menu">
-        <i class="fa-solid fa-bars"></i>
-      </button>
-      <div class="topbar-right">
-        <button class="notif-btn" aria-label="Notifications">
-          <i class="fa-regular fa-bell"></i>
-          <span class="notif-badge">3</span>
-        </button>
-        <div class="admin-profile">
-          <div class="avatar"><i class="fa-solid fa-user"></i></div>
-          <div class="admin-info">
-            <span class="admin-name">Admin</span>
-            <span class="admin-role">Administrateur</span>
-          </div>
-        </div>
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo"></div>
+        <span>ISMO-SkillSwap</span>
       </div>
-    </header>
- 
-    <!-- PAGE CONTENT -->
-    <main class="content">
-      <div class="page-header">
-        <h1>Tableau de bord Admin</h1>
-        <p>Vue d'ensemble de la plateforme</p>
-      </div>
- 
-      <!-- STAT CARDS -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon blue"><i class="fa-solid fa-users"></i></div>
-          <div class="stat-body">
-            <span class="stat-label">Utilisateurs inscrits</span>
-            <span class="stat-value">260 <small>+12 ce mois</small></span>
+      <nav class="nav-menu">
+        <a class="nav-item active" href="#">
+          <span class="nav-icon nav-home"></span>
+          <span>Tableau de bord</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="nav-icon nav-users"></span>
+          <span>Utilisateurs</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="nav-icon nav-skills"></span>
+          <span>Compétences</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="nav-icon nav-badges"></span>
+          <span>Badges</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="nav-icon nav-moderation"></span>
+          <span>Modération</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="nav-icon nav-stats"></span>
+          <span>Statistiques</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="nav-icon nav-market"></span>
+          <span>Marketplace</span>
+        </a>
+      </nav>
+    </aside>
+
+    <div class="page-content">
+      <header class="topbar">
+        <div class="topbar-spacer"></div>
+        <div class="profile-block">
+          <div class="profile-meta">
+            <span class="profile-role">Admin</span>
+            <strong class="profile-name">Administrateur</strong>
           </div>
+          <div class="profile-avatar">A</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-icon teal"><i class="fa-solid fa-user-check"></i></div>
-          <div class="stat-body">
-            <span class="stat-label">Utilisateurs actifs</span>
-            <span class="stat-value">187</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon red"><i class="fa-solid fa-user-xmark"></i></div>
-          <div class="stat-body">
-            <span class="stat-label">Comptes suspendus</span>
-            <span class="stat-value">5</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon amber"><i class="fa-solid fa-triangle-exclamation"></i></div>
-          <div class="stat-body">
-            <span class="stat-label">Publications signalées</span>
-            <span class="stat-value">5</span>
-          </div>
-        </div>
-      </div>
- 
-      <!-- ALERTS -->
-      <div class="alert-box">
-        <div class="alert-title">
-          <i class="fa-solid fa-triangle-exclamation"></i>
-          <strong>Alertes</strong>
-        </div>
-        <ul class="alert-list">
-          <li>5 publications signalées en attente de modération</li>
-          <li>15 nouvelles demandes de compte à approuver</li>
-        </ul>
-      </div>
- 
-      <div class="bottom-grid">
-        <div class="card chart-card">
-          <h2 class="card-title">Répartition par rôle</h2>
-          <div class="donut-wrap">
-            <svg class="donut-svg" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
-              <!-- Stagiaires: ~85% -->
-              <circle class="donut-track" cx="80" cy="80" r="60" />
-              <circle class="donut-seg stagiaires" cx="80" cy="80" r="60"
-                stroke-dasharray="320 377"
-                stroke-dashoffset="0" />
-              <circle class="donut-seg formateurs" cx="80" cy="80" r="60"
-                stroke-dasharray="38 377"
-                stroke-dashoffset="-320" />
-              <circle class="donut-seg admins" cx="80" cy="80" r="60"
-                stroke-dasharray="19 377"
-                stroke-dashoffset="-358" />
-            </svg>
-            <div class="donut-center">
-              <span class="donut-total">260</span>
-              <span class="donut-sub">total</span>
+      </header>
+
+      <main class="content-area">
+        <section class="hero-section">
+          <h1>Tableau de bord Admin</h1>
+          <p>Vue d'ensemble de la plateforme</p>
+        </section>
+
+        <section class="stats-grid">
+          <article class="stat-card">
+            <div class="stat-head">
+              <strong>Utilisateurs inscrits</strong>
+              <span class="stat-icon icon-users"></span>
             </div>
+            <div class="stat-number">260</div>
+            <div class="stat-note"><span>+12</span> ce mois</div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-head">
+              <strong>Utilisateurs actifs</strong>
+              <span class="stat-icon icon-active"></span>
+            </div>
+            <div class="stat-number">187</div>
+            <div class="stat-note">&nbsp;</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-head">
+              <strong>Comptes suspendus</strong>
+              <span class="stat-icon icon-suspend"></span>
+            </div>
+            <div class="stat-number">5</div>
+            <div class="stat-note">&nbsp;</div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-head">
+              <strong>Publications signalées</strong>
+              <span class="stat-icon icon-flag"></span>
+            </div>
+            <div class="stat-number">5</div>
+            <div class="stat-note">&nbsp;</div>
+          </article>
+        </section>
+
+        <section class="alert-panel">
+          <div class="alert-header">
+            <span class="alert-label">Alertes</span>
+            <span class="alert-badge">!</span>
           </div>
-          <div class="legend">
-            <span class="legend-item"><span class="dot stagiaires-dot"></span>Stagiaires</span>
-            <span class="legend-item"><span class="dot formateurs-dot"></span>Formateurs</span>
-            <span class="legend-item"><span class="dot admins-dot"></span>Admins</span>
-          </div>
-        </div>
- 
-        <div class="card activity-card">
-          <h2 class="card-title">Activité récente</h2>
-          <ul class="activity-list">
-            <li class="activity-item">
-              <div class="activity-avatar a1"><i class="fa-solid fa-user"></i></div>
-              <div class="activity-body">
-                <p><strong>Ahmed Idrissi</strong> a publié une demande d'aide</p>
-              </div>
-              <span class="activity-time">il y a 5 min</span>
-            </li>
-            <li class="activity-item">
-              <div class="activity-avatar a2"><i class="fa-solid fa-user"></i></div>
-              <div class="activity-body">
-                <p><strong>Sara El Amrani</strong> a validé une compétence React</p>
-              </div>
-              <span class="activity-time">il y a 12 min</span>
-            </li>
-            <li class="activity-item">
-              <div class="activity-avatar a3"><i class="fa-solid fa-user"></i></div>
-              <div class="activity-body">
-                <p><strong>Prof. Benjelloun</strong> a attribué un badge</p>
-              </div>
-              <span class="activity-time">il y a 1h</span>
-            </li>
-            <li class="activity-item">
-              <div class="activity-avatar a4"><i class="fa-solid fa-user"></i></div>
-              <div class="activity-body">
-                <p><strong>Youssef Benali</strong> s'est inscrit</p>
-              </div>
-              <span class="activity-time">il y a 2h</span>
-            </li>
+          <ul class="alert-list">
+            <li>5 publications signalées en attente de modération</li>
+            <li>15 nouvelles demandes de compte à approuver</li>
           </ul>
-        </div>
- 
-      </div>
-    </main>
+        </section>
+
+        <section class="bottom-cards">
+          <article class="chart-card">
+            <div class="card-title">Répartition par rôle</div>
+            <div class="donut-chart" aria-hidden="true"></div>
+            <div class="chart-legend">
+              <div class="legend-item">
+                <span class="legend-color legend-blue"></span>
+                <span>Stagiaires</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color legend-green"></span>
+                <span>Formateurs</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color legend-orange"></span>
+                <span>Admins</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="activity-card">
+            <div class="card-title">Activité récente</div>
+            <div class="activity-item">
+              <p><strong>Ahmed Idrissi</strong> a publié une demande d'aide</p>
+              <span>il y a 5 min</span>
+            </div>
+            <div class="activity-item">
+              <p><strong>Sara El Amrani</strong> a validé une compétence React</p>
+              <span>il y a 12 min</span>
+            </div>
+            <div class="activity-item">
+              <p><strong>Prof. Benjelloun</strong> a attribué un badge</p>
+              <span>il y a 1 h</span>
+            </div>
+            <div class="activity-item">
+              <p><strong>Youssef Benali</strong> s'est inscrit</p>
+              <span>il y a 2 h</span>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
   </div>
- 
-  <script>
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebarOverlay');
-    const menuBtn = document.getElementById('menuBtn');
-    const sidebarToggle = document.getElementById('sidebarToggle');
- 
-    function openSidebar() {
-      sidebar.classList.add('open');
-      overlay.classList.add('visible');
-    }
-    function closeSidebar() {
-      sidebar.classList.remove('open');
-      overlay.classList.remove('visible');
-    }
- 
-    menuBtn.addEventListener('click', openSidebar);
-    overlay.addEventListener('click', closeSidebar);
- 
-    sidebarToggle.addEventListener('click', () => {
-      document.body.classList.toggle('sidebar-collapsed');
-    });
-  </script>
 </body>
 </html>
