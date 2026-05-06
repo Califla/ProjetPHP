@@ -130,10 +130,7 @@
         </ul>
       </div>
  
-      <!-- BOTTOM GRID -->
       <div class="bottom-grid">
- 
-        <!-- DONUT CHART -->
         <div class="card chart-card">
           <h2 class="card-title">Répartition par rôle</h2>
           <div class="donut-wrap">
@@ -143,11 +140,9 @@
               <circle class="donut-seg stagiaires" cx="80" cy="80" r="60"
                 stroke-dasharray="320 377"
                 stroke-dashoffset="0" />
-              <!-- Formateurs: ~10% -->
               <circle class="donut-seg formateurs" cx="80" cy="80" r="60"
                 stroke-dasharray="38 377"
                 stroke-dashoffset="-320" />
-              <!-- Admins: ~5% -->
               <circle class="donut-seg admins" cx="80" cy="80" r="60"
                 stroke-dasharray="19 377"
                 stroke-dashoffset="-358" />
@@ -164,7 +159,6 @@
           </div>
         </div>
  
-        <!-- ACTIVITY -->
         <div class="card activity-card">
           <h2 class="card-title">Activité récente</h2>
           <ul class="activity-list">
@@ -221,7 +215,6 @@
     menuBtn.addEventListener('click', openSidebar);
     overlay.addEventListener('click', closeSidebar);
  
-    // Desktop collapse toggle
     sidebarToggle.addEventListener('click', () => {
       document.body.classList.toggle('sidebar-collapsed');
     });

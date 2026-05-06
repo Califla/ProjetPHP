@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ISMO-SkillSwap – Tableau de bord</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="tableaubord.css">
+   
+
+</head>
+<body>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span>ISMO-SkillSwap</span>
+    </div>
+    <nav class="sidebar-nav">
+
+      <div class="nav-item active" onclick="setPage(this,'dashboard')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        <span>Tableau de bord</span>
+      </div>
+
+      <div class="nav-item" onclick="setPage(this,'demandes')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+        </svg>
+        <span>Mes demandes</span>
+      </div>
+
+      <div class="nav-item" onclick="setPage(this,'competences')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+        <span>Compétences &amp; Badges</span>
+      </div>
+
+      <div class="nav-item" onclick="setPage(this,'passeport')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>Passeport</span>
+      </div>
+
+      <div class="nav-item" onclick="setPage(this,'marketplace')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        <span>Marketplace</span>
+      </div>
+
+    </nav>
+  </aside>
+
+  <header class="header">
+    <button class="notif-btn">
+      <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-dot"></span>
+    </button>
+    <div class="user-pill">
+      <div class="user-info">
+        <div class="user-name">Ahmed Idrissi</div>
+        <div class="user-role">Stagiaire DEV 101</div>
+      </div>
+      <div class="user-avatar">AI</div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="page-title">Tableau de bord</div>
+    <div class="page-sub">Vue d'ensemble de vos activités</div>
+
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-label">Aides données</span>
+          <svg class="stat-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg>
+        </div>
+        <div class="stat-value">12</div>
+        <div class="stat-sub"><span class="up">+3</span> ce mois</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-label">Note moyenne</span>
+          <svg class="stat-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="stat-value">4.6</div>
+        <div class="stat-sub">&nbsp;</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-label">Compétences</span>
+          <svg class="stat-icon" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+        <div class="stat-value">8</div>
+        <div class="stat-sub">2 validées</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-label">Points / Rang</span>
+          <svg class="stat-icon" viewBox="0 0 24 24"><polyline points="8 6 2 12 8 18"/><polyline points="16 6 22 12 16 18"/></svg>
+        </div>
+        <div class="stat-value">450</div>
+        <div class="stat-sub">#12 sur 85</div>
+      </div>
+    </div>
+
+    <div class="bottom-grid">
+
+      <!-- MES BADGES -->
+      <div class="card">
+        <div class="card-title">Mes Badges</div>
+        <div class="badge-list" id="badge-list"></div>
+        <div id="badge-empty" style="display:none; font-size:0.85rem; color:var(--gray-text); text-align:center; padding:20px 0;">
+          Aucun badge confirmé pour le moment.<br/>Votre formateur vous en attribuera.
+        </div>
+      </div>
+
+      <!-- TOP MENTORS -->
+      <div class="card">
+        <div class="card-title">Top Mentors</div>
+        <div class="mentor-list">
+          <div class="mentor-item">
+            <span class="mentor-rank">#1</span>
+            <div class="mentor-avatar" style="background:#3b82f6">Sa</div>
+            <div class="mentor-info">
+              <div class="mentor-name">Sarah El A…</div>
+              <div class="mentor-aides">47 aides</div>
+            </div>
+            <div class="mentor-rating">
+              <svg class="star-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.9
+            </div>
+          </div>
+          <div class="mentor-item">
+            <span class="mentor-rank">#2</span>
+            <div class="mentor-avatar" style="background:#8b5cf6">Yo</div>
+            <div class="mentor-info">
+              <div class="mentor-name">Youssef B…</div>
+              <div class="mentor-aides">38 aides</div>
+            </div>
+            <div class="mentor-rating">
+              <svg class="star-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.8
+            </div>
+          </div>
+          <div class="mentor-item">
+            <span class="mentor-rank">#3</span>
+            <div class="mentor-avatar" style="background:#10b981">Fa</div>
+            <div class="mentor-info">
+              <div class="mentor-name">Fatima Za…</div>
+              <div class="mentor-aides">35 aides</div>
+            </div>
+            <div class="mentor-rating">
+              <svg class="star-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.7
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEMANDES RÉCENTES -->
+      <div class="card">
+        <div class="card-title">Demandes récentes</div>
+        <div class="demande-list">
+          <div class="demande-item">
+            <div class="demande-row">
+              <span class="demande-title">Aide React Hooks</span>
+              <span class="badge-status resolu">Résolu</span>
+            </div>
+            <div class="demande-time">il y a 2 heures</div>
+          </div>
+          <div class="demande-item">
+            <div class="demande-row">
+              <span class="demande-title">Problème avec Git merge</span>
+              <span class="badge-status ouvert">Ouvert</span>
+            </div>
+            <div class="demande-time">il y a 5 heures</div>
+          </div>
+          <div class="demande-item">
+            <div class="demande-row">
+              <span class="demande-title">CSS Grid vs Flexbox</span>
+              <span class="badge-status resolu">Résolu</span>
+            </div>
+            <div class="demande-time">il y a 1 jour</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<div class="help-btn">?</div>
+
+<script>
+  // ── BADGE DATA ──────────────────────────────────────────────
+  // confirmed: true  → badge attribué par formateur → affiché
+  // confirmed: false → pas encore attribué          → invisible
+  const ALL_BADGES = [
+    {
+      id: 'premier_pas',
+      emoji: '🎯',
+      label: 'Premier pas',
+      description: 'A donné sa première aide',
+      confirmed: true,
+      confirmedBy: 'Mme. Benali (Formateur)',
+      confirmedAt: 'il y a 3 jours'
+    },
+    {
+      id: 'mentor_actif',
+      emoji: '⭐',
+      label: 'Mentor actif',
+      description: 'A aidé +10 stagiaires',
+      confirmed: true,
+      confirmedBy: 'M. Rachidi (Formateur)',
+      confirmedAt: 'il y a 1 semaine'
+    },
+    {
+      id: 'expert_react',
+      emoji: '⚛️',
+      label: 'Expert React',
+      description: 'Maîtrise validée en React',
+      confirmed: false,
+      confirmedBy: null,
+      confirmedAt: null
+    },
+    {
+      id: 'git_master',
+      emoji: '🌿',
+      label: 'Git Master',
+      description: 'Maîtrise de Git & GitHub',
+      confirmed: false,
+      confirmedBy: null,
+      confirmedAt: null
+    }
+  ];
+
+  // ── RENDER BADGES ────────────────────────────────────────────
+  function renderBadges() {
+    const list  = document.getElementById('badge-list');
+    const empty = document.getElementById('badge-empty');
+
+    // Afficher UNIQUEMENT les badges confirmés par un formateur
+    const earned = ALL_BADGES.filter(b => b.confirmed);
+
+    if (earned.length === 0) {
+      list.style.display  = 'none';
+      empty.style.display = 'block';
+      return;
+    }
+
+    list.style.display  = 'flex';
+    empty.style.display = 'none';
+    list.innerHTML = '';
+
+    earned.forEach(b => {
+      const div = document.createElement('div');
+      div.className = 'badge-item';
+      div.title = `Confirmé par : ${b.confirmedBy} — ${b.confirmedAt}`;
+      div.innerHTML = `
+        <span class="badge-emoji">${b.emoji}</span>
+        <div style="flex:1">
+          <div style="font-weight:600">${b.label}</div>
+          <div style="font-size:0.75rem;color:var(--gray-text)">${b.description}</div>
+        </div>
+        <span style="font-size:0.7rem;color:#15803d;background:#dcfce7;padding:2px 8px;border-radius:20px;font-weight:600;">✓ Confirmé</span>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  // ── NAV ─────────────────────────────────────────────────────
+  function setPage(el, page) {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ── INIT ─────────────────────────────────────────────────────
+  renderBadges();
+</script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ISMO-SkillSwap – Inscription</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="inscription.css">
+
+</head>
+
+<body>
+
+
+  <div class="left">
+    <div class="brand-wrapper">
+      <div class="jsp">
+        <img src="logoofppt.jpg" class="logofppt">
+        <div class="brand">
+          <h1>ISMO-SkillSwap</h1>
+          <p>Plateforme d'échange de compétences ISMO Tétouan</p>
+        </div>
+      </div>
+    </div>
+    <div class="features">
+      <h2>Rejoignez la communauté</h2>
+      <div class="feature-item">
+        <div class="feature-icon"><svg viewBox="0 0 24 24">
+            <path d="M20 6L9 17l-5-5" />
+          </svg></div>
+        <span class="feature-text">Créez votre profil de compétences</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><svg viewBox="0 0 24 24">
+            <path d="M20 6L9 17l-5-5" />
+          </svg></div>
+        <span class="feature-text">Partagez vos connaissances avec vos pairs</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><svg viewBox="0 0 24 24">
+            <path d="M20 6L9 17l-5-5" />
+          </svg></div>
+        <span class="feature-text">Développez votre expertise reconnue</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><svg viewBox="0 0 24 24">
+            <path d="M20 6L9 17l-5-5" />
+          </svg></div>
+        <span class="feature-text">Accédez à l'entraide collaborative</span>
+      </div>
+    </div>
+    <p class="footer-text">© 2026 ISMO Tétouan – Institut Spécialisé dans les métiers de l'offshoring</p>
+  </div>
+
+  <main class="right">
+
+    <div class="step active" id="step-role">
+      <div class="role-step">
+        <h2>Inscription</h2>
+        <p class="subtitle">Choisissez votre rôle pour commencer</p>
+
+        <div class="role-cards">
+          <div class="role-card" data-role="stagiaire" onclick="selectRole(this)">
+            <div class="role-icon stagiaire">🎓</div>
+            <div class="role-info">
+              <h3>Stagiaire</h3>
+              <p>Apprenez, échangez des compétences et progressez avec vos pairs</p>
+            </div>
+            <div class="role-check"></div>
+          </div>
+
+          <div class="role-card" data-role="formateur" onclick="selectRole(this)">
+            <div class="role-icon formateur">👨‍🏫</div>
+            <div class="role-info">
+              <h3>Formateur</h3>
+              <p>Encadrez les stagiaires et partagez votre expertise professionnelle</p>
+            </div>
+            <div class="role-check"></div>
+          </div>
+
+          <div class="role-card" data-role="admin" onclick="selectRole(this)">
+            <div class="role-icon admin">🛡️</div>
+            <div class="role-info">
+              <h3>Administrateur</h3>
+              <p>Gérez la plateforme, les filières et les utilisateurs ISMO</p>
+            </div>
+            <div class="role-check"></div>
+          </div>
+        </div>
+
+        <button class="btn-continue" id="btn-continue" onclick="goToForm()">Continuer →</button>
+        <p class="login-link" style="margin-top:20px">Déjà un compte ? <a href="connexion.html">Se connecter</a></p>
+      </div>
+    </div>
+
+    <div class="step" id="step-form">
+      <div class="card">
+        <div class="card-header">
+          <h2>Inscription</h2>
+          <p class="subtitle">Créez votre compte SkillSwap</p>
+        </div>
+
+        <div class="role-badge" onclick="goBack()" title="Changer de rôle">
+          <span id="badge-icon">🎓</span>
+          <span id="badge-label">Stagiaire</span>
+          <span style="margin-left:4px;opacity:0.6">✕</span>
+        </div>
+
+        <div class="row-2">
+          <div class="field">
+            <label>Nom</label>
+            <input type="text" placeholder="Nom de famille" />
+          </div>
+          <div class="field">
+            <label>Prénom</label>
+            <input type="text" placeholder="Prénom" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input type="email" placeholder="votre.email@ismo.ma" />
+        </div>
+
+        <div class="field filiere-field" id="filiere-field">
+          <label>Filière</label>
+          <div class="select-wrap">
+            <select>
+              <option>DEV 101 – Développement Digital</option>
+              <option>INF 201 – Infrastructure & Cloud</option>
+              <option>CRM 301 – Relation Client & CRM</option>
+              <option>DATA 401 – Data & Business Intelligence</option>
+              <option>SEC 501 – Cybersécurité</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Mot de passe</label>
+          <input type="password" placeholder="••••••••" />
+        </div>
+
+        <div class="field">
+          <label>Confirmer le mot de passe</label>
+          <input type="password" placeholder="••••••••" />
+        </div>
+
+        <div class="terms">
+          <input type="checkbox" id="terms-check" />
+          <span>J'accepte les <a href="#">conditions d'utilisation</a> et la <a href="#">politique de
+              confidentialité</a></span>
+        </div>
+
+        <button class="btn-primary">Créer mon compte</button>
+        <p class="login-link">Déjà un compte ? <a href="connexion.html">Se connecter</a></p>
+      </div>
+    </div>
+
+  </main>
+
+  <div class="help-btn">?</div>
+
+  <script>
+    let selectedRole = null;
+
+    const roleLabels = {
+      stagiaire: { label: 'Stagiaire', icon: '🎓' },
+      formateur: { label: 'Formateur', icon: '👨‍🏫' },
+      admin: { label: 'Administrateur', icon: '🛡️' }
+    };
+
+    function selectRole(card) {
+      document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedRole = card.dataset.role;
+      const btn = document.getElementById('btn-continue');
+      btn.classList.add('enabled');
+    }
+ 
+    function goToForm() {
+      if (!selectedRole) return;
+
+      document.getElementById('badge-icon').textContent = roleLabels[selectedRole].icon;
+      document.getElementById('badge-label').textContent = roleLabels[selectedRole].label;
+
+      const filiereField = document.getElementById('filiere-field');
+      filiereField.classList.toggle('hidden', selectedRole !== 'stagiaire');
+
+
+      document.getElementById('step-role').classList.remove('active');
+      document.getElementById('step-form').classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goBack() {
+      document.getElementById('step-form').classList.remove('active');
+      document.getElementById('step-role').classList.add('active');
+    }
+  </script>
+</body>
+
+</html>
