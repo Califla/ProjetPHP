@@ -45,7 +45,7 @@
           </svg>
           <span>Passeport</span>
         </div>
-        <div class="nav-item" onclick="location.href='../marketplace/index.html'">
+        <div class="nav-item" onclick="location.href='/prj/marketplace/index.html'">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
           </svg>
@@ -91,7 +91,7 @@
         </div>
       </section>
 
-      <section class="demandes-list" id="demandesList">
+      <div class="demandes-list" id="demandesList">
         <article class="demande-card" data-status="resolu">
           <div class="card-header">
             <div>
@@ -136,7 +136,29 @@
             <button class="primary-btn">Voir détails</button>
           </div>
         </article>
-      </section>
+        
+        <article class="demande-card" data-status="ouvert">
+          <div class="card-header">
+            <div>
+              <h2>Problème avec Git merge conflicts</h2>
+              <p>Conflits lors du merge de ma branche feature avec main.</p>
+            </div>
+            <span class="badge-status ouvert">Ouvert</span>
+          </div>
+          <div class="tag-row">
+            <span class="tag">Git</span>
+            <span class="tag">Version Control</span>
+          </div>
+          <div class="card-footer">
+            <span>Publié le 26/04/2026</span>
+            <span>0 réponse</span>
+          </div>
+          <div class="action-row">
+            <button class="ghost-btn">Modifier</button>
+            <button class="primary-btn">Voir détails</button>
+          </div>
+        </article>
+      </div>
     </main>
   </div>
 
