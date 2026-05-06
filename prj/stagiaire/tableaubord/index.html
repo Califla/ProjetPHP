@@ -6,8 +6,7 @@
   <title>ISMO-SkillSwap – Tableau de bord</title>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css">
-   
-
+  <link rel="stylesheet" href="/prj/1-css/style.css">
 </head>
 <body>
 
@@ -93,17 +92,8 @@
           <svg class="stat-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg>
         </div>
         <div class="stat-value">12</div>
-        <div class="stat-sub"><span class="up">+3</span> ce mois</div>
       </div>
 
-      <div class="stat-card">
-        <div class="stat-header">
-          <span class="stat-label">Note moyenne</span>
-          <svg class="stat-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
-        <div class="stat-value">4.6</div>
-        <div class="stat-sub">&nbsp;</div>
-      </div>
 
       <div class="stat-card">
         <div class="stat-header">
@@ -111,7 +101,7 @@
           <svg class="stat-icon" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
         </div>
         <div class="stat-value">8</div>
-        <div class="stat-sub">2 validées</div>
+        
       </div>
 
       <div class="stat-card">
@@ -120,13 +110,12 @@
           <svg class="stat-icon" viewBox="0 0 24 24"><polyline points="8 6 2 12 8 18"/><polyline points="16 6 22 12 16 18"/></svg>
         </div>
         <div class="stat-value">450</div>
-        <div class="stat-sub">#12 sur 85</div>
+      
       </div>
     </div>
 
     <div class="bottom-grid">
 
-      <!-- MES BADGES -->
       <div class="card">
         <div class="card-title">Mes Badges</div>
         <div class="badge-list" id="badge-list"></div>
@@ -135,7 +124,7 @@
         </div>
       </div>
 
-      <!-- TOP MENTORS -->
+      
       <div class="card">
         <div class="card-title">Top Mentors</div>
         <div class="mentor-list">
@@ -178,7 +167,7 @@
         </div>
       </div>
 
-      <!-- DEMANDES RÉCENTES -->
+      
       <div class="card">
         <div class="card-title">Demandes récentes</div>
         <div class="demande-list">
@@ -214,9 +203,7 @@
 <div class="help-btn">?</div>
 
 <script>
-  // ── BADGE DATA ──────────────────────────────────────────────
-  // confirmed: true  → badge attribué par formateur → affiché
-  // confirmed: false → pas encore attribué          → invisible
+  
   const ALL_BADGES = [
     {
       id: 'premier_pas',
@@ -256,12 +243,10 @@
     }
   ];
 
-  // ── RENDER BADGES ────────────────────────────────────────────
   function renderBadges() {
     const list  = document.getElementById('badge-list');
     const empty = document.getElementById('badge-empty');
 
-    // Afficher UNIQUEMENT les badges confirmés par un formateur
     const earned = ALL_BADGES.filter(b => b.confirmed);
 
     if (earned.length === 0) {
@@ -290,13 +275,11 @@
     });
   }
 
-  // ── NAV ─────────────────────────────────────────────────────
   function setPage(el, page) {
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     el.classList.add('active');
   }
 
-  // ── INIT ─────────────────────────────────────────────────────
   renderBadges();
 </script>
 </body>

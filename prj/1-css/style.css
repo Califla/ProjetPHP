@@ -1,0 +1,253 @@
+/* Fichier: common-sidebar-header.css */
+
+/* Variables CSS communes pour la sidebar et le header */
+:root {
+    --navy: #0d2240;
+    --navy-mid: #163158;
+    --navy-light: #1e4270;
+    --accent: #2e6fca;
+    --white: #ffffff;
+    --sidebar-w: 220px;
+    --header-h: 64px;
+}
+
+html,
+body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Sora', sans-serif;
+    letter-spacing: -0.02em;
+}
+
+.sidebar {
+    width: var(--sidebar-w);
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 60%, var(--navy-light) 100%);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
+}
+
+.sidebar-logo {
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-logo span {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.3px;
+}
+
+.sidebar-nav {
+    flex: 1;
+    position: relative; 
+    z-index: 10;
+    padding: 16px 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 20px;
+    color: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.nav-item.active {
+    background: var(--accent);
+    color: var(--white);
+    border-radius: 10px;
+    margin: 0 10px;
+    padding: 11px 10px;
+}
+
+.nav-item.active .nav-icon {
+    opacity: 1;
+}
+
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    opacity: 0.7;
+}
+
+/* Styles du Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-w);
+    right: 0;
+    height: var(--header-h);
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 60%, var(--navy-light) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 28px;
+    gap: 16px;
+    z-index: 90;
+    /* Assure que le header est au-dessus des autres éléments, mais sous la sidebar si nécessaire */
+}
+
+.notif-btn {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    transition: background 0.15s;
+}
+
+.notif-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.notif-btn svg {
+    stroke: rgba(255, 255, 255, 0.85);
+    fill: none;
+    width: 20px;
+    height: 20px;
+}
+
+.notif-dot {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ef4444;
+    border: 2px solid var(--navy);
+}
+
+.user-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.user-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--white);
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.user-info {
+    text-align: right;
+}
+
+.user-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.2;
+}
+
+.user-role {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive pour la sidebar et le header */
+@media (max-width: 700px) {
+    .sidebar {
+        width: 60px;
+    }
+
+    .sidebar-logo span,
+    .nav-item span {
+        display: none;
+    }
+
+    .sidebar-nav {
+        padding-top: 14px;
+    }
+
+    .nav-item {
+        justify-content: center;
+        padding: 12px;
+    }
+
+    .nav-item.active {
+        margin: 0 6px;
+        padding: 12px;
+    }
+
+    .header {
+        left: 60px;
+    }
+
+    /* Ajustement du contenu principal pour correspondre à la sidebar réduite */
+    .main {
+        margin-left: 60px;
+    }
+
+    .user-info {
+        display: none;
+    }
+}
+
+.sidebar::before {
+    content: '';
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.226);
+    top: -80px;
+    right: -120px;
+    z-index: 1; 
+}
+
+.sidebar::after {
+    content: '';
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.226);
+    bottom: 80px;
+    left: -60px;
+}
