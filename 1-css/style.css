@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap');
+
 /* Fichier: common-sidebar-header.css */
 
 /* Variables CSS communes pour la sidebar et le header */
@@ -11,12 +13,26 @@
     --header-h: 64px;
 }
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 html,
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
+    background: #f8fafc;
+    color: #334155;
+    line-height: 1.6;
+    font-size: 15px;
+    min-height: 100%;
+    margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+}
+
+body {
+    background: #f8fafc;
 }
 
 h1,
@@ -26,7 +42,39 @@ h4,
 h5,
 h6 {
     font-family: 'Sora', sans-serif;
+    color: #000000;
     letter-spacing: -0.02em;
+    margin: 0 0 0.75rem;
+}
+
+
+p,
+span,
+li,
+button,
+input,
+select,
+textarea,
+a {
+    font-family: inherit;
+    color: #475569;
+}
+
+p {
+    margin: 0 0 1rem;
+}
+
+.page-title {
+    font-size: clamp(1.75rem, 2vw, 2.2rem);
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+}
+
+.page-sub {
+    color: #64748b;
+    font-size: 0.95rem;
+    margin-bottom: 1.75rem;
 }
 
 .sidebar {
@@ -63,26 +111,29 @@ h6 {
     z-index: 10;
     padding: 16px 0;
 }
-
+.sidebar-nav span{
+    color: var(--white);
+}
 .nav-item {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 11px 20px;
-    color: rgba(255, 255, 255, 0.55);
+    color: rgba(255, 255, 255, 0.75);
     cursor: pointer;
     transition: background 0.15s, color 0.15s;
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
 }
 
 .nav-item:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .nav-item.active {
-    background: var(--accent);
+    background: #1e40af;
     color: var(--white);
     border-radius: 10px;
     margin: 0 10px;
@@ -194,7 +245,8 @@ h6 {
     color: rgba(255, 255, 255, 0.5);
 }
 
-.main {
+.main,
+.main-content {
     margin-left: var(--sidebar-w);
     padding-top: var(--header-h);
     min-height: 100vh;
