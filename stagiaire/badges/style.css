@@ -101,16 +101,17 @@ body {
 }
 
 .badge-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #e84c89 0%, #f97094 100%);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 16px;
     flex-shrink: 0;
-    color: white;
+    font-size: 2rem;
+    width: auto;
+    height: auto;
+    background: transparent;
+    border-radius: 0;
+    color: inherit;
 }
 
 .badge-icon svg {
@@ -118,23 +119,10 @@ body {
     height: 36px;
 }
 
-.badge-icon.gold {
-    background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
-}
-
-.badge-icon.purple {
-    background: linear-gradient(135deg, #9c27b0 0%, #c2185b 100%);
-}
-
+.badge-icon.gold,
+.badge-icon.purple,
 .badge-icon.orange {
-    background: linear-gradient(135deg, #ff9800 0%, #ff6d00 100%);
-}
-
-.badge-content h3 {
-    font-family: 'Sora', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #0d2240;
+    background: transparent;
     margin-bottom: 6px;
     letter-spacing: -0.2px;
 }
