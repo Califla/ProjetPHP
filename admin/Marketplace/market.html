@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marketplace</title>
+  <link rel="stylesheet" href="market.css" />
+  <link rel="stylesheet" href="../../1-css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><span>ISMO-SkillSwap</span></div>
+      <nav class="sidebar-nav">
+        <div class="nav-item" onclick="location.href='../Tableau de bord/table.html'">
+          <span class="nav-icon">🏠</span>
+          <span>Tableau de bord</span>
+        </div>
+        <div class="nav-item" onclick="location.href='../Utulisateurs/utili.html'">
+          <span class="nav-icon">👥</span>
+          <span>Utilisateurs</span>
+        </div>
+        <div class="nav-item" onclick="location.href='../Competences/compe.html'">
+          <span class="nav-icon">🏷️</span>
+          <span>Compétences</span>
+        </div>
+        <div class="nav-item" onclick="location.href='../Badges/badges.html'">
+          <span class="nav-icon">🎖️</span>
+          <span>Badges</span>
+        </div>
+        <div class="nav-item" onclick="location.href='../Moderation/mode.html'">
+          <span class="nav-icon">🛡️</span>
+          <span>Modération</span>
+        </div>
+        <div class="nav-item" onclick="location.href='../Statistiques/stat.html'">
+          <span class="nav-icon">📊</span>
+          <span>Statistiques</span>
+        </div>
+        <div class="nav-item active" onclick="location.href='market.html'">
+          <span class="nav-icon">🛒</span>
+          <span>Marketplace</span>
+        </div>
+      </nav>
+    </aside>
+
+    <header class="header">
+      <button class="notif-btn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-dot"></span>
+      </button>
+      <div class="user-pill">
+        <div class="user-info">
+          <div class="user-name">Ahmed Idrissi</div>
+          <div class="user-role">Stagiaire DEV 101</div>
+        </div>
+        <div class="user-avatar">AI</div>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <div class="page-header">
+        <div>
+          <h1>Marketplace - Demandes d'aide</h1>
+          <p class="page-subtitle">Trouvez des demandes à laquelle vous pouvez répondre ou publiez la vôtre</p>
+        </div>
+        <button class="btn btn-primary">+ Publier une demande</button>
+      </div>
+
+      <section class="search-panel">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="search" placeholder="Rechercher par mot-clé, compétence, technologie..." aria-label="Recherche demande" />
+        </div>
+        <button class="btn btn-filter">Filtres</button>
+      </section>
+
+      <section class="filters-row">
+        <button class="filter-pill">Toutes les filières</button>
+        <button class="filter-pill">Tous les niveaux</button>
+        <button class="filter-pill">Tous les statuts</button>
+      </section>
+
+      <section class="demand-list">
+        <article class="demand-card">
+          <div class="demand-head">
+            <div>
+              <h2>Aide sur les algorithmes de tri en Python</h2>
+              <span class="status-badge open">Ouvert</span>
+            </div>
+            <button class="btn btn-secondary">Modifier</button>
+          </div>
+          <p class="demand-description">Je cherche quelqu'un pour m'expliquer QuickSort et MergeSort avec des exemples pratiques</p>
+          <div class="demand-tags">
+            <span>Python</span>
+            <span>Algorithmes</span>
+            <span>Débutant</span>
+          </div>
+          <div class="demand-footer">
+            <div class="author">
+              <div class="avatar">Ah</div>
+              <div>
+                <div class="author-name">Ahmed Idrissi</div>
+                <div class="author-role">DEV 101</div>
+              </div>
+            </div>
+            <div class="publish-date">Publié le 26/04/2026</div>
+          </div>
+        </article>
+
+        <article class="demand-card">
+          <div class="demand-head">
+            <div>
+              <h2>Configuration d'un firewall pfSense</h2>
+              <span class="status-badge open">Ouvert</span>
+            </div>
+            <button class="btn btn-secondary">Proposer mon aide</button>
+          </div>
+          <p class="demand-description">Besoin d'aide pour configurer les règles de firewall et le NAT sur pfSense</p>
+          <div class="demand-tags">
+            <span>Réseau</span>
+            <span>Sécurité</span>
+            <span>pfSense</span>
+          </div>
+          <div class="demand-footer">
+            <div class="author">
+              <div class="avatar">Yo</div>
+              <div>
+                <div class="author-name">Youssef Benali</div>
+                <div class="author-role">CYBERSEC</div>
+              </div>
+            </div>
+            <div class="publish-date">Publié le 26/04/2026</div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

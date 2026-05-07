@@ -118,6 +118,11 @@ input {
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 8px 24px rgba(16, 37, 79, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
 }
 
 .stat-card.danger {

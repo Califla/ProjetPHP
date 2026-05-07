@@ -50,12 +50,12 @@ a {
   min-height: calc(100vh - var(--header-h, 64px));
   background: var(--bg);
   display: flex;
-  flex-direction: column;
+  justify-content: center;
 }
 
 .content-area {
-  max-width: 100%;
-  width: 100%;
+  max-width: 1120px;
+  width: min(100%, 1120px);
   margin: 0 auto;
   padding: 0;
 }
@@ -282,6 +282,7 @@ a {
 @media (max-width: 700px) {
   .main {
     margin-left: 60px;
+    width: calc(100% - 60px);
     padding-top: calc(var(--header-h, 64px) + 20px);
   }
 

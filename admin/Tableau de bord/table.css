@@ -37,7 +37,7 @@ body {
 .content-area {
   margin-left: var(--sidebar-w, 220px);
   width: calc(100% - var(--sidebar-w, 220px));
-  padding-top: calc(var(--header-h, 64px) + 36px);
+  padding-top: calc(var(--header-h, 64px) + 48px);
   padding-left: 42px;
   padding-right: 42px;
   padding-bottom: 42px;
@@ -86,7 +86,7 @@ body {
 .stat-head {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
 }
 
@@ -371,7 +371,8 @@ body {
   }
 
   .content-area {
-    padding: 22px 18px 24px;
+    width: calc(100% - 60px);
+    padding: calc(var(--header-h, 64px) + 20px) 18px 24px;
   }
 
   .hero-section h1 {
