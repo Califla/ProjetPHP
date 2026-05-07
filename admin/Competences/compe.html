@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestion des compétences</title>
+  <link rel="stylesheet" href="compe.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">IS</div>
+        <div>
+          <span>ISMO</span>
+          <small>SkillSwap</small>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <a class="nav-item" href="../Tableau de bord/table.html">
+          <span class="nav-icon">🏠</span>
+          <span>Tableau de bord</span>
+        </a>
+        <a class="nav-item" href="../Utulisateurs/utili.html">
+          <span class="nav-icon">👥</span>
+          <span>Utilisateurs</span>
+        </a>
+        <a class="nav-item" href="../Competences/compe.html">
+          <span class="nav-icon active">🏷️</span>
+          <span>Compétences</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="nav-icon">🎖️</span>
+          <span>Badges</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="nav-icon">🛡️</span>
+          <span>Modération</span>
+        </a>
+        <a class="nav-item" href="../Statistiques/stats.html">
+          <span class="nav-icon">📊</span>
+          <span>Statistiques</span>
+        </a>
+        <a class="nav-item" href="../../marketplace/index.html">
+          <span class="nav-icon">🛒</span>
+          <span>Marketplace</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="page-content">
+      <header class="topbar">
+        <div class="profile-block">
+          <div class="profile-avatar">AD</div>
+          <div class="profile-meta">
+            <span class="profile-name">Admin</span>
+            <span class="profile-role">Administrateur</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="content-area">
+        <div class="page-header">
+          <div>
+            <p class="eyebrow">Gestion des compétences</p>
+            <h1>Administrez le référentiel de compétences</h1>
+          </div>
+          <a href="#" class="btn btn-primary">+ Ajouter une compétence</a>
+        </div>
+
+        <div class="search-panel">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="search" placeholder="Rechercher une compétence..." aria-label="Recherche compétence" />
+          </div>
+          <div class="select-box">
+            <select aria-label="Toutes les catégories">
+              <option>Toutes les catégories</option>
+              <option>Frontend</option>
+              <option>Backend</option>
+              <option>DevOps</option>
+              <option>Cybersécurité</option>
+              <option>Base de données</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="category-grid">
+          <article class="overview-card">
+            <strong>12</strong>
+            <span>Frontend</span>
+          </article>
+          <article class="overview-card">
+            <strong>8</strong>
+            <span>Backend</span>
+          </article>
+          <article class="overview-card">
+            <strong>6</strong>
+            <span>DevOps</span>
+          </article>
+          <article class="overview-card">
+            <strong>5</strong>
+            <span>Cybersécurité</span>
+          </article>
+          <article class="overview-card">
+            <strong>7</strong>
+            <span>Base de données</span>
+          </article>
+        </div>
+
+        <div class="cards-grid">
+          <article class="skill-card">
+            <div class="skill-card-header">
+              <h2>React</h2>
+              <div class="skill-card-actions">
+                <button class="icon-btn" aria-label="Modifier React">✏️</button>
+                <button class="icon-btn danger" aria-label="Supprimer React">🗑️</button>
+              </div>
+            </div>
+            <span class="skill-badge">Frontend</span>
+            <div class="skill-row"><span>Déclarations</span><strong>45</strong></div>
+            <div class="skill-row"><span>Validations</span><strong>38</strong></div>
+            <div class="skill-row progress-row">
+              <span>Taux validation</span>
+              <strong>84%</strong>
+            </div>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-card-header">
+              <h2>Python</h2>
+              <div class="skill-card-actions">
+                <button class="icon-btn" aria-label="Modifier Python">✏️</button>
+                <button class="icon-btn danger" aria-label="Supprimer Python">🗑️</button>
+              </div>
+            </div>
+            <span class="skill-badge">Langages</span>
+            <div class="skill-row"><span>Déclarations</span><strong>52</strong></div>
+            <div class="skill-row"><span>Validations</span><strong>48</strong></div>
+            <div class="skill-row progress-row">
+              <span>Taux validation</span>
+              <strong>92%</strong>
+            </div>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-card-header">
+              <h2>Docker</h2>
+              <div class="skill-card-actions">
+                <button class="icon-btn" aria-label="Modifier Docker">✏️</button>
+                <button class="icon-btn danger" aria-label="Supprimer Docker">🗑️</button>
+              </div>
+            </div>
+            <span class="skill-badge">DevOps</span>
+            <div class="skill-row"><span>Déclarations</span><strong>28</strong></div>
+            <div class="skill-row"><span>Validations</span><strong>22</strong></div>
+            <div class="skill-row progress-row">
+              <span>Taux validation</span>
+              <strong>79%</strong>
+            </div>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-card-header">
+              <h2>Penetration Testing</h2>
+              <div class="skill-card-actions">
+                <button class="icon-btn" aria-label="Modifier Penetration Testing">✏️</button>
+                <button class="icon-btn danger" aria-label="Supprimer Penetration Testing">🗑️</button>
+              </div>
+            </div>
+            <span class="skill-badge">Cybersécurité</span>
+            <div class="skill-row"><span>Déclarations</span><strong>15</strong></div>
+            <div class="skill-row"><span>Validations</span><strong>12</strong></div>
+            <div class="skill-row progress-row">
+              <span>Taux validation</span>
+              <strong>80%</strong>
+            </div>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-card-header">
+              <h2>MongoDB</h2>
+              <div class="skill-card-actions">
+                <button class="icon-btn" aria-label="Modifier MongoDB">✏️</button>
+                <button class="icon-btn danger" aria-label="Supprimer MongoDB">🗑️</button>
+              </div>
+            </div>
+            <span class="skill-badge">Base de données</span>
+            <div class="skill-row"><span>Déclarations</span><strong>32</strong></div>
+            <div class="skill-row"><span>Validations</span><strong>28</strong></div>
+            <div class="skill-row progress-row">
+              <span>Taux validation</span>
+              <strong>88%</strong>
+            </div>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-card-header">
+              <h2>Kubernetes</h2>
+              <div class="skill-card-actions">
+                <button class="icon-btn" aria-label="Modifier Kubernetes">✏️</button>
+                <button class="icon-btn danger" aria-label="Supprimer Kubernetes">🗑️</button>
+              </div>
+            </div>
+            <span class="skill-badge">DevOps</span>
+            <div class="skill-row"><span>Déclarations</span><strong>12</strong></div>
+            <div class="skill-row"><span>Validations</span><strong>8</strong></div>
+            <div class="skill-row progress-row">
+              <span>Taux validation</span>
+              <strong>67%</strong>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+
+

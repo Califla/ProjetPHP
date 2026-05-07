@@ -1,0 +1,232 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestion des utilisateurs</title>
+  <link rel="stylesheet" href="utili.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">IS</div>
+        <div>
+          <span>ISMO</span>
+          <small>SkillSwap</small>
+        </div>
+      </div>
+
+      <nav class="nav-menu" aria-label="Navigation principale">
+        </a><nav class="nav-menu">
+        <a class="nav-item" href="../Tableau de bord/table.html">
+          <span class="nav-icon">🏠</span>
+          <span>Tableau de bord</span>
+        </a>
+        <a class="nav-item active" href="../Utulisateurs/utili.html">
+          <span class="nav-icon">👥</span>
+          <span>Utilisateurs</span>
+        </a>
+        <a class="nav-item" href="../Competences/compe.html">
+          <span class="nav-icon">🏷️</span>
+          <span>Compétences</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="nav-icon">🎖️</span>
+          <span>Badges</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="nav-icon">🛡️</span>
+          <span>Modération</span>
+        </a>
+        <a class="nav-item" href="../Statistiques/stats.html">
+          <span class="nav-icon">📊</span>
+          <span>Statistiques</span>
+        </a>
+        <a class="nav-item" href="../../marketplace/index.html">
+          <span class="nav-icon">🛒</span>
+          <span>Marketplace</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="page-content">
+      <header class="topbar">
+        <div class="profile-block">
+          <div class="profile-avatar">AD</div>
+          <div class="profile-meta">
+            <span class="profile-name">Admin</span>
+            <span class="profile-role">Administrateur</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="content-area">
+        <div class="page-header">
+          <div>
+            <p class="eyebrow">Gestion des utilisateurs</p>
+            <h1>Gérez les comptes et permissions</h1>
+          </div>
+          <a href="#" class="btn btn-primary">+ Créer un utilisateur</a>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <span class="stat-label">Total utilisateurs</span>
+            <strong>260</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Actifs</span>
+            <strong>187</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">En attente</span>
+            <strong>8</strong>
+          </article>
+          <article class="stat-card stat-card-alert">
+            <span class="stat-label">Suspendus</span>
+            <strong>5</strong>
+          </article>
+        </div>
+
+        <section class="table-card">
+          <div class="table-header">
+            <div class="search-wrapper">
+              <span class="search-icon">🔍</span>
+              <input type="search" placeholder="Rechercher par nom, email..." aria-label="Recherche utilisateurs" />
+            </div>
+            <div class="filter-row">
+              <label>
+                <span class="visually-hidden">Filtrer par rôle</span>
+                <select>
+                  <option>Tous les rôles</option>
+                  <option>Stagiaire</option>
+                  <option>Formateur</option>
+                  <option>Administrateur</option>
+                </select>
+              </label>
+              <label>
+                <span class="visually-hidden">Filtrer par statut</span>
+                <select>
+                  <option>Tous les statuts</option>
+                  <option>Actif</option>
+                  <option>En attente</option>
+                  <option>Suspendu</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Utilisateur</th>
+                  <th>Email</th>
+                  <th>Rôle</th>
+                  <th>Filière</th>
+                  <th>Statut</th>
+                  <th>Inscription</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="user-cell">
+                    <span class="user-avatar">Ah</span>
+                    <div>
+                      <strong>Ahmed Idrissi</strong>
+                    </div>
+                  </td>
+                  <td>ahmed.idrissi@ismo.ma</td>
+                  <td><span class="badge badge-soft">Stagiaire</span></td>
+                  <td>DEV 101</td>
+                  <td><span class="status status-success">Actif</span></td>
+                  <td>15/01/2026</td>
+                  <td class="actions-cell">
+                    <button class="btn btn-secondary">accepter</button>
+                    <button class="btn btn-danger">refuser</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="user-cell">
+                    <span class="user-avatar">Sa</span>
+                    <div>
+                      <strong>Sara El Amrani</strong>
+                    </div>
+                  </td>
+                  <td>sara.amrani@ismo.ma</td>
+                  <td><span class="badge badge-soft">Stagiaire</span></td>
+                  <td>DEV 102</td>
+                  <td><span class="status status-success">Actif</span></td>
+                  <td>20/01/2026</td>
+                  <td class="actions-cell">
+                    <button class="btn btn-secondary">accepter</button>
+                    <button class="btn btn-danger">refuser</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="user-cell">
+                    <span class="user-avatar">Yo</span>
+                    <div>
+                      <strong>Youssef Benali</strong>
+                    </div>
+                  </td>
+                  <td>youssef.benali@ismo.ma</td>
+                  <td><span class="badge badge-soft">Stagiaire</span></td>
+                  <td>CYBERSEC</td>
+                  <td><span class="status status-warning">En attente</span></td>
+                  <td>26/04/2026</td>
+                  <td class="actions-cell">
+                    <button class="btn btn-secondary">accepter</button>
+                    <button class="btn btn-danger">refuser</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="user-cell">
+                    <span class="user-avatar">Pr</span>
+                    <div>
+                      <strong>Prof. Kamal Benjelloun</strong>
+                    </div>
+                  </td>
+                  <td>k.benjelloun@ismo.ma</td>
+                  <td><span class="badge badge-soft">Formateur</span></td>
+                  <td>DEV</td>
+                  <td><span class="status status-success">Actif</span></td>
+                  <td>01/09/2025</td>
+                  <td class="actions-cell">
+                    <button class="btn btn-secondary">accepter</button>
+                    <button class="btn btn-danger">refuser</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="user-cell">
+                    <span class="user-avatar">Fa</span>
+                    <div>
+                      <strong>Fatima Zahrae</strong>
+                    </div>
+                  </td>
+                  <td>fatima.z@ismo.ma</td>
+                  <td><span class="badge badge-soft">Stagiaire</span></td>
+                  <td>DEV 101</td>
+                  <td><span class="status status-danger">Suspendu</span></td>
+                  <td>10/02/2026</td>
+                  <td class="actions-cell">
+                    <button class="btn btn-secondary">accepter</button>
+                    <button class="btn btn-danger">refuser</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+
+
