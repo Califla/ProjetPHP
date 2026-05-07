@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ISMO-SkillSwap – Mes demandes</title>
+  <title>ISMO-SkillSwap – Marketplace</title>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="../../1-css/style.css">
+  <link rel="stylesheet" href="../../1-css/style.css" />
 </head>
 <body>
   <div class="layout">
@@ -17,7 +17,7 @@
           <span class="nav-icon">🏠</span>
           <span>Tableau de bord</span>
         </div>
-        <div class="nav-item active" onclick="location.href='index.html'">
+        <div class="nav-item" onclick="location.href='../mes demandes/index.html'">
           <span class="nav-icon">📋</span>
           <span>Mes demandes</span>
         </div>
@@ -33,7 +33,7 @@
           <span class="nav-icon">👤</span>
           <span>Passeport</span>
         </div>
-        <div class="nav-item" onclick="location.href='../marketplace/index.html'">
+        <div class="nav-item active" onclick="location.href='index.html'">
           <span class="nav-icon">🛒</span>
           <span>Marketplace</span>
         </div>
@@ -55,63 +55,71 @@
     </header>
 
     <main class="main">
-      <div class="page-title">Mes demandes d'aide</div>
-      <div class="page-sub">Gérez vos demandes et suivez leur progression</div>
+      <div class="page-title">Marketplace - Demandes d'aide</div>
+      <div class="page-sub">Trouvez des demandes auxquelles vous pouvez répondre ou publiez la vôtre</div>
 
       <section class="controls-row">
         <div class="control-group search-group">
           <svg class="control-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input id="searchInput" type="search" placeholder="Rechercher dans mes demandes..." />
+          <input id="searchInput" type="search" placeholder="Rechercher par mot-clé, compétence, technologie..." />
         </div>
         <div class="control-group right-group">
-          <select id="statusSelect">
-            <option value="all">Tous les statuts</option>
-            <option value="ouvert">Ouvert</option>
-            <option value="resolu">Résolu</option>
+          <select>
+            <option>Toutes les filières</option>
+            <option>DEV</option>
+            <option>CYBERSEC</option>
+            <option>DATA</option>
           </select>
-          <button class="filter-btn" id="filterBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
-            Filtres
-          </button>
+          <select>
+            <option>Tous les niveaux</option>
+            <option>Débutant</option>
+            <option>Intermédiaire</option>
+            <option>Avancé</option>
+          </select>
+          <select>
+            <option>Tous les statuts</option>
+            <option>Ouvert</option>
+            <option>Fermé</option>
+          </select>
         </div>
       </section>
 
-      <div class="demandes-list" id="demandesList">
-        <article class="demande-card" data-status="resolu">
+      <div class="demandes-list">
+        <article class="demande-card">
           <div class="card-header">
             <div>
-              <h2>Aide sur React Hooks useEffect</h2>
-              <p>Je n'arrive pas à comprendre le lifecycle avec useEffect et les dépendances.</p>
+              <h2>Aide sur les algorithmes de tri en Python</h2>
+              <p>Je cherche quelqu'un pour m'expliquer QuickSort et MergeSort avec des exemples pratiques.</p>
             </div>
-            <span class="badge-status resolu">Résolu</span>
+            <span class="badge-status ouvert">Ouvert</span>
           </div>
           <div class="tag-row">
-            <span class="tag">React</span>
-            <span class="tag">JavaScript</span>
-            <span class="tag">Hooks</span>
+            <span class="tag">Python</span>
+            <span class="tag">Algorithmes</span>
+            <span class="tag">Débutant</span>
           </div>
           <div class="card-footer">
-            <span>Publié le 24/04/2026</span>
-            <span>3 réponses</span>
+            <span>Publié le 26/04/2026</span>
+            <span>1 réponse</span>
           </div>
           <div class="action-row">
             <button class="ghost-btn">Modifier</button>
-            <button class="primary-btn">Voir détails</button>
+            <button class="primary-btn">Proposer mon aide</button>
           </div>
         </article>
 
-        <article class="demande-card" data-status="ouvert">
+        <article class="demande-card">
           <div class="card-header">
             <div>
-              <h2>Problème avec Git merge conflicts</h2>
-              <p>Conflits lors du merge de ma branche feature avec main.</p>
+              <h2>Configuration d'un firewall pfSense</h2>
+              <p>Besoin d'aide pour configurer les règles de firewall et le NAT sur pfSense.</p>
             </div>
             <span class="badge-status ouvert">Ouvert</span>
           </div>
           <div class="tag-row">
-            <span class="tag">Git</span>
-            <span class="tag">Version Control</span>
+            <span class="tag">Réseau</span>
+            <span class="tag">Sécurité</span>
+            <span class="tag">pfSense</span>
           </div>
           <div class="card-footer">
             <span>Publié le 26/04/2026</span>
@@ -119,35 +127,11 @@
           </div>
           <div class="action-row">
             <button class="ghost-btn">Modifier</button>
-            <button class="primary-btn">Voir détails</button>
-          </div>
-        </article>
-        
-        <article class="demande-card" data-status="ouvert">
-          <div class="card-header">
-            <div>
-              <h2>Problème avec Git merge conflicts</h2>
-              <p>Conflits lors du merge de ma branche feature avec main.</p>
-            </div>
-            <span class="badge-status ouvert">Ouvert</span>
-          </div>
-          <div class="tag-row">
-            <span class="tag">Git</span>
-            <span class="tag">Version Control</span>
-          </div>
-          <div class="card-footer">
-            <span>Publié le 26/04/2026</span>
-            <span>0 réponse</span>
-          </div>
-          <div class="action-row">
-            <button class="ghost-btn">Modifier</button>
-            <button class="primary-btn">Voir détails</button>
+            <button class="primary-btn">Proposer mon aide</button>
           </div>
         </article>
       </div>
     </main>
   </div>
-
-  <script src="script.js"></script>
 </body>
 </html>
