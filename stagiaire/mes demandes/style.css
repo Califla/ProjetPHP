@@ -243,35 +243,5 @@ select {
     }
 }
 
-@media (max-width: 700px) {
-    .sidebar {
-        width: 60px;
-    }
 
-    .sidebar-logo span,
-    .nav-item span {
-        display: none;
-    }
-
-    .sidebar-nav {
-        padding-top: 14px;
-    }
-
-    .nav-item {
-        justify-content: center;
-    }
-
-    .header {
-        left: 60px;
-    }
-
-    .main {
-        margin-left: 60px;
-        padding: 18px;
-    }
-
-    .user-info {
-        display: none;
-    }
-}
 

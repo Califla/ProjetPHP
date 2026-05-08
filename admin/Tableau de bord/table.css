@@ -1,4 +1,4 @@
-﻿* {
+﻿﻿* {
   box-sizing: border-box;
 }
 
@@ -330,16 +330,8 @@ body {
 }
 
 @media (max-width: 1080px) {
-  .dashboard-shell {
-    flex-direction: column;
-  }
 
-  .sidebar {
-    width: 100%;
-    min-width: auto;
-    padding: 30px 24px 22px;
-  }
-
+ 
   .page-content {
     width: 100%;
   }
@@ -357,36 +349,41 @@ body {
   }
 }
 
-@media (max-width: 720px) {
-  .sidebar {
-    padding: 24px 18px 20px;
-  }
-
-  .nav-item {
-    padding: 12px 14px;
-  }
-
-  .topbar {
-    padding: 0 18px;
-  }
-
+@media (max-width: 700px) {
   .content-area {
+    margin-left: 60px;
     width: calc(100% - 60px);
     padding: calc(var(--header-h, 64px) + 20px) 18px 24px;
   }
 
   .hero-section h1 {
-    font-size: 2.2rem;
-  }
-
-  .stat-card,
-  .alert-panel,
-  .chart-card,
-  .activity-card {
-    border-radius: 22px;
+    font-size: 2rem;
   }
 
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    min-height: auto;
+    padding: 20px;
+  }
+
+  .stat-number {
+    font-size: 2.2rem;
+  }
+
+  .donut-chart {
+    width: 180px;
+    height: 180px;
+  }
+
+  .donut-chart::after {
+    inset: 30px;
+  }
+
+  .chart-legend {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 }

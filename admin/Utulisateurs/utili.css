@@ -174,7 +174,8 @@ input {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 12px 16px;
-  min-width: 320px;
+  flex: 1;
+  min-width: 260px;
 }
 
 .search-icon {
@@ -186,7 +187,7 @@ input {
   border: none;
   outline: none;
   background: transparent;
-  width: 320px;
+  width: 100%;
   font-size: 0.95rem;
   color: var(--text);
 }
@@ -314,19 +315,33 @@ tbody tr:hover {
 }
 
 @media (max-width: 840px) {
-  .dashboard-shell {
+  .page-header {
     flex-direction: column;
+    align-items: flex-start;
   }
 
-  .sidebar {
-    width: 100%;
-    min-width: auto;
-  }
-
-  .page-content {
+  .search-wrapper input {
     width: 100%;
   }
 
+  .table-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 700px) {
+  .content-area {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+    padding: calc(var(--header-h, 64px) + 24px) 20px 32px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 840px) {
   .page-header {
     flex-direction: column;
     align-items: flex-start;
@@ -361,4 +376,3 @@ tbody tr:hover {
 
 
 .search-icon svg { width: 18px; height: 18px; }
-
