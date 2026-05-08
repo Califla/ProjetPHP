@@ -72,26 +72,20 @@
         font-size: 0.875rem;
         color: #64748b;
         margin-bottom: 12px;
+        padding-right: 35px; /* Khali blassa l-l'icon f l-ymin */
     }
 
     .stat-card .val {
         font-size: 2rem;
         font-weight: 700;
         color: var(--navy);
+        padding-right: 35px; /* Khali blassa l-l'icon f l-ymin */
     }
 
     .stat-card .trend {
         font-size: 0.75rem;
         color: #22c55e;
         font-weight: 600;
-    }
-
-    .card-icon {
-        position: absolute;
-        top: 24px;
-        right: 24px;
-        color: var(--accent);
-        opacity: 0.8;
     }
 
     .panels-grid {
@@ -222,6 +216,15 @@
 
         .stat-card {
             padding: 18px;
+        }
+
+        .card-icon {
+            top: 18px;
+            right: 18px;
+        }
+
+        .stat-card h3, .stat-card .val {
+            padding-right: 28px;
         }
 
         .stat-card .val {

@@ -6,6 +6,7 @@ body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    overflow-x: hidden;
 }
 *, *::before, *::after {
     box-sizing: border-box;
@@ -215,8 +216,15 @@ h6 {
 
 @media (max-width: 768px) {
 
+    /* Sync m3a collapse dial sidebar li f style.css */
+    @media (max-width: 700px) {
+        .main-content {
+            margin-left: 60px;
+        }
+    }
+
     .main-content {
-        padding: calc(var(--header-h) + 20px) 18px 20px;
+        padding: calc(var(--header-h) + 25px) 20px 30px;
     }
 
     .badges-layout {
