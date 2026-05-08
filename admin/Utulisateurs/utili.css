@@ -19,15 +19,22 @@
 
 html,
 body {
-  margin: 0;
-  min-height: 100%;
-  font-family: 'Inter', sans-serif;
-  background: var(--bg);
-  color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background: #f8fafc;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
-body {
-  min-height: 100vh;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Sora', sans-serif;
+    letter-spacing: -0.02em;
 }
 
 .layout {
@@ -54,7 +61,7 @@ input {
   padding-right: 42px;
   padding-bottom: 42px;
   min-height: calc(100vh - var(--header-h, 64px));
-  background: var(--bg);
+  background: #f8fafc;
   flex: 1;
 }
 
@@ -74,13 +81,6 @@ input {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-}
-
-.page-header h1 {
-  margin: 0;
-  font-family: 'Sora', sans-serif;
-  font-size: 2.2rem;
-  line-height: 1.05;
 }
 
 .btn {
@@ -357,9 +357,6 @@ tbody tr:hover {
 }
 
 @media (max-width: 640px) {
-  .page-header h1 {
-    font-size: 1.8rem;
-  }
 
   .table-header {
     flex-direction: column;

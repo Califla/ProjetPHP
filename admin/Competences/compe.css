@@ -19,15 +19,22 @@
 
 html,
 body {
-  margin: 0;
-  min-height: 100%;
-  font-family: 'Inter', sans-serif;
-  background: var(--bg);
-  color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background: #f8fafc;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
-body {
-  min-height: 100vh;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Sora', sans-serif;
+    letter-spacing: -0.02em;
 }
 
 .layout {
@@ -41,14 +48,11 @@ a {
 }
 
 .main {
-  margin-left: var(--sidebar-w, 220px);
+  margin-left: var(--sidebar-w);
   width: calc(100% - var(--sidebar-w, 220px));
   padding-top: calc(var(--header-h, 64px) + 36px);
-  padding-left: 42px;
-  padding-right: 42px;
-  padding-bottom: 42px;
-  min-height: calc(100vh - var(--header-h, 64px));
-  background: var(--bg);
+  min-height: 100vh;
+  background: #f8fafc;
   display: flex;
   justify-content: center;
 }
@@ -68,13 +72,6 @@ a {
   margin-bottom: 28px;
 }
 
-.page-header h1 {
-  margin: 0;
-  font-family: 'Sora', sans-serif;
-  font-size: 2.3rem;
-  line-height: 1.05;
-  color: #0d2240;
-}
 
 .eyebrow {
   margin: 0 0 6px;
@@ -299,12 +296,6 @@ a {
   .category-grid,
   .cards-grid {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 640px) {
-  .page-header h1 {
-    font-size: 1.8rem;
   }
 }
 
