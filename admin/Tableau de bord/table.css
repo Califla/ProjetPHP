@@ -51,13 +51,12 @@ h6 {
 }
 
 .content-area {
-  margin-left: var(--sidebar-w, 220px);
-  width: calc(100% - var(--sidebar-w, 220px));
-  padding-top: calc(var(--header-h, 64px) + 36px);
+  padding: 0 14px 100px 0;
   min-height: calc(100vh - var(--header-h, 64px));
   background: #f8fafc;
   flex: 1;
 }
+
 
 .hero-section {
   margin-top: 12px;
@@ -336,14 +335,9 @@ h6 {
 }
 
 @media (max-width: 1080px) {
-
  
   .page-content {
     width: 100%;
-  }
-
-  .content-area {
-    padding: 28px 24px 32px;
   }
 
   .stats-grid {
@@ -356,11 +350,6 @@ h6 {
 }
 
 @media (max-width: 700px) {
-  .content-area {
-    margin-left: 60px;
-    width: calc(100% - 60px);
-    padding: calc(var(--header-h, 64px) + 20px) 18px 24px;
-  }
 
   .stats-grid {
     grid-template-columns: 1fr;

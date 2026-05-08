@@ -13,7 +13,9 @@
     --header-h: 64px;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
@@ -33,6 +35,8 @@ body {
 
 body {
     background: #f8fafc;
+    padding-left: 250px;
+    padding-top: 80px;
 }
 
 h1,
@@ -64,18 +68,7 @@ p {
     margin: 0 0 1rem;
 }
 
-.page-title {
-    font-size: clamp(1.75rem, 2vw, 2.2rem);
-    font-weight: 700;
-    color: #0f172a;
-    margin-bottom: 0.5rem;
-}
 
-.page-sub {
-    color: #64748b;
-    font-size: 0.95rem;
-    margin-bottom: 1.75rem;
-}
 
 .sidebar {
     width: var(--sidebar-w);
@@ -107,13 +100,15 @@ p {
 
 .sidebar-nav {
     flex: 1;
-    position: relative; 
+    position: relative;
     z-index: 10;
     padding: 16px 0;
 }
-.sidebar-nav span{
+
+.sidebar-nav span {
     color: var(--white);
 }
+
 .nav-item {
     display: flex;
     align-items: center;
@@ -245,31 +240,14 @@ p {
     color: rgba(255, 255, 255, 0.5);
 }
 
-.main,
-.main-content {
-    margin-left: var(--sidebar-w);
-    padding-top: var(--header-h);
-    min-height: 100vh;
-    background-color: #f8fafc; /* Une couleur de fond légère pour le contenu */
-}
-
-.content-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.content-area > * {
-    max-width: 1120px;
-    width: min(100%, 1120px);
-    margin: 0 auto;
-}
-
 /* Responsive pour la sidebar et le header */
 @media (max-width: 700px) {
     .sidebar {
         width: 60px;
         align-items: center;
+    }
+    body{
+        padding-left: 80px;
     }
 
     .sidebar-logo {
@@ -299,7 +277,7 @@ p {
         gap: 6px;
     }
 
-    .nav-item > span:not(.nav-icon) {
+    .nav-item>span:not(.nav-icon) {
         display: none;
     }
 
@@ -319,20 +297,6 @@ p {
         left: 60px;
     }
 
-    /* Ajustement du contenu principal pour correspondre à la sidebar réduite */
-    .main,
-    .main-content {
-        margin-left: 60px;
-        width: calc(100% - 60px);
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-    
-    .content-area {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-
     .user-info {
         display: none;
     }
@@ -347,7 +311,7 @@ p {
     border: 1px solid rgba(255, 255, 255, 0.226);
     top: -80px;
     right: -120px;
-    z-index: 1; 
+    z-index: 1;
 }
 
 .sidebar::after {

@@ -26,14 +26,8 @@ h6 {
     font-family: 'Sora', sans-serif;
     letter-spacing: -0.02em;
 }
-/* --- Layout --- */
-.layout {
-    min-height: 100vh;
-}
 
 .main-content {
-    margin-left: var(--sidebar-w);
-    padding: calc(var(--header-h) + 40px) 40px 40px;
     min-height: 100vh;
     background-color: #f8fafc;
 }
@@ -216,17 +210,6 @@ h6 {
 
 @media (max-width: 768px) {
 
-    /* Sync m3a collapse dial sidebar li f style.css */
-    @media (max-width: 700px) {
-        .main-content {
-            margin-left: 60px;
-        }
-    }
-
-    .main-content {
-        padding: calc(var(--header-h) + 25px) 20px 30px;
-    }
-
     .badges-layout {
         grid-template-columns: 1fr;
         gap: 18px;
@@ -272,9 +255,6 @@ h6 {
         overflow-x: hidden;
     }
 
-    .main-content {
-        padding: calc(var(--header-h) + 15px) 14px 100px;
-    }
 
     .badges-layout {
         grid-template-columns: 1fr;

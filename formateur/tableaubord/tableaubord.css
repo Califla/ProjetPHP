@@ -19,9 +19,7 @@
     }
 
 
-    .main {
-        padding: calc(var(--header-h) + 40px) 40px 40px;
-    }
+    
 
     /* --- Stagiaire Style Icons --- */
     .card-icon {
@@ -192,9 +190,6 @@
 
     @media (max-width: 700px) {
 
-        .main {
-            padding: calc(var(--header-h) + 20px) 18px 20px;
-        }
 
         .stats-grid {
             grid-template-columns: 1fr;

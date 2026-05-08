@@ -18,10 +18,6 @@ h6 {
     letter-spacing: -0.02em;
 }
 
-.main {
-    padding: 100px 40px 40px;
-    max-width: 1200px;
-}
 
 .page-title h1 {
     font-size: 28px;
@@ -237,9 +233,6 @@ h6 {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .main {
-        padding: 100px 25px 25px;
-    }
 
     .search-section {
         flex-direction: column;
@@ -255,10 +248,7 @@ h6 {
 
 @media (max-width: 768px) {
 
-    .main {
-        padding: 95px 18px 20px;
-    }
-
+    
     .stats-row {
         grid-template-columns: 1fr;
         gap: 16px;
@@ -299,10 +289,6 @@ h6 {
 
     body {
         overflow-x: hidden;
-    }
-
-    .main {
-        padding: 90px 14px 100px;
     }
 
     .page-title h1 {
