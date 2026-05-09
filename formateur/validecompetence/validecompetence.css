@@ -24,6 +24,9 @@ h6 {
     font-family: 'Sora';
 }
 
+.main{
+    padding: 0 14px 100px 0;
+}
 .page-title p {
     color: #64748b;
     margin-bottom: 30px;

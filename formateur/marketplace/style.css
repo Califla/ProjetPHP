@@ -32,7 +32,10 @@ body {
     min-height: 100vh;
 }
 
+.main{
+    padding: 0 14px 100px 0;
 
+}
 .page-title {
     font-family: 'Sora', sans-serif;
     font-size: 1.5rem;
