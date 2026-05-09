@@ -49,8 +49,7 @@ a {
 .main {
   flex: 1;
   min-width: 0;
-  padding: 0 14px 100px 0;  /* بحال content-area */
-  /* امسح margin-left كاملاً */
+  padding: 0 14px 100px 0;  
 }
 
 .page-header {
