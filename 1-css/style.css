@@ -51,7 +51,14 @@ h6 {
     margin: 0 0 0.75rem;
 }
 
-
+.page-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0d2240;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+}
 p,
 span,
 li,
