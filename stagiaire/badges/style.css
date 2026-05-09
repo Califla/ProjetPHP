@@ -16,14 +16,7 @@ body {
 }
 
 /* Main content area */
-.main {
-    margin-left: var(--sidebar-w);
-    margin-top: var(--header-h);
-    padding: 32px;
-    flex: 1;
-    min-height: calc(100vh - var(--header-h));
-    background: #f5f7fa;
-}
+
 
 /* Page title and subtitle */
 .page-title {
@@ -218,11 +211,6 @@ body {
 }
 
 @media (max-width: 700px) {
-    .main {
-        margin-left: 60px;
-        padding: 20px;
-    }
-
     .page-title {
         font-size: 1.5rem;
     }
@@ -277,10 +265,6 @@ body {
 }
 
 @media (max-width: 480px) {
-    .main {
-        margin-left: 0;
-        padding: 16px;
-    }
 
     .badges-stats {
         gap: 8px;

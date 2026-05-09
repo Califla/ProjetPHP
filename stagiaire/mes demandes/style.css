@@ -34,9 +34,7 @@ body {
 
 
 .main {
-    margin-left: var(--sidebar-w);
-    margin-top: var(--header-h);
-    padding: 32px;
+    padding: 0 14px 100px 0;
     min-height: calc(100vh - var(--header-h));
 }
 
@@ -233,9 +231,6 @@ select {
 }
 
 @media (max-width: 960px) {
-    .main {
-        padding: 24px;
-    }
 
     .controls-row {
         flex-direction: column;

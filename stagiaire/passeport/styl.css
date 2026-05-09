@@ -14,11 +14,8 @@ body {
 }
 
 .main {
-  margin-left: var(--sidebar-w);
-  margin-top: var(--header-h);
+  padding: 0 14px 100px 0;
   min-height: calc(100vh - var(--header-h));
-  padding: 32px 36px;
-  background: var(--gray-bg);
 }
 
 .passport-top {
@@ -218,10 +215,6 @@ body {
 }
 
 @media (max-width: 700px) {
-  .main {
-    margin-left: 60px;
-    padding: 20px 16px;
-  }
   .passport-top {
     flex-direction: column;
     align-items: flex-start;

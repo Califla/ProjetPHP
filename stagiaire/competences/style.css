@@ -17,9 +17,7 @@ body {
 
 /* Main content area */
 .main {
-    margin-left: var(--sidebar-w);
-    margin-top: var(--header-h);
-    padding: 32px;
+    padding: 0 14px 100px 0;
     flex: 1;
     min-height: calc(100vh - var(--header-h));
     background: #f5f7fa;
@@ -228,11 +226,6 @@ body {
 }
 
 @media (max-width: 700px) {
-    .main {
-        margin-left: 60px;
-        padding: 20px;
-    }
-
     .page-header {
         flex-direction: column;
         align-items: stretch;
@@ -291,10 +284,6 @@ body {
 }
 
 @media (max-width: 480px) {
-    .main {
-        margin-left: 0;
-        padding: 16px;
-    }
 
     .competences-stats {
         gap: 8px;
