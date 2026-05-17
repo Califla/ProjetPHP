@@ -8,15 +8,22 @@ body {
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
 }
-*, *::before, *::after {
+
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
+
 /* --- Icons (Stagiaire Style) --- */
 .stat-icon {
-    width: 24px; height: 24px;
-    stroke: var(--accent); fill: none;
+    width: 24px;
+    height: 24px;
+    stroke: var(--accent);
+    fill: none;
     stroke-width: 1.8;
 }
+
 h1,
 h2,
 h3,
@@ -32,6 +39,13 @@ h6 {
     background-color: #f8fafc;
     padding: 0 14px 100px 0;
 
+}
+
+.eyebrow {
+    font-size: 0.95rem;
+    color: var(--gray-text);
+    margin-top: 8px;
+    margin-bottom: 32px;
 }
 
 .badges-right-side {
@@ -165,6 +179,20 @@ h6 {
     background: #f8fafc;
     font-family: inherit;
     outline: none;
+}
+
+.custom-search-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    font-family: inherit;
+    outline: none;
+}
+
+.custom-search-input::placeholder {
+    color: #94a3b8;
 }
 
 .btn-primary-muted {

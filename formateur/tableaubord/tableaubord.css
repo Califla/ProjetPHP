@@ -43,6 +43,12 @@
         padding: 0 14px 100px 0;
 
     }
+    .eyebrow{
+        font-size: 0.95rem;
+        color: var(--gray-text);
+        margin-top: 8px;
+        margin-bottom: 32px;
+    }
     .page-title p {
         color: #64748b;
         margin: 8px 0 32px;
