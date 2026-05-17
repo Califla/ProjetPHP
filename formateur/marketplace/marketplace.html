@@ -5,9 +5,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ISMO-SkillSwap – Marketplace Formateur</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../1-css/style.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -44,62 +41,98 @@
         </svg>
         <span class="notif-dot"></span>
       </button>
-      <form class="header-search" action="#" onsubmit="return false;">
-        <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="7" />
-          <line x1="21" y1="21" x2="16.65" y2="16.65" />
-        </svg>
-        <input id="globalSearch" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
-      </form>
       <div class="user-pill">
         <div class="user-info">
           <div class="user-name">Lafhal Jouariya</div>
-          <div class="user-role">Formateur</div>
+          <div class="user-role">formateur</div>
         </div>
         <div class="user-avatar">LJ</div>
       </div>
     </header>
 
-    <main class="main" data-role="formateur">
+    <main class="main">
       <div class="page-title">Marketplace Formateur</div>
       <div class="page-sub">Gérez les demandes d'aide et proposez votre soutien aux stagiaires.</div>
 
       <section class="controls-row">
         <div class="control-group search-group">
-          <svg class="control-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg class="control-icon" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
           <input id="searchInput" type="search" placeholder="Rechercher par mot-clé, compétence, technologie..." />
         </div>
         <div class="control-group right-group">
           <select>
-            <option value="all">Toutes les filières</option>
-            <option value="DEV">DEV</option>
-            <option value="CYBERSEC">CYBERSEC</option>
-            <option value="DATA">DATA</option>
+            <option>Toutes les filières</option>
+            <option>DEV</option>
+            <option>CYBERSEC</option>
+            <option>DATA</option>
           </select>
           <select>
-            <option value="all">Tous les niveaux</option>
-            <option value="Débutant">Débutant</option>
-            <option value="Intermédiaire">Intermédiaire</option>
-            <option value="Avancé">Avancé</option>
+            <option>Tous les niveaux</option>
+            <option>Débutant</option>
+            <option>Intermédiaire</option>
+            <option>Avancé</option>
           </select>
           <select>
-            <option value="all">Tous les statuts</option>
-            <option value="ouvert">Ouvert</option>
-            <option value="fermé">Fermé</option>
+            <option>Tous les statuts</option>
+            <option>Ouvert</option>
+            <option>Fermé</option>
           </select>
-          <button class="filter-btn" id="filterBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
-            Filtres
-          </button>
         </div>
       </section>
 
-      <div class="demandes-list"></div>
+      <div class="demandes-list">
+        <article class="demande-card">
+          <div class="card-header">
+            <div>
+              <h2>Réponse aux tests unitaires Angular</h2>
+              <p>Besoin d'un formateur pour revoir les meilleures pratiques de tests unitaires Angular avec Jasmine et
+                Karma.</p>
+            </div>
+            <span class="badge-status ouvert">Ouvert</span>
+          </div>
+          <div class="tag-row">
+            <span class="tag">Angular</span>
+            <span class="tag">Tests</span>
+            <span class="tag">Intermédiaire</span>
+          </div>
+          <div class="card-footer">
+            <span>Publié le 06/05/2026</span>
+            <span>2 réponses</span>
+          </div>
+          <div class="action-row">
+            <button class="ghost-btn">Voir</button>
+            <button class="primary-btn">Proposer mon aide</button>
+          </div>
+        </article>
+
+        <article class="demande-card">
+          <div class="card-header">
+            <div>
+              <h2>Accompagnement sur la sécurité d'API REST</h2>
+              <p>Recherche un formateur expert pour expliquer l'authentification JWT et la protection des endpoints.</p>
+            </div>
+            <span class="badge-status ouvert">Ouvert</span>
+          </div>
+          <div class="tag-row">
+            <span class="tag">API</span>
+            <span class="tag">Sécurité</span>
+            <span class="tag">JWT</span>
+          </div>
+          <div class="card-footer">
+            <span>Publié le 05/05/2026</span>
+            <span>0 réponse</span>
+          </div>
+          <div class="action-row">
+            <button class="ghost-btn">Voir</button>
+            <button class="primary-btn">Proposer mon aide</button>
+          </div>
+        </article>
+      </div>
     </main>
   </div>
-
-  <script src="../../2-script/marketplace.js"></script>
 </body>
 
 </html>

@@ -24,17 +24,9 @@ h6 {
     font-family: 'Sora';
 }
 
-.main {
+.main{
     padding: 0 14px 100px 0;
 }
-
-.eyebrow {
-    font-size: 0.95rem;
-    color: var(--gray-text);
-    margin-top: 8px;
-    margin-bottom: 32px;
-}
-
 .page-title p {
     color: #64748b;
     margin-bottom: 30px;
@@ -259,7 +251,7 @@ h6 {
 
 @media (max-width: 768px) {
 
-
+    
     .stats-row {
         grid-template-columns: 1fr;
         gap: 16px;
