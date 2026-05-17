@@ -58,7 +58,7 @@ body {
     cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Sora', sans-serif;
 }
 
 .btn-primary:hover {

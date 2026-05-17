@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap');
 
 /* Fichier: common-sidebar-header.css */
 
@@ -21,7 +21,7 @@
 
 html,
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Sora', sans-serif;
     background: #f8fafc;
     color: #334155;
     line-height: 1.6;

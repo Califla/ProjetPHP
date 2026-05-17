@@ -22,7 +22,7 @@
     html,
     body {
       height: 100%;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Sora', sans-serif;
     }
 
     body {
@@ -388,7 +388,7 @@
       border: 1.5px solid var(--border);
       border-radius: 10px;
       font-size: 0.9rem;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Sora', sans-serif;
       color: var(--text-dark);
       background: var(--white);
       outline: none;

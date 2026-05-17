@@ -10,7 +10,7 @@
       --orange:      #f97316;
     }
 
-    html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--gray-bg); color: var(--text-dark); }
+    html, body { height: 100%; font-family: 'Sora', sans-serif; background: var(--gray-bg); color: var(--text-dark); }
 
     /* ── LAYOUT ── */
     .layout { display: flex; min-height: 100vh; }

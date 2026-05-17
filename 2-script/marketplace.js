@@ -142,7 +142,7 @@ function createCard(demande) {
   const isLiked = likedDemandes.has(demande.id);
   const isProposed = proposedDemandes.has(demande.id);
 
-  const shouldShowPropose = pageRole !== 'admin';
+  const shouldShowPropose = pageRole === 'stagiaire';
   const proposeButtonHtml = shouldShowPropose
     ? `<button class="primary-btn propose-btn ${isProposed ? 'proposed' : ''}" data-id="${demande.id}">
         ${isProposed ? '✓ Proposé' : 'Proposer mon aide'}

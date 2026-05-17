@@ -19,7 +19,7 @@
 
 html,
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Sora', sans-serif;
     background: #f8fafc;
     -moz-osx-font-smoothing: grayscale;
     margin: 0;
@@ -185,7 +185,7 @@ input {
 .axis-label {
   font-size: 12px;
   fill: var(--muted);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Sora', sans-serif;
 }
 
 .pie-label {
