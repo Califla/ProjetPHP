@@ -237,13 +237,24 @@ function reportDemande(id) {
 
 function modifyDemande(id) {
   const demande = demandesData.find(d => d.id === id);
-  if (demande) {
-    if (currentUserName !== demande.author) {
-      alert('Vous ne pouvez modifier que vos propres demandes.');
-      return;
-    }
-    alert(`Modification de: ${demande.title}\n\nFonctionnalité en développement...`);
+  if (!demande) return;
+  if (currentUserName !== demande.author) {
+    alert('Vous ne pouvez modifier que vos propres demandes.');
+    return;
   }
+
+  const newTitle = prompt('Nouveau titre :', demande.title);
+  if (newTitle === null) return;
+  const newDesc = prompt('Nouvelle description :', demande.description);
+  if (newDesc === null) return;
+  const newTags = prompt('Tags (séparés par des virgules) :', demande.tags.join(', '));
+  if (newTags === null) return;
+
+  demande.title = newTitle.trim();
+  demande.description = newDesc.trim();
+  demande.tags = newTags.split(',').map(t => t.trim()).filter(t => t);
+
+  renderCards();
 }
 
 function toggleFilterPanel() {
