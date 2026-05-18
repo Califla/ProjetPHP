@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ISMO-SkillSwap – Passeport Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../1-css/style.css" />
+  <link rel="stylesheet" href="passeport.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><span>ISMO-SkillSwap</span></div>
+      <nav class="sidebar-nav">
+        <div class="nav-item" onclick="location.href='../Tableau de bord/table.html'">
+          <span class="nav-icon">🏠</span>
+          <span>Tableau de bord</span>
+        </div>
+        <div class="nav-item" onclick="location.href='../Utulisateurs/utili.html'">
+          <span class="nav-icon">👥</span>
+          <span>Utilisateurs</span>
+        </div>
+        <div class="nav-item" onclick="location.href='../Competences/compe.html'">
+          <span class="nav-icon">🏷️</span>
+          <span>Compétences</span>
+        </div>
+        <div class="nav-item" onclick="location.href='../Badges/badges.html'">
+          <span class="nav-icon">🎖️</span>
+          <span>Badges</span>
+        </div>
+        <div class="nav-item" onclick="location.href='../Moderation/mode.html'">
+          <span class="nav-icon">🛡️</span>
+          <span>Modération</span>
+        </div>
+        <div class="nav-item" onclick="location.href='../Statistiques/stat.html'">
+          <span class="nav-icon">📊</span>
+          <span>Statistiques</span>
+        </div>
+        <div class="nav-item" onclick="location.href='../Marketplace/market.html'">
+          <span class="nav-icon">🛒</span>
+          <span>Marketplace</span>
+        </div>
+        <div class="nav-item active" onclick="location.href='passeport.html'">
+          <span class="nav-icon">👤</span>
+          <span>Passeport</span>
+        </div>
+      </nav>
+    </aside>
+
+    <header class="header">
+      <button class="notif-btn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-dot"></span>
+      </button>
+      <form class="header-search" action="#" onsubmit="return false;">
+        <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input id="globalSearch" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
+      </form>
+      <div class="user-pill" data-email="admin@ismo.ma">
+        <div class="user-info">
+          <div class="user-name">Admin</div>
+          <div class="user-role">Administrateur</div>
+        </div>
+        <div class="user-avatar">Ad</div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="passport-top">
+        <div>
+          <h1 class="page-title">Passeport administrateur</h1>
+          <p class="page-label">Aperçu de votre profil et de votre activité sur la plateforme</p>
+        </div>
+        <button class="export-btn">Exporter en PDF</button>
+      </section>
+
+      <section class="passport-summary">
+        <div class="profile-card">
+          <div class="profile-badge">Ad</div>
+          <div class="profile-info">
+            <div class="profile-name">Admin</div>
+            <div class="profile-role">Administrateur</div>
+          </div>
+        </div>
+        <div class="summary-stats">
+          <div class="stat-block">
+            <div class="stat-label">Utilisateurs</div>
+            <div class="stat-value">156</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Badges</div>
+            <div class="stat-value">12</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Signalements</div>
+            <div class="stat-value">8</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="passport-grid">
+        <article class="card badges-card">
+          <div class="card-title">Badges créés</div>
+          <div class="badge-grid">
+            <div class="badge-item">
+              <span class="badge-icon">🎯</span>
+              <div>
+                <div class="badge-name">Premier pas</div>
+                <div class="badge-count">45 attributions</div>
+              </div>
+            </div>
+            <div class="badge-item">
+              <span class="badge-icon">⭐</span>
+              <div>
+                <div class="badge-name">Mentor actif</div>
+                <div class="badge-count">23 attributions</div>
+              </div>
+            </div>
+            <div class="badge-item">
+              <span class="badge-icon">💜</span>
+              <div>
+                <div class="badge-name">Expert React</div>
+                <div class="badge-count">12 attributions</div>
+              </div>
+            </div>
+            <div class="badge-item">
+              <span class="badge-icon">💛</span>
+              <div>
+                <div class="badge-name">Collaborateur</div>
+                <div class="badge-count">18 attributions</div>
+              </div>
+            </div>
+            <div class="badge-item">
+              <span class="badge-icon">🏆</span>
+              <div>
+                <div class="badge-name">Top contributeur</div>
+                <div class="badge-count">10 attributions</div>
+              </div>
+            </div>
+            <div class="badge-item">
+              <span class="badge-icon">🔒</span>
+              <div>
+                <div class="badge-name">Sécurité Pro</div>
+                <div class="badge-count">8 attributions</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card activity-card">
+          <div class="card-title">Activité récente</div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <span class="activity-icon">➕</span>
+              <div>
+                <div class="activity-text">Nouvel utilisateur inscrit : Sara El Amrani</div>
+                <div class="activity-date">18/05/2026</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <span class="activity-icon">🎖️</span>
+              <div>
+                <div class="activity-text">Badge "Mentor actif" attribué à Youssef Benali</div>
+                <div class="activity-date">17/05/2026</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <span class="activity-icon">🗑️</span>
+              <div>
+                <div class="activity-text">Publication signalée supprimée</div>
+                <div class="activity-date">16/05/2026</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <span class="activity-icon">✅</span>
+              <div>
+                <div class="activity-text">Compétence "Docker" validée pour Ahmed Idrissi</div>
+                <div class="activity-date">15/05/2026</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <span class="activity-icon">🛒</span>
+              <div>
+                <div class="activity-text">Nouvelle demande sur le Marketplace</div>
+                <div class="activity-date">14/05/2026</div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+  <script src="../../2-script/profile-menu.js"></script>
+  <script src="../../2-script/search.js"></script>
+</body>
+</html>
