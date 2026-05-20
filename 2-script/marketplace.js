@@ -10,7 +10,7 @@ const demandesData = [
     status: "ouvert",
     date: "26/04/2026",
     responses: 1,
-    author: "Marie Dupont"
+    author: "Youssef Benali"
   },
   {
     id: 2,
@@ -141,15 +141,14 @@ function createCard(demande) {
 
   const isLiked = likedDemandes.has(demande.id);
   const isProposed = proposedDemandes.has(demande.id);
+  const canModify = currentUserName && currentUserName === demande.author;
 
-  const shouldShowPropose = pageRole === 'stagiaire';
+  const shouldShowPropose = pageRole === 'stagiaire' && !canModify;
   const proposeButtonHtml = shouldShowPropose
     ? `<button class="primary-btn propose-btn ${isProposed ? 'proposed' : ''}" data-id="${demande.id}">
         ${isProposed ? '✓ Proposé' : 'Proposer mon aide'}
       </button>`
     : '';
-
-  const canModify = currentUserName && currentUserName === demande.author;
   const modifyButtonHtml = canModify
     ? `<button class="ghost-btn modify-btn" data-id="${demande.id}">Modifier</button>`
     : '';
