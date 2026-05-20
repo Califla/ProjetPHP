@@ -99,7 +99,7 @@ body {
 
 .summary-stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -199,6 +199,12 @@ body {
   font-size: 0.82rem;
   color: var(--gray-text);
   margin-top: 4px;
+}
+
+.rating-stars {
+  font-size: 1.1rem;
+  color: #f59e0b;
+  letter-spacing: 2px;
 }
 
 @media (max-width: 1024px) {

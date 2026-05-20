@@ -85,7 +85,7 @@
       </section>
 
       <div class="demandes-list" id="demandesList">
-        <article class="demande-card" data-status="resolu">
+        <article class="demande-card" data-status="resolu" data-mentor="Youssef Benali">
           <div class="card-header">
             <div>
               <h2>Aide sur React Hooks useEffect</h2>
@@ -100,10 +100,10 @@
           </div>
           <div class="card-footer">
             <span>Publié le 24/04/2026</span>
-            <span>3 réponses</span>
+            <span>Mentor: Youssef Benali</span>
           </div>
           <div class="action-row">
-            <button class="ghost-btn">Modifier</button>
+            <button class="ghost-btn rating-btn" data-mentor="Youssef Benali">⭐ Noter le mentor</button>
             <button class="primary-btn">Voir détails</button>
           </div>
         </article>
@@ -153,6 +153,24 @@
         </article>
       </div>
     </main>
+  </div>
+
+  <div class="modal-overlay" id="ratingModal">
+    <div class="modal-content">
+      <button class="modal-close" id="closeModal">&times;</button>
+      <h2>Noter le mentor</h2>
+      <p class="modal-mentor" id="modalMentorName">—</p>
+      <div class="star-rating" id="starRating">
+        <span class="star" data-value="1">☆</span>
+        <span class="star" data-value="2">☆</span>
+        <span class="star" data-value="3">☆</span>
+        <span class="star" data-value="4">☆</span>
+        <span class="star" data-value="5">☆</span>
+      </div>
+      <p class="rating-label" id="ratingLabel">Sélectionnez une note</p>
+      <textarea class="rating-comment" id="ratingComment" placeholder="Laissez un commentaire (optionnel)" rows="3"></textarea>
+      <button class="primary-btn submit-rating" id="submitRating">Envoyer la note</button>
+    </div>
   </div>
 
   <script src="script.js"></script>

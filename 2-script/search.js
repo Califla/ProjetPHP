@@ -6,6 +6,7 @@ const searchUsers = [
   { nom: "Alex Chen", role: "stagiaire", filiere: "DATA", avatar: "AC" },
   { nom: "Thomas Lefevre", role: "stagiaire", filiere: "CYBERSEC", avatar: "TL" },
   { nom: "Lafhal Jouariya", role: "formateur", filiere: null, avatar: "LJ" },
+  { nom: "Youssef Benali", role: "mentor", filiere: "DEV", avatar: "YB" },
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -56,8 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     dropdown.querySelectorAll('.search-dropdown-item').forEach(item => {
       item.addEventListener('click', () => {
-        searchInput.value = item.dataset.user;
+        const userName = item.dataset.user;
+        searchInput.value = userName;
         dropdown.style.display = 'none';
+        const isProfilePage = window.location.pathname.includes('public_profile.html') || document.querySelector('.pub-card');
+        const prefix = isProfilePage ? '' : '../../';
+        window.location.href = prefix + 'public_profile.html?name=' + encodeURIComponent(userName);
       });
     });
   });

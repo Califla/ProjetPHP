@@ -9,7 +9,6 @@ const demandesData = [
     level: "Débutant",
     status: "ouvert",
     date: "26/04/2026",
-    responses: 1,
     author: "Youssef Benali"
   },
   {
@@ -21,7 +20,6 @@ const demandesData = [
     level: "Intermédiaire",
     status: "ouvert",
     date: "26/04/2026",
-    responses: 0,
     author: "Jean Martin"
   },
   {
@@ -33,7 +31,6 @@ const demandesData = [
     level: "Intermédiaire",
     status: "ouvert",
     date: "25/04/2026",
-    responses: 2,
     author: "Sophie Bernard"
   },
   {
@@ -45,7 +42,6 @@ const demandesData = [
     level: "Avancé",
     status: "ouvert",
     date: "24/04/2026",
-    responses: 3,
     author: "Alex Chen"
   },
   {
@@ -57,7 +53,6 @@ const demandesData = [
     level: "Avancé",
     status: "fermé",
     date: "23/04/2026",
-    responses: 5,
     author: "Thomas Lefevre"
   }
 ];
@@ -165,7 +160,7 @@ function createCard(demande) {
       <div class="header-info">
         <h2>${demande.title}</h2>
         <p>${demande.description}</p>
-        <p style="font-size: 0.85rem; color: #999; margin-top: 8px;">Par : <strong>${demande.author}</strong></p>
+        <p style="font-size: 0.85rem; color: #999; margin-top: 8px;">Par : <a href="../../public_profile.html?name=${encodeURIComponent(demande.author)}" style="color:var(--accent);text-decoration:none;font-weight:600;">${demande.author}</a></p>
       </div>
       ${rightBlockHtml}
     </div>
