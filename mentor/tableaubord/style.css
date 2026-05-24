@@ -127,6 +127,8 @@
     .badge-status.resolu  { background: #dcfce7; color: #15803d; }
     .badge-status.ouvert  { background: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; }
 
+
+
     /* HELP BTN */
     .help-btn {
       position: fixed; bottom: 24px; right: 24px;

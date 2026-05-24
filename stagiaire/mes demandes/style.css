@@ -209,9 +209,15 @@ select {
 }
 
 .badge-status.ouvert {
-    background: #dbeafe;
-    color: #1d4ed8;
-    border: 1px solid #93c5fd;
+  background: #dbeafe;
+  color: #1d4ed8;
+  border: 1px solid #93c5fd;
+}
+
+.badge-status.ferme {
+  background: #f3e8ff;
+  color: #7c3aed;
+  border: 1px solid #d8b4fe;
 }
 
 .tag-row {
@@ -261,6 +267,118 @@ select {
 .primary-btn {
     background: var(--accent);
     color: var(--white);
+}
+
+/* ── Proposals section ── */
+.proposals-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.proposals-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 10px;
+}
+
+.proposal-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--gray-bg);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.proposal-item:last-child {
+  margin-bottom: 0;
+}
+
+.proposal-proposer {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.proposal-proposer:hover {
+  color: var(--accent-soft);
+  text-decoration: underline;
+}
+
+.proposal-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.proposal-badge.en_attente { background: #fef3c7; color: #92400e; }
+.proposal-badge.acceptee   { background: #dcfce7; color: #15803d; }
+.proposal-badge.refusee    { background: #fee2e2; color: #b91c1c; }
+
+.proposal-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.accept-btn, .refuse-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.accept-btn {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.accept-btn:hover {
+  background: #bbf7d0;
+}
+
+.refuse-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.refuse-btn:hover {
+  background: #fecaca;
+}
+
+.status-select {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Sora', sans-serif;
+  background: var(--accent);
+  color: var(--white);
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s;
+  min-width: 120px;
+}
+
+.status-select:hover {
+  background: var(--accent-soft);
+  transform: translateY(-1px);
+}
+
+.status-select option {
+  background: var(--white);
+  color: var(--text-dark);
 }
 
 .no-results {

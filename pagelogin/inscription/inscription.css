@@ -6,6 +6,25 @@
       padding: 0;
     }
 
+    .field-error {
+      display: block;
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 4px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .error-msg {
+      color: #e74c3c;
+      margin-bottom: 16px;
+      padding: 10px;
+      background: #fde8e8;
+      border-radius: 8px;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+    }
+
     :root {
       --navy: #0d2240;
       --navy-mid: #163158;

@@ -162,3 +162,129 @@ document.addEventListener('keydown', (e) => {
     modal.style.display = 'none';
   }
 });
+
+// ── Status change ──────────────────────────────────────────────
+function getDemandeStatuses() {
+  return JSON.parse(localStorage.getItem('demandeStatuses') || '{}');
+}
+
+function toggleRatingBtn(card) {
+  const ratingBtn = card.querySelector('.rating-btn');
+  if (!ratingBtn) return;
+  ratingBtn.style.display = card.dataset.status === 'resolu' ? '' : 'none';
+}
+
+function initStatusSelects() {
+  const saved = getDemandeStatuses();
+  document.querySelectorAll('.status-select').forEach(select => {
+    const card = select.closest('.demande-card');
+    const title = card.querySelector('h2').textContent;
+
+    if (saved[title]) {
+      card.dataset.status = saved[title];
+    }
+    select.value = card.dataset.status;
+    updateBadge(card);
+    toggleRatingBtn(card);
+
+    select.addEventListener('change', () => {
+      const newStatus = select.value;
+      card.dataset.status = newStatus;
+      const saved2 = getDemandeStatuses();
+      saved2[title] = newStatus;
+      localStorage.setItem('demandeStatuses', JSON.stringify(saved2));
+      updateBadge(card);
+      toggleRatingBtn(card);
+    });
+  });
+}
+
+function updateBadge(card) {
+  const badge = card.querySelector('.badge-status');
+  if (!badge) return;
+  const status = card.dataset.status;
+  const labels = { ouvert: 'Ouvert', resolu: 'Résolu', ferme: 'Fermé' };
+  badge.className = 'badge-status ' + status;
+  badge.textContent = labels[status] || status;
+}
+
+initStatusSelects();
+
+// Seed demo proposals
+(function seedProposals() {
+  const existing = JSON.parse(localStorage.getItem('proposalsDetails') || '[]');
+  const proposed = new Set(JSON.parse(localStorage.getItem('proposedDemandes') || '[]'));
+  const demo = [
+    { id: 99, title: 'Aide sur React Hooks useEffect', date: '24/04/2026', status: 'en_attente', proposer: 'Youssef Benali' },
+    { id: 98, title: 'Aide sur React Hooks useEffect', date: '24/04/2026', status: 'en_attente', proposer: 'Karim Benali' },
+    { id: 97, title: 'Problème avec Git merge conflicts', date: '26/04/2026', status: 'en_attente', proposer: 'Sara El Fassi' },
+  ];
+  let changed = false;
+  demo.forEach(d => {
+    if (!existing.find(e => e.title === d.title && e.proposer === d.proposer)) {
+      existing.push(d);
+      proposed.add(d.id);
+      changed = true;
+    }
+  });
+  if (changed) {
+    localStorage.setItem('proposalsDetails', JSON.stringify(existing));
+    localStorage.setItem('proposedDemandes', JSON.stringify(Array.from(proposed)));
+  }
+})();
+
+renderProposals();
+
+// ── Proposals (accept/refuse) ──────────────────────────────────
+function renderProposals() {
+  const proposals = JSON.parse(localStorage.getItem('proposalsDetails') || '[]');
+
+  document.querySelectorAll('.proposals-section').forEach(section => {
+    const card = section.closest('.demande-card');
+    const title = card.querySelector('h2').textContent;
+    const cardProposals = proposals.filter(p => p.title === title);
+
+    if (cardProposals.length === 0) {
+      section.innerHTML = '';
+      return;
+    }
+
+    section.innerHTML = '<div class="proposals-title">Propositions reçues :</div>' +
+      cardProposals.map(p => {
+        const labels = { en_attente: 'En attente', acceptee: 'Acceptée', refusee: 'Refusée' };
+        const btns = p.status === 'en_attente'
+          ? `<button class="accept-btn" data-proposer="${p.proposer}">✓ Accepter</button>
+             <button class="refuse-btn" data-proposer="${p.proposer}">✗ Refuser</button>`
+          : '';
+        return `
+          <div class="proposal-item" data-proposer="${p.proposer}">
+            <a href="../../public_profile.html?name=${encodeURIComponent(p.proposer)}" class="proposal-proposer">${p.proposer}</a>
+            <span class="proposal-badge ${p.status}">${labels[p.status]}</span>
+            <div class="proposal-actions">${btns}</div>
+          </div>
+        `;
+      }).join('');
+  });
+
+  document.querySelectorAll('.accept-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => updateProposalStatus(e, 'acceptee'));
+  });
+  document.querySelectorAll('.refuse-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => updateProposalStatus(e, 'refusee'));
+  });
+}
+
+function updateProposalStatus(e, newStatus) {
+  const btn = e.currentTarget;
+  const card = btn.closest('.demande-card');
+  if (!card) return;
+  const title = card.querySelector('h2').textContent;
+  const proposer = btn.dataset.proposer;
+  const proposals = JSON.parse(localStorage.getItem('proposalsDetails') || '[]');
+  const p = proposals.find(p => p.title === title && p.proposer === proposer);
+  if (p) {
+    p.status = newStatus;
+    localStorage.setItem('proposalsDetails', JSON.stringify(proposals));
+    renderProposals();
+  }
+}

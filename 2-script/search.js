@@ -7,6 +7,8 @@ const searchUsers = [
   { nom: "Thomas Lefevre", role: "stagiaire", filiere: "CYBERSEC", avatar: "TL" },
   { nom: "Lafhal Jouariya", role: "formateur", filiere: null, avatar: "LJ" },
   { nom: "Youssef Benali", role: "mentor", filiere: "DEV", avatar: "YB" },
+  { nom: "Karim Benali", role: "stagiaire", filiere: "DEV", avatar: "KB" },
+  { nom: "Sara El Fassi", role: "stagiaire", filiere: "DATA", avatar: "SF" },
 ];
 
 document.addEventListener('DOMContentLoaded', () => {

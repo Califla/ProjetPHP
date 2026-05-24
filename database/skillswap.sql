@@ -3,7 +3,7 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 
-CREATE SCHEMA IF NOT EXISTS `skillswaps` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+CREATE SCHEMA IF NOT EXISTS `skillswaps` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci ;
 USE `skillswaps` ;
 
 
@@ -19,10 +19,10 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`utilisateurs` (
   `filiere` VARCHAR(100) NULL DEFAULT NULL,
   `statut` ENUM('actif', 'inactif', 'en_attente', 'suspendu') NULL DEFAULT NULL,
   PRIMARY KEY (`id_user`),
-  UNIQUE INDEX `email` (`email` ASC) VISIBLE)
+  UNIQUE INDEX `email` (`email` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+COLLATE = utf8mb4_general_ci;
 
 
 
@@ -38,13 +38,13 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`aide` (
   `level` VARCHAR(50) NULL DEFAULT NULL,
   `id_user` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id_demande`),
-  INDEX `id_user` (`id_user` ASC) VISIBLE,
+  INDEX `id_user` (`id_user` ASC),
   CONSTRAINT `aide_ibfk_1`
     FOREIGN KEY (`id_user`)
     REFERENCES `skillswaps`.`utilisateurs` (`id_user`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+COLLATE = utf8mb4_general_ci;
 
 
 
@@ -56,8 +56,8 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`propositions_aide` (
   `date_prop` DATETIME NULL DEFAULT NULL,
   `date_rep` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`id_proposition`),
-  INDEX `id_demande` (`id_demande` ASC) VISIBLE,
-  INDEX `id_user` (`id_user` ASC) VISIBLE,
+  INDEX `id_demande` (`id_demande` ASC),
+  INDEX `id_user` (`id_user` ASC),
   CONSTRAINT `propositions_aide_ibfk_1`
     FOREIGN KEY (`id_demande`)
     REFERENCES `skillswaps`.`aide` (`id_demande`),
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`propositions_aide` (
     REFERENCES `skillswaps`.`utilisateurs` (`id_user`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+COLLATE = utf8mb4_general_ci;
 
 
 
@@ -77,9 +77,9 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`aide_effectuee` (
   `date_intervention` DATETIME NULL,
   `note_mentor` INT NULL,
   `commentaire` TEXT NULL,
-  INDEX `id_proposition` (`id_proposition` ASC) VISIBLE,
-  INDEX `id_aidant` (`id_mentor` ASC) VISIBLE,
-  INDEX `id_beneficiaire` (`id_beneficiaire` ASC) VISIBLE,
+  INDEX `id_proposition` (`id_proposition` ASC),
+  INDEX `id_aidant` (`id_mentor` ASC),
+  INDEX `id_beneficiaire` (`id_beneficiaire` ASC),
   PRIMARY KEY (`id_proposition`, `id_mentor`, `id_beneficiaire`),
   CONSTRAINT `aide_effectuee_ibfk_1`
     FOREIGN KEY (`id_proposition`)
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`aide_effectuee` (
     REFERENCES `skillswaps`.`utilisateurs` (`id_user`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+COLLATE = utf8mb4_general_ci;
 
 
 
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`badges` (
   PRIMARY KEY (`id_badge`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+COLLATE = utf8mb4_general_ci;
 
 
 
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`competences` (
   PRIMARY KEY (`id_competence`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+COLLATE = utf8mb4_general_ci;
 
 
 
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`obtention_badges` (
   `confirmed_by` INT NULL DEFAULT NULL,
   `date_obtention` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`id_user`, `id_badge`),
-  INDEX `id_badge` (`id_badge` ASC) VISIBLE,
+  INDEX `id_badge` (`id_badge` ASC),
   CONSTRAINT `obtention_badges_ibfk_1`
     FOREIGN KEY (`id_user`)
     REFERENCES `skillswaps`.`utilisateurs` (`id_user`),
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`obtention_badges` (
     REFERENCES `skillswaps`.`utilisateurs` (`id_user`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+COLLATE = utf8mb4_general_ci;
 
 
 
@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`possede` (
   `id_competence` INT NOT NULL,
   `niveau` ENUM('debutant', 'intermediaire', 'avance', 'expert') NULL DEFAULT NULL,
   PRIMARY KEY (`id_user`, `id_competence`),
-  INDEX `id_competence` (`id_competence` ASC) VISIBLE,
+  INDEX `id_competence` (`id_competence` ASC),
   CONSTRAINT `possede_ibfk_1`
     FOREIGN KEY (`id_user`)
     REFERENCES `skillswaps`.`utilisateurs` (`id_user`),
@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`possede` (
     REFERENCES `skillswaps`.`competences` (`id_competence`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+COLLATE = utf8mb4_general_ci;
 
 
 
@@ -167,8 +167,8 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`validation_competence` (
   `justification` TEXT NULL DEFAULT NULL,
   `date_validation` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`id_user`, `id_competence`),
-  INDEX `id_validateur` (`id_validateur` ASC) VISIBLE,
-  INDEX `id_competence` (`id_competence` ASC) VISIBLE,
+  INDEX `id_validateur` (`id_validateur` ASC),
+  INDEX `id_competence` (`id_competence` ASC),
   CONSTRAINT `validation_competence_ibfk_1`
     FOREIGN KEY (`id_user`)
     REFERENCES `skillswaps`.`utilisateurs` (`id_user`),
@@ -180,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`validation_competence` (
     REFERENCES `skillswaps`.`competences` (`id_competence`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+COLLATE = utf8mb4_general_ci;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

@@ -1,3 +1,64 @@
+<?php
+require_once __DIR__ . '/../../database/config.php';
+
+$err = [];
+$old = [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $nom = trim($_POST['nom'] ?? '');
+  $prenom = trim($_POST['prenom'] ?? '');
+  $email = trim($_POST['email'] ?? '');
+  $password = $_POST['password'] ?? '';
+  $confirm_password = $_POST['confirm_password'] ?? '';
+  $filiere = $_POST['filiere'] ?? '';
+  $role = $_POST['role'] ?? '';
+  $terms = isset($_POST['terms']);
+
+  $old = compact('nom', 'prenom', 'email', 'filiere', 'role');
+
+  if (empty($nom)) $err['nom'] = 'Le nom est obligatoire';
+  if (empty($prenom)) $err['prenom'] = 'Le prénom est obligatoire';
+  if (empty($email)) $err['email'] = "L'email est obligatoire";
+  elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) $err['email'] = "L'email n'est pas valide";
+  if (empty($password)) $err['password'] = 'Le mot de passe est obligatoire';
+  elseif (strlen($password) < 6) $err['password'] = 'Le mot de passe doit contenir au moins 6 caractères';
+  if (empty($confirm_password)) $err['confirm_password'] = 'La confirmation est obligatoire';
+  elseif ($password !== $confirm_password) $err['confirm_password'] = 'Les mots de passe ne correspondent pas';
+  if (empty($role)) $err['role'] = 'Veuillez sélectionner un rôle';
+  if (!$terms) $err['terms'] = 'Vous devez accepter les conditions d\'utilisation';
+
+  if (empty($err)) {
+    $stmt = $conn->prepare("SELECT id_user FROM utilisateurs WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
+    if ($stmt->num_rows > 0) {
+      $err['email'] = 'Cet email est déjà utilisé';
+    }
+    $stmt->close();
+  }
+
+  if (empty($err)) {
+    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+    $statut = 'actif';
+
+    $stmt = $conn->prepare("INSERT INTO utilisateurs (nom, prenom, email, motdepasse, role, filiere, statut) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssss", $nom, $prenom, $email, $hashed_password, $role, $filiere, $statut);
+
+    if ($stmt->execute()) {
+      $_SESSION['user_id'] = $stmt->insert_id;
+      $_SESSION['role'] = $role;
+      $_SESSION['nom'] = $nom;
+      $_SESSION['prenom'] = $prenom;
+      header("Location: ../connexion/index.php");
+      exit;
+    } else {
+      $err['general'] = 'Erreur lors de l\'inscription. Veuillez réessayer.';
+    }
+    $stmt->close();
+  }
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -55,7 +116,7 @@
 
   <main class="right">
 
-    <div class="step active" id="step-role">
+    <div class="step <?= empty($err) ? 'active' : '' ?>" id="step-role">
       <div class="role-step">
         <h2>Inscription</h2>
         <p class="subtitle">Choisissez votre rôle pour commencer</p>
@@ -90,13 +151,13 @@
         </div>
 
         <button class="btn-continue" id="btn-continue" onclick="goToForm()">Continuer →</button>
-        <p class="login-link" style="margin-top:20px">Déjà un compte ? <a href="../connexion/index.html">Se connecter</a></p>
+        <p class="login-link" style="margin-top:20px">Déjà un compte ? <a href="../connexion/index.php">Se connecter</a></p>
       </div>
     </div>
 
-    <div class="step" id="step-form">
+    <div class="step <?= !empty($err) ? 'active' : '' ?>" id="step-form">
         <div class="card">
-        <form method="POST" action="inscription.html">
+        <form method="POST" action="">
         <div class="card-header">
           <h2>Inscription</h2>
           <p class="subtitle">Créez votre compte SkillSwap</p>
@@ -108,20 +169,27 @@
           <span style="margin-left:4px;opacity:0.6">✕</span>
         </div>
 
+        <?php if (!empty($err['general'])): ?>
+          <div class="error-msg" style="color:#e74c3c;margin-bottom:16px;padding:10px;background:#fde8e8;border-radius:8px;text-align:center"><?= htmlspecialchars($err['general']) ?></div>
+        <?php endif; ?>
+
         <div class="row-2">
           <div class="field">
             <label>Nom</label>
-            <input type="text" name="nom" placeholder="Nom de famille" />
+            <input type="text" name="nom" placeholder="Nom de famille" value="<?= htmlspecialchars($old['nom'] ?? '') ?>" />
+            <?php if (!empty($err['nom'])): ?><span class="field-error"><?= htmlspecialchars($err['nom']) ?></span><?php endif; ?>
           </div>
           <div class="field">
             <label>Prénom</label>
-            <input type="text" name="prenom" placeholder="Prénom" />
+            <input type="text" name="prenom" placeholder="Prénom" value="<?= htmlspecialchars($old['prenom'] ?? '') ?>" />
+            <?php if (!empty($err['prenom'])): ?><span class="field-error"><?= htmlspecialchars($err['prenom']) ?></span><?php endif; ?>
           </div>
         </div>
 
         <div class="field">
           <label>Email</label>
-          <input type="email" name="email" placeholder="votre.email@ismo.ma" />
+          <input type="email" name="email" placeholder="votre.email@ismo.ma" value="<?= htmlspecialchars($old['email'] ?? '') ?>" />
+          <?php if (!empty($err['email'])): ?><span class="field-error"><?= htmlspecialchars($err['email']) ?></span><?php endif; ?>
         </div>
 
         <div class="field filiere-field" id="filiere-field">
@@ -140,22 +208,25 @@
         <div class="field">
           <label>Mot de passe</label>
           <input type="password" name="password" placeholder="••••••••" />
+          <?php if (!empty($err['password'])): ?><span class="field-error"><?= htmlspecialchars($err['password']) ?></span><?php endif; ?>
         </div>
 
         <div class="field">
           <label>Confirmer le mot de passe</label>
           <input type="password" name="confirm_password" placeholder="••••••••" />
+          <?php if (!empty($err['confirm_password'])): ?><span class="field-error"><?= htmlspecialchars($err['confirm_password']) ?></span><?php endif; ?>
         </div>
 
         <div class="terms">
           <input type="checkbox" name="terms" id="terms-check" />
           <span>J'accepte les <a href="#">conditions d'utilisation</a> et la <a href="#">politique de
               confidentialité</a></span>
+          <?php if (!empty($err['terms'])): ?><span class="field-error"><?= htmlspecialchars($err['terms']) ?></span><?php endif; ?>
         </div>
 
         <input type="hidden" name="role" id="role-input" value="" />
         <button type="submit" class="btn-primary" id="btn-create-account">Créer mon compte</button>
-        <p class="login-link">Déjà un compte ? <a href="../connexion/index.html">Se connecter</a></p>
+        <p class="login-link">Déjà un compte ? <a href="../connexion/index.php">Se connecter</a></p>
       </form>
       </div>
     </div>

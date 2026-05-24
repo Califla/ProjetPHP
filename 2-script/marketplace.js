@@ -201,6 +201,9 @@ function toggleLike(id) {
 
 function proposeDemande(id) {
   if (pageRole === 'admin') return;
+  const demande = demandesData.find(d => d.id === id);
+  if (!demande) return;
+
   if (proposedDemandes.has(id)) {
     proposedDemandes.delete(id);
   } else {
@@ -208,7 +211,17 @@ function proposeDemande(id) {
   }
   localStorage.setItem('proposedDemandes', JSON.stringify(Array.from(proposedDemandes)));
 
-  const demande = demandesData.find(d => d.id === id);
+  const proposals = JSON.parse(localStorage.getItem('proposalsDetails') || '[]');
+  const existingIdx = proposals.findIndex(p => p.id === id && p.proposer === currentUserName);
+  if (proposedDemandes.has(id)) {
+    if (existingIdx === -1) {
+      proposals.push({ id, title: demande.title, date: demande.date, status: 'en_attente', proposer: currentUserName });
+    }
+  } else {
+    if (existingIdx !== -1) proposals.splice(existingIdx, 1);
+  }
+  localStorage.setItem('proposalsDetails', JSON.stringify(proposals));
+
   if (proposedDemandes.has(id) && demande) {
     alert(`✅ Votre aide a été proposée pour "${demande.title}"`);
   }
