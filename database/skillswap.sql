@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`utilisateurs` (
   `score` INT NULL DEFAULT '0',
   `photo` VARCHAR(255) NULL DEFAULT NULL,
   `filiere` VARCHAR(100) NULL DEFAULT NULL,
-  `statut` ENUM('actif', 'inactif', 'en_attente', 'suspendu') NULL DEFAULT NULL,
+  `statut` ENUM('actif', 'en_attente', 'suspendu') NULL DEFAULT NULL,
+  `date_inscription` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`id_user`),
   UNIQUE INDEX `email` (`email` ASC))
 ENGINE = InnoDB

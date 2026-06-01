@@ -1,14 +1,8 @@
 <?php
-$host = '127.0.0.1';
-$port = 3307;
-$user = 'root';
-$pass = '';
-$dbname = 'skillswaps';
-
-$conn = mysqli_connect($host, $user, $pass, $dbname, $port);
-
-if (!$conn) {
-    die("Connexion échouée : " . mysqli_connect_error());
+try{
+    $db=new PDO("mysql:host=127.0.0.1;dbname=skillswaps;port=3307","root","");
 }
-
-session_start();
+catch(PDOException $e){
+    echo "erreur de connexion:".$e->getMessage();
+}
+?>
