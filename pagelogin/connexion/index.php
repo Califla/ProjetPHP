@@ -14,7 +14,7 @@
   <aside class="left">
     <div class="jsp">
     <div class="brand">
-      <h1>ISMO-SkillSwp</h1>
+      <h1>ISMO-SkillSwap</h1>
       <p>Plateforme d'échange de compétences ISMO Tétouan</p>
     </div>
 </div>
