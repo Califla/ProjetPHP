@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`utilisateurs` (
   `prenom` VARCHAR(45) NULL DEFAULT NULL,
   `email` VARCHAR(100) NULL DEFAULT NULL,
   `motdepasse` VARCHAR(255) NULL DEFAULT NULL,
-  `role` ENUM('stagiaire', 'formateur', 'admin') NULL DEFAULT NULL,
+  `role` ENUM('stagiaire', 'formateur' , 'mentor', 'admin') NULL DEFAULT NULL,
   `score` INT NULL DEFAULT '0',
   `photo` VARCHAR(255) NULL DEFAULT NULL,
   `filiere` VARCHAR(100) NULL DEFAULT NULL,

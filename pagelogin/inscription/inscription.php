@@ -3,7 +3,6 @@ $err = [];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     extract($_POST);
     $err = [];
-        $tab_filieres = ["DEV 101", "INF 201", "AI 101", "SEC 501"];
         if (!isset($role) || $role == "") $err["role"] = "le rôle est obligatoire";
         if (!isset($nom) || $nom == "") $err["nom"] = "le nom est obligatoire";
         else if(!preg_match("/^[a-zA-Z]+$/", $nom)) $err["nom"] = "le nom ne doit contenir que des lettres";
@@ -11,8 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         else if(!preg_match("/^[a-zA-Z]+$/", $prenom)) $err["prenom"] = "le prénom ne doit contenir que des lettres";
         if (!isset($email) || $email == "") $err["email"] = "l'email est obligatoire";
         else if (!preg_match("/^[a-zA-Z0-9._%+-]+@ismo\.ma$/", $email)) $err["email"] = "l'email doit être au format ismo.ma";
-        if ($role == "Stagiaire" && (!isset($filiere) || $filiere == "")) $err["filiere"] = "la filière est obligatoire";
-        else if ($role == "Stagiaire" && !in_array($filiere, $tab_filieres)) $err["filiere"] = "la filière choisie n'est pas valide";
+        if (strtolower($role) == "stagiaire" && (!isset($filiere) || $filiere == "")) $err["filiere"] = "la filière est obligatoire";
         if (!isset($password) || $password == "") $err["password"] = "le mot de passe est obligatoire";
         else if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/", $password)) $err["password"] = "le mot de passe doit contenir au moins une lettre majuscule et une lettre minuscule, un chiffre et doit être d'au moins 8 caractères";
         if (!isset($confirm_password) || $confirm_password == "") $err["confirm_password"] = "la confirmation du mot de passe est obligatoire";
@@ -27,19 +25,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $filiere = htmlspecialchars(trim($filiere));
             $role = htmlspecialchars(trim($role));
             $password_hash = password_hash($password, PASSWORD_DEFAULT);
-            #insertion a la base des donnes
             $date = date('Y-m-d H:i:s');
             $statut = "en_attente";
             include("../../database/config.php");
             try {
                 $req = $db->prepare("INSERT INTO utilisateurs(nom, prenom, email, motdepasse,role, filiere,statut, date_inscription) VALUES(?,?,?,?,?,?,?,?)");
                 $req->execute([$nom,$prenom,$email,$password_hash,$role,$filiere,$statut,$date]);
-                header("refresh:2;url=../connexion/index.php");
+                if ($req==false){
+                    header("Location: ../connexion/index.php?error=Erreur lors de l'inscription");
+                    exit();
+                }else{
+                    header("Location: ../connexion/index.php?msg=Inscription réussie, en attente de validation par l'administrateur");
+                    exit();
+                }
             } catch (PDOException $e) {
-                echo "Erreur: " . $e->getMessage();
+                die("Erreur lors de l'inscription : " . $e->getMessage());
             }
         }
     }
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -170,15 +174,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <select name="filiere">
                                 <option value="">-- les choix --</option>
-                                <option value="DEV 101">DEV 101 – Développement Digital</option>
-                                <option value="INF 201">INF 201 – Infrastructure & Cloud</option>
-                                <option value="AI 101">AI 101 – Intelligence Artificielle</option>
-                                <option value="SEC 501">SEC 501 – Cybersécurité</option>
+                                <option value="DEV 101">DEV 101 - Développement Digital</option>
+                                <option value="INF 201">INF 201 - Infrastructure & Cloud</option>
+                                <option value="AI 101">AI 101 - Intelligence Artificielle</option>
+                                <option value="SEC 501">SEC 501 - Cybersécurité</option>
                             </select>
                             <?php if (isset($err["filiere"])) echo "<div style='color:red'>" . $err["filiere"] . "</div>"; ?>
                         </div>
                     </div>
-
                     <div class="field">
                         <label>Mot de passe</label>
                         <input type="password" name="password" value="<?php if(isset($_POST['password'])) echo $_POST['password']; ?>"placeholder="••••••••" />
@@ -197,9 +200,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <?php if (isset($err["terms"])) echo "<div style='color:red'>" . $err["terms"] . "</div>"; ?>
                     </div>
 
-                    <input type="hidden" name="role" id="role-input" value=""/>
+                    <input type="hidden" name="role" id="role-input" value="<?php if(isset($_POST['role'])) echo htmlspecialchars($_POST['role']); ?>"/>
                     <input type="submit" name="cre" class="btn-primary" id="btn-create-account" value="Créer mon compte"/>
                     <p class="login-link">Déjà un compte ? <a href="../connexion/index.html">Se connecter</a></p>
+                    <?php if (isset($_GET['error'])) echo "<div style='color:red;text-align:center;margin-top:10px'>" . htmlspecialchars($_GET['error']) . "</div>"; ?>
                 </form>
             </div>
         </div>
@@ -257,6 +261,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             document.getElementById('step-form').classList.remove('active');
             document.getElementById('step-role').classList.add('active');
         }
+
+        window.addEventListener('DOMContentLoaded', function () {
+            var stepForm = document.getElementById('step-form');
+            if (stepForm.classList.contains('active')) {
+                var roleInput = document.getElementById('role-input');
+                if (roleInput.value) {
+                    selectedRole = roleInput.value;
+                    document.getElementById('badge-icon').textContent = roleLabels[selectedRole].icon;
+                    document.getElementById('badge-label').textContent = roleLabels[selectedRole].label;
+                    document.getElementById('filiere-field').classList.toggle('hidden', selectedRole !== 'stagiaire');
+                }
+            }
+        });
     </script>
 </body>
 

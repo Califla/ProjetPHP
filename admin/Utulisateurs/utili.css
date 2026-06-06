@@ -106,12 +106,16 @@ input {
   background: var(--surface-soft);
   color: var(--text);
   border: 1px solid var(--border);
+  padding: 8px 14px;
+  font-size: 0.82rem;
 }
 
 .btn-danger {
   background: rgba(239, 68, 68, 0.1);
   color: var(--danger);
   border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 8px 14px;
+  font-size: 0.82rem;
 }
 
 .stats-grid {
@@ -289,8 +293,8 @@ tbody tr:hover {
 
 .actions-cell {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-wrap: nowrap;
+  gap: 8px;
 }
 
 .visually-hidden {
