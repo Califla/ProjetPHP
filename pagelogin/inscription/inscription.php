@@ -159,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <div class="step <?= !empty($err) ? 'active' : '' ?>" id="step-form">
             <div class="card">
-                <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data">
                     <div class="card-header">
                         <h2>Inscription</h2>
                         <p class="subtitle">Créez votre compte SkillSwap</p>
@@ -215,6 +215,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <?php if (isset($err["filiere"]))
                                 echo "<div style='color:red'>" . $err["filiere"] . "</div>"; ?>
                         </div>
+                    </div>
+                    <div class="field photo-field">
+                        <label>Photo de profil</label>
+                        <div class="photo-upload" id="photoUpload" onclick="document.getElementById('photoInput').click()">
+                            <div class="photo-upload-content" id="photoContent">
+                                <div class="photo-icon">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                                        <circle cx="12" cy="13" r="4" />
+                                    </svg>
+                                </div>
+                                <span class="photo-text">Ajouter une photo</span>
+                                <span class="photo-hint">JPG, PNG ou WEBP - Max 2 Mo</span>
+                            </div>
+                            <img id="photoPreview" class="photo-preview" />
+                        </div>
+                        <input type="file" id="photoInput" name="photo" accept="image/jpeg,image/png,image/webp" hidden onchange="previewPhoto(event)" />
+                        <?php if (isset($err["photo"]))
+                            echo "<div style='color:red'>" . $err["photo"] . "</div>"; ?>
                     </div>
                     <div class="field">
                         <label>Mot de passe</label>
@@ -351,6 +370,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 inp.type = 'password';
                 btnEl.classList.remove('visible');
             }
+        }
+
+        function previewPhoto(event) {
+            var file = event.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var preview = document.getElementById('photoPreview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                preview.parentElement.classList.add('has-image');
+            };
+            reader.readAsDataURL(file);
         }
 
     </script>

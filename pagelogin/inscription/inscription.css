@@ -550,6 +550,82 @@
       stroke: #16a34a;
     }
 
+    .photo-upload {
+      width: 100%;
+      min-height: 120px;
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      background: var(--gray-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .photo-upload:hover {
+      border-color: var(--accent);
+      background: #f0f6ff;
+      box-shadow: 0 0 0 3px rgba(46, 111, 202, 0.08);
+    }
+
+    .photo-upload-content {
+      text-align: center;
+      padding: 20px;
+      pointer-events: none;
+    }
+
+    .photo-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      color: var(--gray-text);
+      opacity: 0.6;
+      transition: opacity 0.2s, color 0.2s;
+    }
+
+    .photo-upload:hover .photo-icon {
+      color: var(--accent);
+      opacity: 1;
+    }
+
+    .photo-text {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-dark);
+      margin-bottom: 2px;
+    }
+
+    .photo-hint {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--gray-text);
+    }
+
+    .photo-preview {
+      display: none;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--white);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .photo-upload.has-image .photo-upload-content {
+      display: none;
+    }
+
+    .photo-upload.has-image {
+      padding: 16px;
+      border-style: solid;
+      border-color: var(--accent);
+      background: #f0f6ff;
+    }
+
     .help-btn {
       position: fixed;
       bottom: 24px;
