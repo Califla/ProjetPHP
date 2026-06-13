@@ -3,64 +3,78 @@ $err = [];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     extract($_POST);
     $err = [];
-        if (!isset($role) || $role == "") $err["role"] = "le rôle est obligatoire";
-        if (!isset($nom) || $nom == "") $err["nom"] = "le nom est obligatoire";
-        else if(!preg_match("/^[a-zA-Z]+$/", $nom)) $err["nom"] = "le nom ne doit contenir que des lettres";
-        if (!isset($prenom) || $prenom == "") $err["prenom"] = "le prénom est obligatoire";
-        else if(!preg_match("/^[a-zA-Z]+$/", $prenom)) $err["prenom"] = "le prénom ne doit contenir que des lettres";
-        if (!isset($email) || $email == "") $err["email"] = "l'email est obligatoire";
-        else if (!preg_match("/^[a-zA-Z0-9._%+-]+@ismo\.ma$/", $email)) $err["email"] = "l'email doit être au format ismo.ma";
-        else {
-            include("../../database/config.php");
-            $req = $db->prepare("SELECT * FROM utilisateurs WHERE email = ?");
-            $req->execute([$email]);
-            if ($req->rowCount() > 0) $err["email"] = "cet email est déjà utilisé";
-        }
-        if (strtolower($role) == "stagiaire" && (!isset($filiere) || $filiere == "")) $err["filiere"] = "la filière est obligatoire";
-        if (!isset($password) || $password == "") $err["password"] = "le mot de passe est obligatoire";
-        else if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/", $password)) $err["password"] = "le mot de passe doit contenir au moins une lettre majuscule et une lettre minuscule, un chiffre et doit être d'au moins 8 caractères";
-        if (!isset($confirm_password) || $confirm_password == "") $err["confirm_password"] = "la confirmation du mot de passe est obligatoire";
-        else if ($confirm_password != $password) $err["confirm_password"] = "la confirmation ne correspond pas au mot de passe";
-        if (!isset($terms) || !$terms) $err["terms"] = "vous devez accepter les conditions d'utilisation";
-        if (empty($err)) {
-            $nom = htmlspecialchars(trim($nom));
-            $prenom = htmlspecialchars(trim($prenom));
-            $email = htmlspecialchars(trim($email));
-            $password = htmlspecialchars(trim($password));
-            $confirm_password = htmlspecialchars(trim($confirm_password));
-            $filiere = htmlspecialchars(trim($filiere));
-            $role = htmlspecialchars(trim($role));
-            $password_hash = password_hash($password, PASSWORD_DEFAULT);
-            $date = date('Y-m-d H:i:s');
-            $statut = "en_attente";
-            include("../../database/config.php");
-            try {
-                $req = $db->prepare("INSERT INTO utilisateurs(nom, prenom, email, motdepasse,role, filiere,statut, date_inscription) VALUES(?,?,?,?,?,?,?,?)");
-                $req->execute([$nom,$prenom,$email,$password_hash,$role,$filiere,$statut,$date]);
-                if ($req==false){
-                    header("Location: ../connexion/index.php?error=Erreur lors de l'inscription");
-                    exit();
-                }else{
-                    header("Location: ../connexion/index.php?msg=Inscription réussie, en attente de validation par l'administrateur");
-                    exit();
-                }
-            } catch (PDOException $e) {
-                die("Erreur lors de l'inscription : " . $e->getMessage());
+    if (!isset($role) || $role == "")
+        $err["role"] = "le rôle est obligatoire";
+    if (!isset($nom) || $nom == "")
+        $err["nom"] = "le nom est obligatoire";
+    else if (!preg_match("/^[a-zA-Z]+$/", $nom))
+        $err["nom"] = "le nom ne doit contenir que des lettres";
+    if (!isset($prenom) || $prenom == "")
+        $err["prenom"] = "le prénom est obligatoire";
+    else if (!preg_match("/^[a-zA-Z]+$/", $prenom))
+        $err["prenom"] = "le prénom ne doit contenir que des lettres";
+    if (!isset($email) || $email == "")
+        $err["email"] = "l'email est obligatoire";
+    else if (!preg_match("/^[a-zA-Z0-9._%+-]+@ismo\.ma$/", $email))
+        $err["email"] = "l'email doit être au format ismo.ma";
+    else {
+        include("../../database/config.php");
+        $req = $db->prepare("SELECT * FROM utilisateurs WHERE email = ?");
+        $req->execute([$email]);
+        if ($req->rowCount() > 0)
+            $err["email"] = "cet email est déjà utilisé";
+    }
+    if (strtolower($role) == "stagiaire" && (!isset($filiere) || $filiere == ""))
+        $err["filiere"] = "la filière est obligatoire";
+    if (!isset($password) || $password == "")
+        $err["password"] = "le mot de passe est obligatoire";
+    else if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/", $password))
+        $err["password"] = "le mot de passe doit contenir au moins une lettre majuscule et une lettre minuscule, un chiffre et doit être d'au moins 8 caractères";
+    if (!isset($confirm_password) || $confirm_password == "")
+        $err["confirm_password"] = "la confirmation du mot de passe est obligatoire";
+    else if ($confirm_password != $password)
+        $err["confirm_password"] = "la confirmation ne correspond pas au mot de passe";
+    if (!isset($terms) || !$terms)
+        $err["terms"] = "vous devez accepter les conditions d'utilisation";
+    if (empty($err)) {
+        $nom = htmlspecialchars(trim($nom));
+        $prenom = htmlspecialchars(trim($prenom));
+        $email = htmlspecialchars(trim($email));
+        $password = htmlspecialchars(trim($password));
+        $confirm_password = htmlspecialchars(trim($confirm_password));
+        $filiere = htmlspecialchars(trim($filiere));
+        $role = htmlspecialchars(trim($role));
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+        $date = date('Y-m-d H:i:s');
+        $statut = "en_attente";
+        include("../../database/config.php");
+        try {
+            $req = $db->prepare("INSERT INTO utilisateurs(nom, prenom, email, motdepasse,role, filiere,statut, date_inscription) VALUES(?,?,?,?,?,?,?,?)");
+            $req->execute([$nom, $prenom, $email, $password_hash, $role, $filiere, $statut, $date]);
+            if ($req == false) {
+                header("Location: ../connexion/index.php?error=Erreur lors de l'inscription");
+                exit();
+            } else {
+                header("Location: ../connexion/index.php?msg=Inscription réussie, en attente de validation par l'administrateur");
+                exit();
             }
+        } catch (PDOException $e) {
+            die("Erreur lors de l'inscription : " . $e->getMessage());
         }
     }
+}
 
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ISMO-SkillSwap – Inscription</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="inscription.css">
-    <script src="../js/toggle-password.js" defer></script>
-
 </head>
 
 <body>
@@ -138,7 +152,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
 
                 <button class="btn-continue" id="btn-continue" onclick="goToForm()">Continuer →</button>
-                <p class="login-link" style="margin-top:20px">Déjà un compte ? <a href="../connexion/index.php">Se connecter</a></p>
+                <p class="login-link" style="margin-top:20px">Déjà un compte ? <a href="../connexion/index.php">Se
+                        connecter</a></p>
             </div>
         </div>
 
@@ -159,20 +174,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="row-2">
                         <div class="field">
                             <label>Nom</label>
-                            <input type="text" name="nom" value="<?php if(isset($_POST['nom'])) echo $_POST['nom']; ?>" placeholder="Nom de famille" />
-                            <?php if (isset($err["nom"])) echo "<div style='color:red'>" . $err["nom"] . "</div>"; ?>
+                            <input type="text" name="nom" value="<?php if (isset($_POST['nom']))
+                                echo $_POST['nom']; ?>"
+                                placeholder="Nom de famille" />
+                            <?php if (isset($err["nom"]))
+                                echo "<div style='color:red'>" . $err["nom"] . "</div>"; ?>
                         </div>
                         <div class="field">
                             <label>Prénom</label>
-                            <input type="text" name="prenom" value="<?php if(isset($_POST['prenom'])) echo $_POST['prenom']; ?>" placeholder="Prénom" />
-                            <?php if (isset($err["prenom"])) echo "<div style='color:red'>" . $err["prenom"] . "</div>"; ?>
+                            <input type="text" name="prenom"
+                                value="<?php if (isset($_POST['prenom']))
+                                    echo $_POST['prenom']; ?>"
+                                placeholder="Prénom" />
+                            <?php if (isset($err["prenom"]))
+                                echo "<div style='color:red'>" . $err["prenom"] . "</div>"; ?>
                         </div>
                     </div>
 
                     <div class="field">
                         <label>Email</label>
-                        <input type="email" name="email" value="<?php if(isset($_POST['email'])) echo $_POST['email']; ?>" placeholder="votre.email@ismo.ma" />
-                        <?php if (isset($err["email"])) echo "<div style='color:red'>" . $err["email"] . "</div>"; ?>
+                        <input type="email" name="email"
+                            value="<?php if (isset($_POST['email']))
+                                echo $_POST['email']; ?>"
+                            placeholder="votre.email@ismo.ma" />
+                        <?php if (isset($err["email"]))
+                            echo "<div style='color:red'>" . $err["email"] . "</div>"; ?>
                     </div>
 
                     <div class="field filiere-field" id="filiere-field">
@@ -186,47 +212,66 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <option value="AI 101">AI 101 - Intelligence Artificielle</option>
                                 <option value="SEC 501">SEC 501 - Cybersécurité</option>
                             </select>
-                            <?php if (isset($err["filiere"])) echo "<div style='color:red'>" . $err["filiere"] . "</div>"; ?>
+                            <?php if (isset($err["filiere"]))
+                                echo "<div style='color:red'>" . $err["filiere"] . "</div>"; ?>
                         </div>
                     </div>
                     <div class="field">
                         <label>Mot de passe</label>
                         <div class="password-wrapper">
-                            <input type="password" name="password" id="password" value="<?php if(isset($_POST['password'])) echo $_POST['password']; ?>" placeholder="••••••••" />
-                            <button type="button" class="toggle-pw" onclick="togglePassword('password', this)" aria-label="Afficher le mot de passe">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
+                            <input type="password" name="password" id="password"
+                                value="<?php if (isset($_POST['password']))
+                                    echo $_POST['password']; ?>"
+                                placeholder="••••••••" />
+                            <button type="button" class="toggle-pw" onclick="togglePassword('password', this)"
+                                aria-label="Afficher le mot de passe">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                    <circle cx="12" cy="12" r="3" />
                                 </svg>
                             </button>
                         </div>
-                        <?php if (isset($err["password"])) echo "<div style='color:red'>" . $err["password"] . "</div>"; ?>
+                        <?php if (isset($err["password"]))
+                            echo "<div style='color:red'>" . $err["password"] . "</div>"; ?>
                     </div>
 
                     <div class="field">
                         <label>Confirmer le mot de passe</label>
                         <div class="password-wrapper">
-                            <input type="password" name="confirm_password" id="confirm_password" value="<?php if(isset($_POST['confirm_password'])) echo $_POST['confirm_password']; ?>" placeholder="••••••••" />
-                            <button type="button" class="toggle-pw" onclick="togglePassword('confirm_password', this)" aria-label="Afficher le mot de passe">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
+                            <input type="password" name="confirm_password" id="confirm_password"
+                                value="<?php if (isset($_POST['confirm_password']))
+                                    echo $_POST['confirm_password']; ?>"
+                                placeholder="••••••••" />
+                            <button type="button" class="toggle-pw" onclick="togglePassword('confirm_password', this)"
+                                aria-label="Afficher le mot de passe">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                    <circle cx="12" cy="12" r="3" />
                                 </svg>
                             </button>
                         </div>
-                        <?php if (isset($err["confirm_password"])) echo "<div style='color:red'>" . $err["confirm_password"] . "</div>"; ?>
+                        <?php if (isset($err["confirm_password"]))
+                            echo "<div style='color:red'>" . $err["confirm_password"] . "</div>"; ?>
                     </div>
 
                     <div class="terms">
                         <input type="checkbox" name="terms" id="terms-check" />
-                        <span>J'accepte les <a href="#">conditions d'utilisation</a> et la <a href="#">politique deconfidentialité</a></span>
-                        <?php if (isset($err["terms"])) echo "<div style='color:red'>" . $err["terms"] . "</div>"; ?>
+                        <span>J'accepte les <a href="#">conditions d'utilisation</a> et la <a href="#">politique
+                                deconfidentialité</a></span>
+                        <?php if (isset($err["terms"]))
+                            echo "<div style='color:red'>" . $err["terms"] . "</div>"; ?>
                     </div>
 
-                    <input type="hidden" name="role" id="role-input" value="<?php if(isset($_POST['role'])) echo htmlspecialchars($_POST['role']); ?>"/>
-                    <input type="submit" name="cre" class="btn-primary" id="btn-create-account" value="Créer mon compte"/>
+                    <input type="hidden" name="role" id="role-input"
+                        value="<?php if (isset($_POST['role']))
+                            echo htmlspecialchars($_POST['role']); ?>" />
+                    <input type="submit" name="cre" class="btn-primary" id="btn-create-account"
+                        value="Créer mon compte" />
                     <p class="login-link">Déjà un compte ? <a href="../connexion/index.php">Se connecter</a></p>
-                    <?php if (isset($_GET['error'])) echo "<div style='color:red;text-align:center;margin-top:10px'>" . htmlspecialchars($_GET['error']) . "</div>"; ?>
+                    <?php if (isset($_GET['error']))
+                        echo "<div style='color:red;text-align:center;margin-top:10px'>" . htmlspecialchars($_GET['error']) . "</div>"; ?>
                 </form>
             </div>
         </div>
@@ -297,6 +342,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
         });
+        function togglePassword(inputId, btnEl) {
+            var inp = document.getElementById(inputId);
+            if (inp.type === 'password') {
+                inp.type = 'text';
+                btnEl.classList.add('visible');
+            } else {
+                inp.type = 'password';
+                btnEl.classList.remove('visible');
+            }
+        }
+
     </script>
 </body>
 
