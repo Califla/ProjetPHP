@@ -3,7 +3,7 @@ const extraMenuItems = [
   { label: 'Paramètres', icon: '⚙️', href: '#' },
   { label: 'Centre d\'aide', icon: '❓', href: '#' },
   { type: 'separator' },
-  { label: 'Déconnexion', icon: '🚪', href: '#', danger: true },
+  { label: 'Déconnexion', icon: '🚪', href: '/ProjetPHP/pagelogin/deconnexion/deco.php', danger: true },
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
