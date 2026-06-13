@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (isset($_SESSION)){
+    extract($_SESSION);
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -14,27 +20,27 @@
         <aside class="sidebar">
             <div class="sidebar-logo"><span>ISMO-SkillSwap</span></div>
             <nav class="sidebar-nav">
-                <div class="nav-item" onclick="location.href='../tableaubord/tableaubord.html'">
+                <div class="nav-item" onclick="location.href='../tableaubord/tableaubord.php'">
                     <span class="nav-icon">🏠</span>
                     <span>Tableau de bord</span>
                 </div>
-                <div class="nav-item" onclick="location.href='../validecompetence/validecompetence.html'">
+                <div class="nav-item" onclick="location.href='../validecompetence/validecompetence.php'">
                     <span class="nav-icon">📋</span>
                     <span>Valider compétences</span>
                 </div>
-                <div class="nav-item" onclick="location.href='../Competences/compe.html'">
+                <div class="nav-item" onclick="location.href='../Competences/compe.php'">
                     <span class="nav-icon">🏷️</span>
                     <span>Compétences</span>
                 </div>
-                <div class="nav-item" onclick="location.href='../utilisateur/index.html'">
+                <div class="nav-item" onclick="location.href='../utilisateur/index.php'">
                     <span class="nav-icon">👥</span>
                     <span>Utilisateurs</span>
                 </div>
-                <div class="nav-item active" onclick="location.href='badge.html'">
+                <div class="nav-item active" onclick="location.href='badge.php'">
                     <span class="nav-icon">🎖️</span>
                     <span>Badges</span>
                 </div>
-                <div class="nav-item" onclick="location.href='../marketplace/marketplace.html'">
+                <div class="nav-item" onclick="location.href='../marketplace/marketplace.php'">
                     <span class="nav-icon">🛒</span>
                     <span>Marketplace</span>
                 </div>
@@ -42,13 +48,6 @@
         </aside>
 
         <header class="header">
-            <button class="notif-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                </svg>
-                <span class="notif-dot"></span>
-            </button>
             <form class="header-search" action="#" onsubmit="return false;">
                 <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="7" />
@@ -58,10 +57,10 @@
             </form>
             <div class="user-pill" data-email="jouariya@ismo.ma">
                 <div class="user-info">
-                    <div class="user-name">Lafhal Jouariya</div>
-                    <div class="user-role">Formateur</div>
+                    <div class="user-name"><?php echo $nom . " " . $prenom; ?></div>
+                    <div class="user-role"><?php echo $role?></div>
                 </div>
-                <div class="user-avatar">LJ</div>
+                <div class="user-avatar"><?php echo substr($nom, 0, 1).substr($prenom, 0, 1); ?></div>
             </div>
         </header>
 

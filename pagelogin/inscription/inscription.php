@@ -3,39 +3,30 @@ $err = [];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     extract($_POST);
     $err = [];
-    if (!isset($role) || $role == "")
-        $err["role"] = "le rôle est obligatoire";
-    if (!isset($nom) || $nom == "")
-        $err["nom"] = "le nom est obligatoire";
-    else if (!preg_match("/^[a-zA-Z]+$/", $nom))
-        $err["nom"] = "le nom ne doit contenir que des lettres";
-    if (!isset($prenom) || $prenom == "")
-        $err["prenom"] = "le prénom est obligatoire";
-    else if (!preg_match("/^[a-zA-Z]+$/", $prenom))
-        $err["prenom"] = "le prénom ne doit contenir que des lettres";
-    if (!isset($email) || $email == "")
-        $err["email"] = "l'email est obligatoire";
-    else if (!preg_match("/^[a-zA-Z0-9._%+-]+@ismo\.ma$/", $email))
-        $err["email"] = "l'email doit être au format ismo.ma";
+    $ext = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!isset($role) || $role == "")$err["role"] = "le rôle est obligatoire";
+    if (!isset($nom) || $nom == "")$err["nom"] = "le nom est obligatoire";
+    else if (!preg_match("/^[a-zA-Z]+$/", $nom))$err["nom"] = "le nom ne doit contenir que des lettres";
+    if (!isset($prenom) || $prenom == "")$err["prenom"] = "le prénom est obligatoire";
+    else if (!preg_match("/^[a-zA-Z]+$/", $prenom))$err["prenom"] = "le prénom ne doit contenir que des lettres";
+    if (!isset($email) || $email == "")$err["email"] = "l'email est obligatoire";
+    else if (!preg_match("/^[a-zA-Z0-9._%+-]+@ismo\.ma$/", $email))$err["email"] = "l'email doit être au format ismo.ma";
     else {
         include("../../database/config.php");
         $req = $db->prepare("SELECT * FROM utilisateurs WHERE email = ?");
         $req->execute([$email]);
-        if ($req->rowCount() > 0)
-            $err["email"] = "cet email est déjà utilisé";
+        if ($req->rowCount() > 0)$err["email"] = "cet email est déjà utilisé";
     }
-    if (strtolower($role) == "stagiaire" && (!isset($filiere) || $filiere == ""))
-        $err["filiere"] = "la filière est obligatoire";
-    if (!isset($password) || $password == "")
-        $err["password"] = "le mot de passe est obligatoire";
-    else if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/", $password))
-        $err["password"] = "le mot de passe doit contenir au moins une lettre majuscule et une lettre minuscule, un chiffre et doit être d'au moins 8 caractères";
-    if (!isset($confirm_password) || $confirm_password == "")
-        $err["confirm_password"] = "la confirmation du mot de passe est obligatoire";
-    else if ($confirm_password != $password)
-        $err["confirm_password"] = "la confirmation ne correspond pas au mot de passe";
-    if (!isset($terms) || !$terms)
-        $err["terms"] = "vous devez accepter les conditions d'utilisation";
+    if (strtolower($role) == "stagiaire" && (!isset($filiere) || $filiere == ""))$err["filiere"] = "la filière est obligatoire";
+    if (!isset($password) || $password == "")$err["password"] = "le mot de passe est obligatoire";
+    else if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/", $password))$err["password"] = "le mot de passe doit contenir au moins une lettre majuscule et une lettre minuscule, un chiffre et doit être d'au moins 8 caractères";
+    if (!isset($confirm_password) || $confirm_password == "")$err["confirm_password"] = "la confirmation du mot de passe est obligatoire";
+    else if ($confirm_password != $password)$err["confirm_password"] = "la confirmation ne correspond pas au mot de passe";
+    if (!isset($terms) || !$terms)$err["terms"] = "vous devez accepter les conditions d'utilisation";
+    if (!empty($_FILES['photo']['name'])) {
+    if (!in_array($_FILES['photo']['type'], $ext)) $err['photo'] = "le format de la photo doit être jpg, jpeg ou png";
+    elseif ($_FILES['photo']['size'] > 2 * 1024 * 1024) $err['photo'] = "la taille de la photo doit être inférieure ou égale à 2Mo";
+    }
     if (empty($err)) {
         $nom = htmlspecialchars(trim($nom));
         $prenom = htmlspecialchars(trim($prenom));
@@ -48,9 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $date = date('Y-m-d H:i:s');
         $statut = "en_attente";
         include("../../database/config.php");
+        #deplacement de la photo de profil dans le dossier photos
+        $move = move_uploaded_file($_FILES['photo']['tmp_name'], "../photos/" . $_FILES['photo']['name']);
+        if ($move == false) $err['photo'] = "erreur lors du deplacement de la photo de profil";
+        $photo_path = "../photos/" . $_FILES['photo']['name'];
         try {
-            $req = $db->prepare("INSERT INTO utilisateurs(nom, prenom, email, motdepasse,role, filiere,statut, date_inscription) VALUES(?,?,?,?,?,?,?,?)");
-            $req->execute([$nom, $prenom, $email, $password_hash, $role, $filiere, $statut, $date]);
+            $req = $db->prepare("INSERT INTO utilisateurs(nom, prenom, email, motdepasse,role,photo, filiere,statut, date_inscription) VALUES(?,?,?,?,?,?,?,?,?)");
+            $req->execute([$nom, $prenom, $email, $password_hash, $role, $photo_path, $filiere, $statut, $date]);
             if ($req == false) {
                 header("Location: ../connexion/index.php?error=Erreur lors de l'inscription");
                 exit();

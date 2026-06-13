@@ -236,7 +236,7 @@ tbody tr:hover {
   background: rgba(59, 130, 246, 0.04);
 }
 
-.user-cell {
+.user-cell-inner {
   display: flex;
   align-items: center;
   gap: 14px;
@@ -291,7 +291,7 @@ tbody tr:hover {
   background: rgba(239, 68, 68, 0.12);
 }
 
-.actions-cell {
+.actions-cell-inner {
   display: flex;
   flex-wrap: nowrap;
   gap: 8px;

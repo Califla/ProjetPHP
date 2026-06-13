@@ -51,9 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['statut'] = $user['statut'];
         $_SESSION['date_inscription'] = $user['date_inscription'];
         if ($user["role"] === "admin") {
-          header("Location: ../../admin/tableaubord/table.html?msg=Connexion réussie !");
+          header("Location: ../../admin/tableaubord/table.php?msg=Connexion réussie !");
         } else {
-          header("Location: ../../formateur/tableaubord/tableaubord.html?msg=Connexion réussie !");
+          header("Location: ../../formateur/tableaubord/tableaubord.php?msg=Connexion réussie !");
         }
         exit();
       }

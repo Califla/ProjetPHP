@@ -174,41 +174,6 @@ p {
     /* Assure que le header est au-dessus des autres éléments, mais sous la sidebar si nécessaire */
 }
 
-.notif-btn {
-    position: relative;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border: none;
-    transition: background 0.15s;
-}
-
-.notif-btn:hover {
-    background: rgba(255, 255, 255, 0.18);
-}
-
-.notif-btn svg {
-    stroke: rgba(255, 255, 255, 0.85);
-    fill: none;
-    width: 20px;
-    height: 20px;
-}
-
-.notif-dot {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #ef4444;
-    border: 2px solid var(--navy);
-}
 
 .user-pill {
     display: flex;
