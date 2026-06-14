@@ -1,21 +1,25 @@
 <?php
 session_start();
-if (isset($_SESSION)){
-    extract($_SESSION);
+if (isset($_SESSION)) {
+  extract($_SESSION);
 }
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ISMO-SkillSwap – Utilisateurs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="../../1-css/style.css" />
   <link rel="stylesheet" href="utilisateur.css" />
 </head>
+
 <body>
   <div class="layout">
     <aside class="sidebar">
@@ -61,8 +65,13 @@ if (isset($_SESSION)){
           <div class="user-name"><?php echo $nom . " " . $prenom; ?></div>
           <div class="user-role"><?php echo $role; ?></div>
         </div>
-        <div class="user-avatar"><?php echo substr($nom, 0, 1).substr($prenom, 0, 1); ?></div>
-      </div>
+        <?php
+        if ($photo) {
+          echo '<img class="user-avatar" src="../../pagelogin/photo/' . $photo . '" alt="Photo de profil">';
+        } else {
+          echo '<div class="user-avatar">' . substr($nom, 0, 1) . substr($prenom, 0, 1) . '</div>';
+        }
+        ?>
     </header>
 
     <main class="main">
@@ -238,4 +247,5 @@ if (isset($_SESSION)){
   <script src="../../2-script/profile-menu.js"></script>
   <script src="../../2-script/search.js"></script>
 </body>
+
 </html>

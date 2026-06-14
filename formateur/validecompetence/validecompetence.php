@@ -61,8 +61,13 @@ if (isset($_SESSION)){
                     <div class="user-name"><?php echo $nom . " " . $prenom; ?></div>
                     <div class="user-role"><?php echo $role; ?></div>
                 </div>
-                <div class="user-avatar"><?php echo substr($nom, 0, 1).substr($prenom, 0, 1); ?></div>
-            </div>
+                <?php
+                if ($photo) {
+                    echo '<img class="user-avatar" src="../../pagelogin/photo/' . $photo . '" alt="Photo de profil">';
+                } else {
+                    echo '<div class="user-avatar">' . substr($nom, 0, 1) . substr($prenom, 0, 1) . '</div>';
+                }
+                ?>
         </header>
 
         <main class="main">

@@ -1,7 +1,7 @@
 ﻿<?php
 session_start();
-if (isset($_SESSION)){
-    extract($_SESSION);
+if (isset($_SESSION)) {
+  extract($_SESSION);
 }
 ?>
 <!DOCTYPE html>
@@ -60,8 +60,13 @@ if (isset($_SESSION)){
           <div class="user-name"><?php echo $nom . " " . $prenom; ?></div>
           <div class="user-role"><?php echo $role; ?></div>
         </div>
-        <div class="user-avatar"><?php echo substr($nom, 0, 1).substr($prenom, 0, 1); ?></div>
-      </div>
+        <?php
+        if ($photo) {
+          echo '<img class="user-avatar" src="../../pagelogin/photo/' . $photo . '" alt="Photo de profil">';
+        } else {
+          echo '<div class="user-avatar">' . substr($nom, 0, 1) . substr($prenom, 0, 1) . '</div>';
+        }
+        ?>
     </header>
 
     <main class="main" data-role="formateur">
@@ -95,8 +100,18 @@ if (isset($_SESSION)){
             <option value="fermé">Fermé</option>
           </select>
           <button class="filter-btn" id="filterBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="4" y1="21" x2="4" y2="14" />
+              <line x1="4" y1="10" x2="4" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12" y2="3" />
+              <line x1="20" y1="21" x2="20" y2="16" />
+              <line x1="20" y1="12" x2="20" y2="3" />
+              <line x1="1" y1="14" x2="7" y2="14" />
+              <line x1="9" y1="8" x2="15" y2="8" />
+              <line x1="17" y1="16" x2="23" y2="16" />
+            </svg>
             Filtres
           </button>
         </div>
@@ -110,4 +125,5 @@ if (isset($_SESSION)){
   <script src="../../2-script/profile-menu.js"></script>
   <script src="../../2-script/search.js"></script>
 </body>
+
 </html>
