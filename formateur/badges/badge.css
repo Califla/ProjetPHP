@@ -23,7 +23,17 @@ body {
     fill: none;
     stroke-width: 1.8;
 }
-
+user-avatar {
+    width: 40px;
+    height: 40px;
+    background: var(--accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+}
 h1,
 h2,
 h3,

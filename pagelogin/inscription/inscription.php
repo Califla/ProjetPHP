@@ -38,11 +38,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
         $date = date('Y-m-d H:i:s');
         $statut = "en_attente";
-        include("../../database/config.php");
         #deplacement de la photo de profil dans le dossier photos
-        $move = move_uploaded_file($_FILES['photo']['tmp_name'], "../photos/" . $_FILES['photo']['name']);
-        if ($move == false) $err['photo'] = "erreur lors du deplacement de la photo de profil";
-        $photo_path = "../photos/" . $_FILES['photo']['name'];
+        $photo_path = $_FILES['photo']['name'];
+        $move = move_uploaded_file($_FILES['photo']['tmp_name'], "../photo/" . $photo_path);
+        if ($move == false) {
+            header("Location: ../connexion/index.php?error=Erreur lors de l'upload de la photo");
+            exit();
+        }
         try {
             $req = $db->prepare("INSERT INTO utilisateurs(nom, prenom, email, motdepasse,role,photo, filiere,statut, date_inscription) VALUES(?,?,?,?,?,?,?,?,?)");
             $req->execute([$nom, $prenom, $email, $password_hash, $role, $photo_path, $filiere, $statut, $date]);
