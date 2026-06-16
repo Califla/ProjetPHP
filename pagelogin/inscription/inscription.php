@@ -40,10 +40,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $statut = "en_attente";
         #deplacement de la photo de profil dans le dossier photos
         $photo_path = $_FILES['photo']['name'];
-        $move = move_uploaded_file($_FILES['photo']['tmp_name'], "../photo/" . $photo_path);
-        if ($move == false) {
-            header("Location: ../connexion/index.php?error=Erreur lors de l'upload de la photo");
-            exit();
+        
+        if(isset($_FILES)&&!empty($_FILES["photo"]['name'])) {
+            $move = move_uploaded_file($_FILES['photo']['tmp_name'], "../photo/" . $photo_path);
+            if ($move == false) {
+                header("Location: ../connexion/index.php?error=Erreur lors de l'upload de la photo");
+                exit();
+        }
         }
         try {
             $req = $db->prepare("INSERT INTO utilisateurs(nom, prenom, email, motdepasse,role,photo, filiere,statut, date_inscription) VALUES(?,?,?,?,?,?,?,?,?)");

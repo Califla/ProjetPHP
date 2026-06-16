@@ -1,5 +1,12 @@
+<?php
+session_start();
+if (isset($_SESSION)){
+    extract($_SESSION);
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,8 +15,11 @@
   <link rel="stylesheet" href="../../1-css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap"
+    rel="stylesheet" />
 </head>
+
 <body>
   <div class="layout">
     <aside class="sidebar">
@@ -52,10 +62,16 @@
       </form>
       <div class="user-pill" data-email="admin@ismo.ma">
         <div class="user-info">
-          <div class="user-name">Admin</div>
-          <div class="user-role">Administrateur</div>
+          <div class="user-name"><?php echo $nom . " " . $prenom; ?></div>
+          <div class="user-role"><?php echo $role ?></div>
         </div>
-        <div class="user-avatar">Ad</div>
+        <?php
+        if ($photo) {
+          echo '<img class="user-avatar" src="../../pagelogin/photo/' . $photo . '" alt="Photo de profil">';
+        } else {
+          echo '<div class="user-avatar">' . substr($nom, 0, 1) . substr($prenom, 0, 1) . '</div>';
+        }
+        ?>
       </div>
     </header>
 
@@ -113,20 +129,20 @@
               <text x="20" y="200" class="axis-label">30</text>
               <text x="20" y="130" class="axis-label">45</text>
               <text x="20" y="60" class="axis-label">60</text>
-              
+
               <!-- Y-axis -->
-              <line x1="50" y1="30" x2="50" y2="330" stroke="#ddd" stroke-width="1"/>
+              <line x1="50" y1="30" x2="50" y2="330" stroke="#ddd" stroke-width="1" />
               <!-- X-axis -->
-              <line x1="50" y1="330" x2="580" y2="330" stroke="#ddd" stroke-width="1"/>
-              
+              <line x1="50" y1="330" x2="580" y2="330" stroke="#ddd" stroke-width="1" />
+
               <!-- Bars -->
-              <rect x="70" y="210" width="40" height="120" fill="#2e6fca" rx="4"/>
-              <rect x="130" y="270" width="40" height="60" fill="#2e6fca" rx="4"/>
-              <rect x="190" y="150" width="40" height="180" fill="#2e6fca" rx="4"/>
-              <rect x="250" y="270" width="40" height="60" fill="#2e6fca" rx="4"/>
-              <rect x="310" y="240" width="40" height="90" fill="#2e6fca" rx="4"/>
-              <rect x="370" y="280" width="40" height="50" fill="#2e6fca" rx="4"/>
-              
+              <rect x="70" y="210" width="40" height="120" fill="#2e6fca" rx="4" />
+              <rect x="130" y="270" width="40" height="60" fill="#2e6fca" rx="4" />
+              <rect x="190" y="150" width="40" height="180" fill="#2e6fca" rx="4" />
+              <rect x="250" y="270" width="40" height="60" fill="#2e6fca" rx="4" />
+              <rect x="310" y="240" width="40" height="90" fill="#2e6fca" rx="4" />
+              <rect x="370" y="280" width="40" height="50" fill="#2e6fca" rx="4" />
+
               <!-- X-axis labels -->
               <text x="90" y="355" class="axis-label">React</text>
               <text x="140" y="355" class="axis-label">Python</text>
@@ -143,11 +159,15 @@
           <div class="chart-container pie-chart">
             <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
               <!-- Pie chart representation using circles/paths -->
-              <circle cx="150" cy="150" r="80" fill="none" stroke="#2e6fca" stroke-width="50" stroke-dasharray="210 660" stroke-dashoffset="0"/>
-              <circle cx="150" cy="150" r="80" fill="none" stroke="#16a34a" stroke-width="50" stroke-dasharray="198 660" stroke-dashoffset="-210"/>
-              <circle cx="150" cy="150" r="80" fill="none" stroke="#f97316" stroke-width="50" stroke-dasharray="105 660" stroke-dashoffset="-408"/>
-              <circle cx="150" cy="150" r="80" fill="none" stroke="#ef4444" stroke-width="50" stroke-dasharray="105 660" stroke-dashoffset="-513"/>
-              
+              <circle cx="150" cy="150" r="80" fill="none" stroke="#2e6fca" stroke-width="50" stroke-dasharray="210 660"
+                stroke-dashoffset="0" />
+              <circle cx="150" cy="150" r="80" fill="none" stroke="#16a34a" stroke-width="50" stroke-dasharray="198 660"
+                stroke-dashoffset="-210" />
+              <circle cx="150" cy="150" r="80" fill="none" stroke="#f97316" stroke-width="50" stroke-dasharray="105 660"
+                stroke-dashoffset="-408" />
+              <circle cx="150" cy="150" r="80" fill="none" stroke="#ef4444" stroke-width="50" stroke-dasharray="105 660"
+                stroke-dashoffset="-513" />
+
               <!-- Labels -->
               <text x="150" y="245" text-anchor="middle" class="pie-label">DEV 101 42%</text>
               <text x="75" y="155" text-anchor="middle" class="pie-label" fill="#16a34a">DEV 102 30%</text>
@@ -164,28 +184,29 @@
           <div class="chart-container line-chart">
             <svg viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg">
               <!-- Grid lines -->
-              <line x1="50" y1="30" x2="50" y2="200" stroke="#ddd" stroke-width="1"/>
-              <line x1="50" y1="200" x2="780" y2="200" stroke="#ddd" stroke-width="1"/>
-              
+              <line x1="50" y1="30" x2="50" y2="200" stroke="#ddd" stroke-width="1" />
+              <line x1="50" y1="200" x2="780" y2="200" stroke="#ddd" stroke-width="1" />
+
               <!-- Y-axis labels -->
               <text x="25" y="210" class="axis-label">0</text>
               <text x="15" y="160" class="axis-label">70</text>
               <text x="10" y="110" class="axis-label">140</text>
               <text x="10" y="60" class="axis-label">210</text>
               <text x="10" y="10" class="axis-label">280</text>
-              
+
               <!-- Line chart -->
-              <polyline points="80,160 150,180 220,140 290,120 360,110 430,100 500,80" fill="none" stroke="#2e6fca" stroke-width="3"/>
-              
+              <polyline points="80,160 150,180 220,140 290,120 360,110 430,100 500,80" fill="none" stroke="#2e6fca"
+                stroke-width="3" />
+
               <!-- Data points -->
-              <circle cx="80" cy="160" r="5" fill="#2e6fca"/>
-              <circle cx="150" cy="180" r="5" fill="#2e6fca"/>
-              <circle cx="220" cy="140" r="5" fill="#2e6fca"/>
-              <circle cx="290" cy="120" r="5" fill="#2e6fca"/>
-              <circle cx="360" cy="110" r="5" fill="#2e6fca"/>
-              <circle cx="430" cy="100" r="5" fill="#2e6fca"/>
-              <circle cx="500" cy="80" r="5" fill="#2e6fca"/>
-              
+              <circle cx="80" cy="160" r="5" fill="#2e6fca" />
+              <circle cx="150" cy="180" r="5" fill="#2e6fca" />
+              <circle cx="220" cy="140" r="5" fill="#2e6fca" />
+              <circle cx="290" cy="120" r="5" fill="#2e6fca" />
+              <circle cx="360" cy="110" r="5" fill="#2e6fca" />
+              <circle cx="430" cy="100" r="5" fill="#2e6fca" />
+              <circle cx="500" cy="80" r="5" fill="#2e6fca" />
+
               <!-- X-axis labels -->
               <text x="70" y="225" class="axis-label">Oct</text>
               <text x="130" y="225" class="axis-label">Nov</text>
@@ -273,4 +294,5 @@
   <script src="../../2-script/profile-menu.js"></script>
   <script src="../../2-script/search.js"></script>
 </body>
+
 </html>

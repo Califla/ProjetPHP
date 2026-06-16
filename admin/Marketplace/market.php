@@ -1,15 +1,24 @@
+<?php
+session_start();
+if (isset($_SESSION)){
+    extract($_SESSION);
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ISMO-SkillSwap – Marketplace Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="../../1-css/style.css" />
   <link rel="stylesheet" href="market.css" />
 </head>
+
 <body>
   <div class="layout">
     <aside class="sidebar">
@@ -52,11 +61,16 @@
       </form>
       <div class="user-pill" data-email="admin@ismo.ma">
         <div class="user-info">
-          <div class="user-name">Admin</div>
-          <div class="user-role">Administrateur</div>
+          <div class="user-name"><?php echo $nom . " " . $prenom; ?></div>
+          <div class="user-role"><?php echo $role ?></div>
         </div>
-        <div class="user-avatar">Ad</div>
-      </div>
+        <?php
+        if ($photo) {
+          echo '<img class="user-avatar" src="../../pagelogin/photo/' . $photo . '" alt="Photo de profil">';
+        } else {
+          echo '<div class="user-avatar">' . substr($nom, 0, 1) . substr($prenom, 0, 1) . '</div>';
+        }
+        ?>
     </header>
 
     <main class="main" data-role="admin">
@@ -65,7 +79,10 @@
 
       <section class="controls-row">
         <div class="control-group search-group">
-          <svg class="control-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg class="control-icon" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
           <input id="searchInput" type="search" placeholder="Rechercher par mot-clé, compétence, technologie..." />
         </div>
         <div class="control-group right-group">
@@ -87,8 +104,18 @@
             <option value="fermé">Fermé</option>
           </select>
           <button class="filter-btn" id="filterBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="4" y1="21" x2="4" y2="14" />
+              <line x1="4" y1="10" x2="4" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12" y2="3" />
+              <line x1="20" y1="21" x2="20" y2="16" />
+              <line x1="20" y1="12" x2="20" y2="3" />
+              <line x1="1" y1="14" x2="7" y2="14" />
+              <line x1="9" y1="8" x2="15" y2="8" />
+              <line x1="17" y1="16" x2="23" y2="16" />
+            </svg>
             Filtres
           </button>
         </div>
@@ -102,4 +129,5 @@
   <script src="../../2-script/profile-menu.js"></script>
   <script src="../../2-script/search.js"></script>
 </body>
+
 </html>

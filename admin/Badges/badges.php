@@ -1,5 +1,12 @@
+<?php
+session_start();
+if (isset($_SESSION)) {
+  extract($_SESSION);
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,8 +15,11 @@
   <link rel="stylesheet" href="../../1-css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap"
+    rel="stylesheet" />
 </head>
+
 <body>
   <div class="layout">
     <aside class="sidebar">
@@ -43,20 +53,25 @@
     </aside>
 
     <header class="header">
-        <form class="header-search" action="#" onsubmit="return false;">
-          <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="7" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-          <input id="globalSearch" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
-        </form>
+      <form class="header-search" action="#" onsubmit="return false;">
+        <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input id="globalSearch" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
+      </form>
       <div class="user-pill" data-email="admin@ismo.ma">
         <div class="user-info">
-          <div class="user-name">Admin</div>
-          <div class="user-role">Administrateur</div>
+          <div class="user-name"><?php echo $nom . " " . $prenom; ?></div>
+          <div class="user-role"><?php echo $role ?></div>
         </div>
-        <div class="user-avatar">Ad</div>
-      </div>
+        <?php
+        if ($photo) {
+          echo '<img class="user-avatar" src="../../pagelogin/photo/' . $photo . '" alt="Photo de profil">';
+        } else {
+          echo '<div class="user-avatar">' . substr($nom, 0, 1) . substr($prenom, 0, 1) . '</div>';
+        }
+        ?>
     </header>
 
     <main class="content-area">
@@ -218,4 +233,5 @@
   <script src="../../2-script/profile-menu.js"></script>
   <script src="../../2-script/search.js"></script>
 </body>
+
 </html>
