@@ -56,6 +56,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       flex-wrap: wrap;
     }
 
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: #8a9bb8;
+      font-size: 1rem;
+      font-weight: 500;
+      background: #f4f7fc;
+      border-radius: 16px;
+      border: 2px dashed #d0d8e4;
+    }
+
     .modal-window {
       display: none;
       position: fixed;
@@ -338,6 +349,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = $db->query("SELECT aide.*, utilisateurs.nom, utilisateurs.prenom FROM aide JOIN utilisateurs ON aide.id_user = utilisateurs.id_user WHERE aide.status = 'ouvert'");
         $stmt->execute();
         $demandes = $stmt->fetchAll();
+        if (count($demandes) == 0) {
+          echo '<div class="empty-state">Aucune demande d\'aide disponible pour le moment.</div>';
+        }
         ?>
         <?php foreach ($demandes as $demand): ?>
           <article class="demande-card">

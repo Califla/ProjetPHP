@@ -35,8 +35,6 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`aide` (
   `status` ENUM('ouvert', 'ferme', 'resolu') NULL DEFAULT NULL,
   `date_pub` DATETIME NULL DEFAULT NULL,
   `tags` TEXT NULL DEFAULT NULL,
-  `filiere` VARCHAR(100) NULL DEFAULT NULL,
-  `level` VARCHAR(50) NULL DEFAULT NULL,
   `id_user` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id_demande`),
   INDEX `id_user` (`id_user` ASC),
@@ -101,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`badges` (
   `id_badge` INT NOT NULL AUTO_INCREMENT,
   `nom` VARCHAR(100) NULL DEFAULT NULL,
   `points_requis` INT NULL DEFAULT NULL,
-  `image` VARCHAR(255) NULL DEFAULT NULL,
+  `icone` VARCHAR(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id_badge`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
