@@ -2,8 +2,40 @@
 session_start();
 if (isset($_SESSION)) {
   extract($_SESSION);
+  require_once("../../database/config.php");
+
+  $sql = "
+  SELECT b.*,
+  COUNT(ob.id_user) as total_attributions
+  FROM badges b
+  LEFT JOIN obtention_badges ob
+  ON b.id_badge = ob.id_badge
+  GROUP BY b.id_badge
+  ";
+
+  $stmt = $db->query($sql);
+  $badges = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  $recentStmt = $db->query("
+    SELECT 
+        u.nom,
+        u.prenom,
+        b.nom AS badge_nom,
+        ob.date_obtention
+    FROM obtention_badges ob
+    JOIN utilisateurs u ON u.id_user = ob.id_user
+    JOIN badges b ON b.id_badge = ob.id_badge
+    ORDER BY ob.date_obtention DESC
+    LIMIT 5
+");
+
+  $recent = $recentStmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
+<?php if (isset($_GET['success'])): ?>
+  <div style="color: green;">
+    Badge créé avec succès ✔
+  </div>
+<?php endif; ?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -25,27 +57,27 @@ if (isset($_SESSION)) {
     <aside class="sidebar">
       <div class="sidebar-logo"><span>ISMO-SkillSwap</span></div>
       <nav class="sidebar-nav">
-        <div class="nav-item" onclick="location.href='../Tableau de bord/table.html'">
+        <div class="nav-item" onclick="location.href='../tableaubord/table.php'">
           <span class="nav-icon">🏠</span>
           <span>Tableau de bord</span>
         </div>
-        <div class="nav-item" onclick="location.href='../Utulisateurs/utili.html'">
+        <div class="nav-item" onclick="location.href='../Utulisateurs/utili.php'">
           <span class="nav-icon">👥</span>
           <span>Utilisateurs</span>
         </div>
-        <div class="nav-item active" onclick="location.href='badges.html'">
+        <div class="nav-item active" onclick="location.href='badges.php'">
           <span class="nav-icon">🎖️</span>
           <span>Badges</span>
         </div>
-        <div class="nav-item" onclick="location.href='../Moderation/mode.html'">
+        <div class="nav-item" onclick="location.href='../Moderation/mode.php'">
           <span class="nav-icon">🛡️</span>
           <span>Modération</span>
         </div>
-        <div class="nav-item" onclick="location.href='../Statistiques/stat.html'">
+        <div class="nav-item" onclick="location.href='../Statistiques/stat.php'">
           <span class="nav-icon">📊</span>
           <span>Statistiques</span>
         </div>
-        <div class="nav-item" onclick="location.href='../Marketplace/market.html'">
+        <div class="nav-item" onclick="location.href='../Marketplace/market.php'">
           <span class="nav-icon">🛒</span>
           <span>Marketplace</span>
         </div>
@@ -78,99 +110,64 @@ if (isset($_SESSION)) {
       <div class="page-header">
         <div>
           <h1 class="page-title">Gestion des badges</h1>
-          <p class="eyebrow">Gestion des badges</p>
+          <p classtableaubord="eyebrow">Gestion des badges</p>
           <p class="page-subtitle">Créez et gérez les badges de reconnaissance</p>
         </div>
-        <a href="#" class="btn btn-primary">+ Créer un badge</a>
+        <button type="button" class="btn btn-primary"
+          onclick="document.getElementById('badgeModal').style.display='flex'">
+          + Créer un badge
+        </button>
       </div>
 
       <div class="badges-container">
         <section class="badges-available">
           <h2>Badges disponibles</h2>
           <div class="badge-list">
-            <article class="badge-card">
-              <div class="badge-icon">🎯</div>
-              <h3>Premier pas</h3>
-              <p>Première aide apportée</p>
-              <div class="badge-meta">
-                <span class="meta-label">attribués</span>
-                <span class="meta-value">45</span>
-              </div>
-              <div class="badge-actions">
-                <button class="icon-btn" aria-label="Modifier">✏️</button>
-                <button class="icon-btn danger" aria-label="Supprimer">🗑️</button>
-              </div>
-            </article>
 
-            <article class="badge-card">
-              <div class="badge-icon">⭐</div>
-              <h3>Mentor actif</h3>
-              <p>10 aides avec note >4.5</p>
-              <div class="badge-meta">
-                <span class="meta-label">attribués</span>
-                <span class="meta-value">23</span>
-              </div>
-              <div class="badge-actions">
-                <button class="icon-btn" aria-label="Modifier">✏️</button>
-                <button class="icon-btn danger" aria-label="Supprimer">🗑️</button>
-              </div>
-            </article>
+            <?php foreach ($badges as $badge) { ?>
 
-            <article class="badge-card">
-              <div class="badge-icon">💜</div>
-              <h3>Expert React</h3>
-              <p>5 compétences React validées</p>
-              <div class="badge-meta">
-                <span class="meta-label">attribués</span>
-                <span class="meta-value">12</span>
-              </div>
-              <div class="badge-actions">
-                <button class="icon-btn" aria-label="Modifier">✏️</button>
-                <button class="icon-btn danger" aria-label="Supprimer">🗑️</button>
-              </div>
-            </article>
+              <article class="badge-card">
 
-            <article class="badge-card">
-              <div class="badge-icon">💛</div>
-              <h3>Collaborateur</h3>
-              <p>20 aides apportées</p>
-              <div class="badge-meta">
-                <span class="meta-label">attribués</span>
-                <span class="meta-value">18</span>
-              </div>
-              <div class="badge-actions">
-                <button class="icon-btn" aria-label="Modifier">✏️</button>
-                <button class="icon-btn danger" aria-label="Supprimer">🗑️</button>
-              </div>
-            </article>
+                <div class="badge-icon">
+                  🏆
+                </div>
 
-            <article class="badge-card">
-              <div class="badge-icon">🏆</div>
-              <h3>Top contributeur</h3>
-              <p>Top 10 du classement</p>
-              <div class="badge-meta">
-                <span class="meta-label">attribué</span>
-                <span class="meta-value">10</span>
-              </div>
-              <div class="badge-actions">
-                <button class="icon-btn" aria-label="Modifier">✏️</button>
-                <button class="icon-btn danger" aria-label="Supprimer">🗑️</button>
-              </div>
-            </article>
+                <h3><?= htmlspecialchars($badge['nom']) ?></h3>
 
-            <article class="badge-card">
-              <div class="badge-icon">🔒</div>
-              <h3>Sécurité Pro</h3>
-              <p>3 compétences cybersécurité validées</p>
-              <div class="badge-meta">
-                <span class="meta-label">attribués</span>
-                <span class="meta-value">8</span>
-              </div>
-              <div class="badge-actions">
-                <button class="icon-btn" aria-label="Modifier">✏️</button>
-                <button class="icon-btn danger" aria-label="Supprimer">🗑️</button>
-              </div>
-            </article>
+                <p>
+                  <?= $badge['points_requis'] ?> points requis
+                </p>
+
+                <div class="badge-meta">
+                  <span class="meta-label">attribués</span>
+                  <span class="meta-value">
+                    <?= $badge['total_attributions'] ?>
+                  </span>
+                </div>
+
+                <div class="badge-actions">
+
+                  <a
+                    href="edit_badge.php?id=<?= $badge['id_badge'] ?>"
+                    class="icon-btn"
+                    style="text-decoration:none;">
+                    ✏️
+                  </a>
+
+                  <a
+                    href="delete_badge.php?id=<?= $badge['id_badge'] ?>"
+                    class="icon-btn danger"
+                    style="text-decoration:none;"
+                    onclick="return confirm('Supprimer ce badge ?')">
+                    🗑️
+                  </a>
+
+                </div>
+
+              </article>
+
+            <?php } ?>
+
           </div>
         </section>
 
@@ -230,6 +227,52 @@ if (isset($_SESSION)) {
       </div>
     </main>
   </div>
+  <div id="badgeModal" class="modal">
+
+    <div class="modal-content">
+
+      <span class="close"
+        onclick="document.getElementById('badgeModal').style.display='none'">
+        &times;
+      </span>
+
+      <h2>Créer un badge</h2>
+
+      <form method="POST" action="create_badge.php" enctype="multipart/form-data">
+
+        <input type="text" name="nom" placeholder="Nom du badge" required>
+
+        <input type="number" name="points_requis" placeholder="Points requis" required>
+
+        <input type="file" name="image" required>
+
+        <button type="submit">
+          Créer le badge
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+  </div>
+  <script>
+    function openModal() {
+      document.getElementById("badgeModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("badgeModal").style.display = "none";
+    }
+
+    window.onclick = function(e) {
+      let modal = document.getElementById("badgeModal");
+      if (e.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
   <script src="../../2-script/profile-menu.js"></script>
   <script src="../../2-script/search.js"></script>
 </body>
