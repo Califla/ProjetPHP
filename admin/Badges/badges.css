@@ -305,8 +305,107 @@ input {
 .view-all a:hover {
   opacity: 0.8;
 }
+/* ===== MODAL CREER BADGE ===== */
 
-/* Responsive Design */
+.modal{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100vh;
+    background:rgba(0,0,0,0.55);
+
+    z-index:99999;
+
+    justify-content:center;
+    align-items:center;
+}
+
+.modal-content{
+    background:#ffffff;
+    width:500px;
+    max-width:90%;
+
+    padding:30px;
+    border-radius:20px;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.2);
+
+    animation: popup .25s ease;
+}
+
+@keyframes popup{
+    from{
+        opacity:0;
+        transform:translateY(-20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.modal-content h2{
+    margin:0 0 20px;
+    color:#0d2240;
+    text-align:center;
+}
+
+.modal-content form{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="number"],
+.modal-content input[type="file"]{
+    width:100%;
+    padding:12px 15px;
+
+    border:1px solid #dbe4ef;
+    border-radius:12px;
+
+    outline:none;
+    transition:.2s;
+}
+
+.modal-content input:focus{
+    border-color:#2e6fca;
+    box-shadow:0 0 0 4px rgba(46,111,202,.15);
+}
+
+.modal-content button{
+    background:#2e6fca;
+    color:white;
+
+    border:none;
+    border-radius:12px;
+
+    padding:13px;
+    cursor:pointer;
+
+    font-weight:600;
+    transition:.2s;
+}
+
+.modal-content button:hover{
+    background:#1f5ab0;
+}
+
+.close{
+    float:right;
+    font-size:28px;
+    font-weight:bold;
+    cursor:pointer;
+    color:#6c7a94;
+}
+
+.close:hover{
+    color:#ef4444;
+}
+
 @media (max-width: 1200px) {
   .badges-container {
     grid-template-columns: 1fr;
