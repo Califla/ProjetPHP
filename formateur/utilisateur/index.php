@@ -3,6 +3,16 @@ session_start();
 if (isset($_SESSION)) {
   extract($_SESSION);
 }
+include("../../database/config.php");
+try {
+  $utr = $db->query("SELECT * FROM utilisateurs WHERE role='stagiaire' OR role='mentor'");
+  $utr->execute();
+  $utilisateurs = $utr->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+  die("Erreur de base de données : " . $e->getMessage());
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -72,6 +82,7 @@ if (isset($_SESSION)) {
           echo '<div class="user-avatar">' . substr($nom, 0, 1) . substr($prenom, 0, 1) . '</div>';
         }
         ?>
+      </div>
     </header>
 
     <main class="main">
@@ -137,30 +148,60 @@ if (isset($_SESSION)) {
                   <th>Email</th>
                   <th>Rôle</th>
                   <th>Filière</th>
-                  <th>Statut</th>
+              
                   <th>Actions</th>
                 </tr>
+
               </thead>
               <tbody>
+                <?php foreach ($utilisateurs as $user): ?>
+           <?php
+           if ($user['role'] == 'stagiaire') :
+           ?>
                 <tr>
                   <td class="user-cell">
                     <div class="user-cell-inner">
-                      <span class="user-avatar">Ah</span>
+                      <span class="user-avatar"><?php echo htmlspecialchars(substr($user['nom'], 0, 1) . substr($user['prenom'], 0, 1)); ?></span>
                       <div>
-                        <strong>Ahmed Idrissi</strong>
+                       <strong><?php echo htmlspecialchars($user['nom'] . ' ' . $user['prenom']); ?></strong>
                       </div>
                     </div>
                   </td>
-                  <td>ahmed.idrissi@ismo.ma</td>
-                  <td><span class="badge badge-stagiaire">Stagiaire</span></td>
-                  <td>DEV 101</td>
-                  <td><span class="status status-success">Actif</span></td>
+                 <td><?php echo htmlspecialchars($user['email']); ?></td>
+                  <td><span class="badge badge-stagiaire"><?php echo htmlspecialchars($user['role']); ?></span></td>
+                 <td><?php echo htmlspecialchars($user['filiere']); ?></td>
+               
                   <td class="actions-cell">
                     <div class="actions-cell-inner">
-                      <button class="btn-role" data-role="stagiaire">Passer Mentor</button>
+                      <a href="modification.php?id=<?php echo $user['id']; ?>&amp;role=mentor" class="btn-role" data-role="stagiaire">Passer Mentor</a>
+                    </div>
+
+                  </td>
+                </tr>
+                <?php endif; ?>
+                <?php
+                if ($user['role'] == 'mentor') :
+                ?><tr>
+                  <td class="user-cell">
+                    <div class="user-cell-inner">
+                      <span class="user-avatar"><?php echo htmlspecialchars(substr($user['nom'], 0, 1) . substr($user['prenom'], 0, 1)); ?></span>
+                      <div>
+                        <strong><?php echo htmlspecialchars($user['nom'] . ' ' . $user['prenom']); ?></strong>
+                      </div>
+                    </div>
+                  </td>
+                  <td><?php echo htmlspecialchars($user['email']); ?></td>
+                  <td><span class="badge badge-mentor"><?php echo htmlspecialchars($user['role']); ?></span></td>
+                  <td><?php echo htmlspecialchars($user['filiere']); ?></td>
+                 
+                  <td class="actions-cell">
+                    <div class="actions-cell-inner">
+                      <a href="modification.php?id=<?php echo $user['id']; ?>&amp;role=stagiaire" class="btn-role" data-role="mentor">Passer Stagiaire</a>
                     </div>
                   </td>
                 </tr>
+                <?php endif; ?>
+                <?php endforeach; ?>
               </tbody>
             </table>
           </div>
