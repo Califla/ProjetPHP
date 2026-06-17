@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `skillswaps`.`aide_effectuee` (
   INDEX `id_proposition` (`id_proposition` ASC),
   INDEX `id_aidant` (`id_mentor` ASC),
   INDEX `id_beneficiaire` (`id_beneficiaire` ASC),
-  PRIMARY KEY (`id_proposition`, `id_mentor`, `id_beneficiaire`),
+  PRIMARY KEY (`id_proposition`),
   CONSTRAINT `aide_effectuee_ibfk_1`
     FOREIGN KEY (`id_proposition`)
     REFERENCES `skillswaps`.`propositions_aide` (`id_proposition`),

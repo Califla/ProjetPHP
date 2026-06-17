@@ -381,7 +381,7 @@ $showModalModif = $showModalModif || ($editCompetence && !isset($_POST['modif'])
 
         <div class="cards-grid">
           <?php
-          $aff = $db->prepare("SELECT id_competence, nom, categorie FROM competences");
+          $aff = $db->prepare("SELECT * FROM competences");
           $aff->execute();
           $competences = $aff->fetchAll(PDO::FETCH_ASSOC);
           if (count($competences) > 0) {
