@@ -52,10 +52,15 @@ body {
 
 .page-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 20px;
+  flex-wrap: wrap;
   margin-bottom: 28px;
+}
+
+.page-header > div {
+  max-width: 720px;
 }
 
 .controls-row {
@@ -322,6 +327,7 @@ select:focus {
 .ghost-btn.report-btn {
     color: #b91c1c;
     border: 1px solid rgba(185, 28, 28, 0.3);
+    text-decoration: none;
 }
 
 .ghost-btn.report-btn:hover {

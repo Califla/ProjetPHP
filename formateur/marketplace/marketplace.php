@@ -3,6 +3,40 @@ session_start();
 if (isset($_SESSION)) {
   extract($_SESSION);
 }
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  include("../../database/config.php");
+  if (isset($_POST['pub'])) {
+    extract($_POST);
+    $err = [];
+    if (!isset($titre) || empty($titre))
+      $err['titre'] = "Le titre est requis";
+    if (!isset($description) || empty($description))
+      $err['description'] = "La description est requise";
+    if (!isset($tags) || empty($tags))
+      $err["tags"] = "Les tags sont requis";
+    if (empty($err)) {
+      $titre = htmlspecialchars(trim($titre));
+      $tags = htmlspecialchars(trim($tags));
+      $description = htmlspecialchars(trim($description));
+      $date_pub = date('Y-m-d H:i:s');
+      $status = 'ouvert';
+      try {
+        $stmt = $db->prepare("INSERT INTO aide (titre, description, status, date_pub, tags, id_user) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$titre, $description, $status, $date_pub, $tags, $_SESSION['id_user']]);
+        if ($stmt == true) {
+          header("Location: marketplace.php?msg=demande+publiée+avec+succès");
+          exit();
+        } else {
+          header("Location: marketplace.php?error=Erreur lors de la publication de la demande");
+          exit();
+        }
+      } catch (PDOException $e) {
+        die("Erreur lors de l'inscription : " . $e->getMessage());
+        exit();
+      }
+    }
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -14,6 +48,14 @@ if (isset($_SESSION)) {
   <link rel="stylesheet" href="../../1-css/style.css" />
   <link rel="stylesheet" href="style.css" />
   <style>
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
     .modal-window {
       display: none;
       position: fixed;
@@ -137,6 +179,46 @@ if (isset($_SESSION)) {
     .modal-window .btn-primary:hover {
       background: #163158;
     }
+
+    .toast {
+      padding: 16px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: toastIn 0.4s ease;
+      border: 1px solid;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .toast.success {
+      background: #e6f7e6;
+      color: #1e7e34;
+      border-color: #b7e4b7;
+    }
+
+    .toast.error {
+      background: #fde8e8;
+      color: #c0392b;
+      border-color: #f5c6cb;
+    }
+
+    .toast-hide {
+      animation: toastOut 0.4s ease forwards;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateY(0); }
+      to   { opacity: 0; transform: translateY(-20px); }
+    }
   </style>
 </head>
 
@@ -195,14 +277,17 @@ if (isset($_SESSION)) {
     </header>
 
     <main class="main" data-role="formateur">
+      <?php if (isset($_GET["msg"])): ?>
+        <div id="toastMsg" class="toast success">✅ <?php echo $_GET["msg"]; ?></div>
+      <?php elseif (isset($_GET["error"])): ?>
+        <div id="toastMsg" class="toast error">❌ <?php echo $_GET["error"]; ?></div>
+      <?php endif; ?>
       <div class="page-header">
         <div>
           <div class="page-title">Marketplace Formateur</div>
           <div class="page-sub">Gérez les demandes d'aide et proposez votre soutien aux stagiaires.</div>
-          <button type="button" class="btn btn-primary" onclick="ouvrirModal('modalAjout')">+ publier une
-            demande</button>
-
         </div>
+        <button type="button" class="btn btn-primary" onclick="ouvrirModal('modalAjout')">+ publier une demande</button>
       </div>
       <section class="controls-row">
         <div class="control-group search-group">
@@ -253,7 +338,8 @@ if (isset($_SESSION)) {
         $stmt = $db->query("SELECT aide.*, utilisateurs.nom, utilisateurs.prenom FROM aide JOIN utilisateurs ON aide.id_user = utilisateurs.id_user WHERE aide.status = 'ouvert'");
         $stmt->execute();
         $demandes = $stmt->fetchAll();
-        foreach ($demandes as $demand): ?>
+        ?>
+        <?php foreach ($demandes as $demand): ?>
           <article class="demande-card">
             <div class="card-header">
               <div class="header-info">
@@ -269,7 +355,16 @@ if (isset($_SESSION)) {
               </div>
             </div>
             <div class="tag-row">
-              <span class="tag"><?php echo htmlspecialchars($demand['tags']); ?></span>
+              <?php
+              if ($demand['tags']) {
+                $tagsArray = explode(',', $demand['tags']);
+                foreach ($tagsArray as $tag) {
+                  echo '<span class="tag">' . htmlspecialchars(trim($tag)) . '</span>';
+                }
+              } else {
+                echo "<span class='no-tags'>Aucun tag</span>";
+              }
+              ?>
             </div>
             <div class="card-footer">
               <div class="footer-left">
@@ -281,7 +376,7 @@ if (isset($_SESSION)) {
                 <button class="primary-btn">Proposer mon aide</button>
               <?php endif; ?>
               <div class="action-right">
-                <button class="ghost-btn">Signaler</button>
+                <a href="signaler.php?id=<?php echo $demand['id_demande']; ?>" class="ghost-btn report-btn">Signaler</a>
               </div>
             </div>
           </article>
@@ -295,19 +390,27 @@ if (isset($_SESSION)) {
         <h2>Publier une demande d'aide</h2>
         <button class="modal-close" onclick="fermerModal('modalAjout')">&times;</button>
       </div>
-      <form action="ajouter_demande.php" method="POST">
+      <form action="marketplace.php" method="POST">
         <div class="modal-body">
           <label class="modal-label">Titre</label>
-          <input class="modal-input" type="text" name="titre" placeholder="Ex: Aide sur les algorithmes..." required>
+          <?php if (isset($err['titre'])): ?>
+            <span style="color:red;font-size:0.8rem;"><?php echo $err['titre']; ?></span>
+          <?php endif; ?>
+          <input class="modal-input" type="text" name="titre" placeholder="Ex: Aide sur les algorithmes..." value="<?php echo isset($titre) ? htmlspecialchars($titre) : ''; ?>">
           <label class="modal-label">Description</label>
-          <textarea class="modal-input" name="description" rows="4" placeholder="Décrivez votre demande..."
-            required></textarea>
+          <?php if (isset($err['description'])): ?>
+            <span style="color:red;font-size:0.8rem;"><?php echo $err['description']; ?></span>
+          <?php endif; ?>
+          <textarea class="modal-input" name="description" rows="4" placeholder="Décrivez votre demande..."><?php echo isset($description) ? htmlspecialchars($description) : ''; ?></textarea>
           <label class="modal-label">Tags (séparés par des virgules)</label>
-          <input class="modal-input" type="text" name="tags" placeholder="Ex: Python, Débutant">
+          <?php if (isset($err['tags'])): ?>
+            <span style="color:red;font-size:0.8rem;"><?php echo $err['tags']; ?></span>
+          <?php endif; ?>
+          <input class="modal-input" type="text" name="tags" placeholder="Ex: Python, Débutant" value="<?php echo isset($tags) ? htmlspecialchars($tags) : ''; ?>">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn-cancel" onclick="fermerModal('modalAjout')">Annuler</button>
-          <button type="submit" class="btn-primary">Publier</button>
+          <button type="submit" name="pub" class="btn-primary">Publier</button>
         </div>
       </form>
     </div>
@@ -322,6 +425,19 @@ if (isset($_SESSION)) {
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') fermerModal('modalAjout');
     });
+    function dismissToast() {
+      var t = document.getElementById('toastMsg');
+      if (t) {
+        t.classList.add('toast-hide');
+        setTimeout(function () { t.remove(); }, 400);
+      }
+    }
+    <?php if (isset($_GET["msg"]) || isset($_GET["error"])): ?>
+      setTimeout(dismissToast, 4500);
+    <?php endif; ?>
+    <?php if (!empty($err) || isset($_GET['error'])): ?>
+    ouvrirModal('modalAjout');
+    <?php endif; ?>
   </script>
   <script src="../2-script/profile-menu.js"></script>
   <script src="../2-script/search.js"></script>
