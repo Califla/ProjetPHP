@@ -3,7 +3,7 @@ session_start();
 if (isset($_SESSION)) {
   extract($_SESSION);
 }
-include("../../database/config.php");
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if (isset($_POST['enr'])) {
@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!isset($lacategorie) || empty($lacategorie))
       $err["categorie"] = "la categorie est obligatoire";
     if (empty($err)) {
+      include("../../database/config.php");
       $lenom = htmlspecialchars(trim($lenom));
       $lacategorie = htmlspecialchars(trim($lacategorie));
       try {
@@ -364,6 +365,7 @@ $showModalModif = $showModalModif || ($editCompetence && !isset($_POST['modif'])
         </div>
 
         <?php
+        include("../../database/config.php");
         $catList = ['Frontend', 'Backend', 'DevOps', 'Cybersécurité', 'Base de données'];
         $catReq = $db->query("SELECT categorie, COUNT(*) AS nb FROM competences GROUP BY categorie");
         $catCounts = [];
@@ -379,7 +381,6 @@ $showModalModif = $showModalModif || ($editCompetence && !isset($_POST['modif'])
             </article>
           <?php endforeach; ?>
         </div>
-
         <div class="cards-grid">
           <?php
           $aff = $db->prepare("SELECT * FROM competences");
