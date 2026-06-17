@@ -8,6 +8,10 @@ try {
   $utr = $db->query("SELECT * FROM utilisateurs WHERE role='stagiaire' OR role='mentor'");
   $utr->execute();
   $utilisateurs = $utr->fetchAll(PDO::FETCH_ASSOC);
+
+  $totalUsers = $db->query("SELECT COUNT(*) FROM utilisateurs")->fetchColumn();
+  $totalStagiaires = $db->query("SELECT COUNT(*) FROM utilisateurs WHERE role='stagiaire'")->fetchColumn();
+  $totalMentors = $db->query("SELECT COUNT(*) FROM utilisateurs WHERE role='mentor'")->fetchColumn();
 } catch (PDOException $e) {
   die("Erreur de base de données : " . $e->getMessage());
 }
@@ -89,27 +93,23 @@ try {
       <section class="content-area">
         <div class="page-header">
           <div>
-            <p class="eyebrow">Gestion des utilisateurs</p>
             <h1>Gérez les rôles des stagiaires</h1>
+            <p class="eyebrow">Gestion des utilisateurs</p>
           </div>
         </div>
 
         <div class="stats-grid">
           <article class="stat-card">
             <span class="stat-label">Total utilisateurs</span>
-            <strong>260</strong>
+            <strong><?= $totalUsers ?></strong>
           </article>
           <article class="stat-card">
             <span class="stat-label">Stagiaires</span>
-            <strong>187</strong>
+            <strong><?= $totalStagiaires ?></strong>
           </article>
           <article class="stat-card">
             <span class="stat-label">Mentors</span>
-            <strong>45</strong>
-          </article>
-          <article class="stat-card">
-            <span class="stat-label">En attente</span>
-            <strong>8</strong>
+            <strong><?= $totalMentors ?></strong>
           </article>
         </div>
 
@@ -173,7 +173,7 @@ try {
                
                   <td class="actions-cell">
                     <div class="actions-cell-inner">
-                      <a href="modification.php?id=<?php echo $user['id']; ?>&amp;role=mentor" class="btn-role" data-role="stagiaire">Passer Mentor</a>
+                      <a href="modification.php?id=<?php echo $user['id_user']; ?>&amp;role=mentor" class="btn-role" data-role="stagiaire">Passer Mentor</a>
                     </div>
 
                   </td>
@@ -196,7 +196,7 @@ try {
                  
                   <td class="actions-cell">
                     <div class="actions-cell-inner">
-                      <a href="modification.php?id=<?php echo $user['id']; ?>&amp;role=stagiaire" class="btn-role" data-role="mentor">Passer Stagiaire</a>
+                      <a href="modification.php?id=<?php echo $user['id_user']; ?>&amp;role=stagiaire" class="btn-role" data-role="mentor">Passer Stagiaire</a>
                     </div>
                   </td>
                 </tr>

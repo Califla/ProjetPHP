@@ -340,6 +340,7 @@ $showModalModif = $showModalModif || ($editCompetence && !isset($_POST['modif'])
         <div class="page-header">
           <div>
             <h1>Gestion des compétences</h1>
+            <p class="eyebrow">ajouter les competences</p>
           </div>
           <a href="#" class="btn btn-primary" onclick="ouvrirModal('modalAjout');return false;">+ Ajouter une
             compétence</a>
