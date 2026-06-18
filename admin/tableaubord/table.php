@@ -25,7 +25,7 @@ if (isset($_SESSION)){
     <aside class="sidebar">
       <div class="sidebar-logo"><span>ISMO-SkillSwap</span></div>
       <nav class="sidebar-nav">
-        <div class="nav-item active" onclick="location.href='../Tableau de bord/table.html'">
+        <div class="nav-item active" onclick="location.href='../Tableau de bord/table.php'">
           <span class="nav-icon">🏠</span>
           <span>Tableau de bord</span>
         </div>
@@ -33,19 +33,19 @@ if (isset($_SESSION)){
           <span class="nav-icon">👥</span>
           <span>Utilisateurs</span>
         </div>
-        <div class="nav-item" onclick="location.href='../Badges/badges.html'">
+        <div class="nav-item" onclick="location.href='../Badges/badges.php'">
           <span class="nav-icon">🎖️</span>
           <span>Badges</span>
         </div>
-        <div class="nav-item" onclick="location.href='../Moderation/mode.html'">
+        <div class="nav-item" onclick="location.href='../Moderation/mode.php'">
           <span class="nav-icon">🛡️</span>
           <span>Modération</span>
         </div>
-        <div class="nav-item" onclick="location.href='../Statistiques/stat.html'">
+        <div class="nav-item" onclick="location.href='../Statistiques/stat.php'">
           <span class="nav-icon">📊</span>
           <span>Statistiques</span>
         </div>
-        <div class="nav-item" onclick="location.href='../Marketplace/market.html'">
+        <div class="nav-item" onclick="location.href='../Marketplace/market.php'">
           <span class="nav-icon">🛒</span>
           <span>Marketplace</span>
         </div>

@@ -253,18 +253,31 @@ tbody tr:hover {
   cursor: pointer;
   transition: all 0.18s;
   white-space: nowrap;
+  text-decoration: none;
 }
 
-.btn-role:hover {
-  background: var(--blue-soft);
-  border-color: var(--blue);
+.btn-role[data-role="stagiaire"] {
   color: var(--blue);
+  border-color: var(--blue);
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.btn-role[data-role="stagiaire"]:hover {
+  background: var(--blue-soft);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-role[data-role="mentor"] {
+  color: var(--purple);
+  border-color: var(--purple);
+  background: rgba(139, 92, 246, 0.06);
 }
 
 .btn-role[data-role="mentor"]:hover {
-  background: rgba(139, 92, 246, 0.1);
-  border-color: var(--purple);
-  color: var(--purple);
+  background: rgba(139, 92, 246, 0.12);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+  transform: translateY(-1px);
 }
 
 .visually-hidden {

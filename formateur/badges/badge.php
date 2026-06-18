@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION)){
+if (isset($_SESSION)) {
     extract($_SESSION);
 }
 ?>
@@ -12,6 +12,29 @@ if (isset($_SESSION)){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../1-css/style.css">
     <link rel="stylesheet" href="badge.css">
+    <style>
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: #8a9bb8;
+            font-size: 1rem;
+            font-weight: 500;
+            background: #f4f7fc;
+            border-radius: 16px;
+            border: 2px dashed #d0d8e4;
+        }
+        .page-title {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 28px;
+        }
+        .page-title h1 {
+            margin: 0;
+        }
+        .main-content {
+            padding: 0 14px 100px 0;
+        }
+    </style>
     <title>Gestion des Badges - ISMO-SkillSwap</title>
 </head>
 
@@ -53,12 +76,13 @@ if (isset($_SESSION)){
                     <circle cx="11" cy="11" r="7" />
                     <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
-                <input id="globalSearch" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
+                <input id="globalSearch" class="header-search-input" type="search"
+                    placeholder="Rechercher un stagiaire...">
             </form>
             <div class="user-pill" data-email="jouariya@ismo.ma">
                 <div class="user-info">
                     <div class="user-name"><?php echo $nom . " " . $prenom; ?></div>
-                    <div class="user-role"><?php echo $role?></div>
+                    <div class="user-role"><?php echo $role ?></div>
                 </div>
                 <?php
                 if ($photo) {
@@ -78,83 +102,25 @@ if (isset($_SESSION)){
             <div class="badges-layout">
                 <section class="badges-list-container">
                     <h2 class="panel-title">Badges disponibles</h2>
-
+                    <?php
+                    include("../../database/config.php");
+                    $stmt = $db->query("SELECT * FROM badges");
+                    $stmt->execute();
+                    $badges = $stmt->fetchAll();
+                    if (count($badges) == 0) {
+                        echo '<div class="empty-state">Aucun badge disponible pour le moment.</div>';
+                    }
+                    ?>
+                    <?php foreach ($badges as $badge): ?>
                     <div class="badge-item-row">
-                        <div class="badge-icon-box">🎯</div>
+                        <div class="badge-icon-box"><?php echo $badge['icone']; ?></div>
                         <div class="badge-details">
-                            <h3>Premier pas</h3>
-                            <p>Première aide apportée</p>
-                        </div>
-                        <div class="badge-stat-box">
-                            <span class="stat-num">45</span>
-                            <span class="stat-text">attribués</span>
+                            <h3><?php echo $badge['nom']; ?></h3>
+                            <p><?php echo $badge['points_requis']; ?> points requis</p>
                         </div>
                         <button class="btn-outline">Attribuer</button>
                     </div>
-
-                    <div class="badge-item-row">
-                        <div class="badge-icon-box">⭐</div>
-                        <div class="badge-details">
-                            <h3>Mentor actif</h3>
-                            <p>10 aides avec note > 4.5</p>
-                        </div>
-                        <div class="badge-stat-box">
-                            <span class="stat-num">23</span>
-                            <span class="stat-text">attribués</span>
-                        </div>
-                        <button class="btn-outline">Attribuer</button>
-                    </div>
-
-                    <div class="badge-item-row">
-                        <div class="badge-icon-box">⚛️</div>
-                        <div class="badge-details">
-                            <h3>Expert React</h3>
-                            <p>5 compétences React validées</p>
-                        </div>
-                        <div class="badge-stat-box">
-                            <span class="stat-num">12</span>
-                            <span class="stat-text">attribués</span>
-                        </div>
-                        <button class="btn-outline">Attribuer</button>
-                    </div>
-                    <div class="badge-item-row">
-                        <div class="badge-icon-box">🤝</div>
-                        <div class="badge-details">
-                            <h3>Collaborateur</h3>
-                            <p>20 aides apportées</p>
-                        </div>
-                        <div class="badge-stat-box">
-                            <span class="stat-num">18</span>
-                            <span class="stat-text">attribués</span>
-                        </div>
-                        <button class="btn-outline">Attribuer</button>
-                    </div>
-
-                    <div class="badge-item-row">
-                        <div class="badge-icon-box">🏆</div>
-                        <div class="badge-details">
-                            <h3>Top contributeur</h3>
-                            <p>Top 10 du classement</p>
-                        </div>
-                        <div class="badge-stat-box">
-                            <span class="stat-num">10</span>
-                            <span class="stat-text">attribués</span>
-                        </div>
-                        <button class="btn-outline">Attribuer</button>
-                    </div>
-
-                    <div class="badge-item-row">
-                        <div class="badge-icon-box">🔒</div>
-                        <div class="badge-details">
-                            <h3>Sécurité Pro</h3>
-                            <p>3 compétences cybersécurité validées</p>
-                        </div>
-                        <div class="badge-stat-box">
-                            <span class="stat-num">8</span>
-                            <span class="stat-text">attribués</span>
-                        </div>
-                        <button class="btn-outline">Attribuer</button>
-                    </div>
+                    <?php endforeach; ?>
                 </section>
 
                 <aside class="badges-right-side">
@@ -207,7 +173,7 @@ if (isset($_SESSION)){
     </div>
     <script src="../../2-script/profile-menu.js"></script>
     <script src="badge.js"></script>
-  <script src="../../2-script/search.js"></script>
+    <script src="../../2-script/search.js"></script>
 </body>
 
 </html>
