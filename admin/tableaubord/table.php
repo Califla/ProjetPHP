@@ -29,7 +29,7 @@ if (isset($_SESSION)){
           <span class="nav-icon">🏠</span>
           <span>Tableau de bord</span>
         </div>
-        <div class="nav-item" onclick="location.href='../Utulisateurs/utili.html'">
+        <div class="nav-item" onclick="location.href='../Utulisateurs/utili.php'">
           <span class="nav-icon">👥</span>
           <span>Utilisateurs</span>
         </div>
