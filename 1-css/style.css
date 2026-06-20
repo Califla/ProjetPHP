@@ -174,7 +174,14 @@ p {
     /* Assure que le header est au-dessus des autres éléments, mais sous la sidebar si nécessaire */
 }
 
-
+.eyebrow {
+  margin: 0 0 6px 10px;
+  color: var(--blue);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
 .user-pill {
     display: flex;
     align-items: center;

@@ -3,6 +3,16 @@ session_start();
 if (isset($_SESSION)){
     extract($_SESSION);
 }
+try{
+    include('../../database/config.php');
+    # Récupérer les publications signalées
+    $req = $db->prepare("SELECT p.*, u.nom, u.prenom FROM aide p JOIN utilisateurs u ON p.id_user = u.id_user WHERE p.signal = 1 ORDER BY p.date_pub DESC");
+    $req->execute();
+    $result = $req->fetchAll(PDO::FETCH_ASSOC);
+
+}catch(PDOException $e){
+    echo "ERREUR DE CONNEXION À LA BASE DE DONNÉES: " . $e->getMessage();
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -25,7 +35,7 @@ if (isset($_SESSION)){
     <aside class="sidebar">
       <div class="sidebar-logo"><span>ISMO-SkillSwap</span></div>
       <nav class="sidebar-nav">
-        <div class="nav-item" onclick="location.href='../Tableau de bord/table.php'">
+        <div class="nav-item" onclick="location.href='../Tableaubord/table.php'">
           <span class="nav-icon">🏠</span>
           <span>Tableau de bord</span>
         </div>
@@ -85,7 +95,7 @@ if (isset($_SESSION)){
       <div class="stats-grid">
         <article class="stat-card">
           <span class="stat-label">Publications signalées</span>
-          <strong>3</strong>
+          <strong><?php echo count($result); ?></strong>
         </article>
         <article class="stat-card">
           <span class="stat-label">Approuvées ce mois</span>
@@ -96,53 +106,22 @@ if (isset($_SESSION)){
           <strong>5</strong>
         </article>
       </div>
-
       <div class="moderation-items">
-        <article class="moderation-card">
-          <div class="card-header">
-            <div class="warning-icon">⚠️</div>
-            <div class="publication-info">
-              <h2>Aide sur React Hooks</h2>
-              <div class="user-meta">
-                <div class="user-avatar">Ah</div>
-                <div class="user-details">
-                  <span class="user-name">Ahmed Idrissi</span>
-                  <span class="date">26/04/2026</span>
-                </div>
+        <?php if (count($result) == 0): ?>
+          <div style="text-align:center;padding:24px;color:#94a3b8;">Aucune publication signalée</div>
+        <?php else: ?>
+        <?php foreach ($result as $row): ?>
+          <article class="moderation-card">
+            <div class="card-header">
+              <div class="warning-icon">⚠️</div>
+              <div class="publication-info">
+                <h2><?php echo $row['titre']; ?></h2>
               </div>
-            </div>
-            <div class="report-count">
-              <div class="count">3</div>
-              <div class="label">signalements</div>
-            </div>
-          </div>
-
-          <div class="content-body">
-            <p>Je cherche quelqu'un pour m'aider à comprendre les hooks React...</p>
-          </div>
-
-          <div class="report-reasons">
-            <span class="reason-tag">Contenu inapproprié</span>
-            <span class="reason-tag">Spam</span>
-          </div>
-
-          <div class="card-actions">
-            <button class="btn-link">Voir détails</button>
-            <button class="btn btn-keep">✓ Garder</button>
-            <button class="btn btn-delete">🗑️ Supprimer</button>
-          </div>
-        </article>
-
-        <article class="moderation-card">
-          <div class="card-header">
-            <div class="warning-icon">⚠️</div>
-            <div class="publication-info">
-              <h2>Configuration Docker</h2>
               <div class="user-meta">
                 <div class="user-avatar">Yo</div>
                 <div class="user-details">
-                  <span class="user-name">Youssef Benali</span>
-                  <span class="date">25/04/2026</span>
+                  <span class="user-name"><?php echo $row['nom'] . " " . $row['prenom']; ?></span>
+                  <span class="date"><?php echo $row['date_pub']; ?></span>
                 </div>
               </div>
             </div>
@@ -166,6 +145,9 @@ if (isset($_SESSION)){
             <button class="btn btn-delete">🗑️ Supprimer</button>
           </div>
         </article>
+        <?php endforeach; ?>
+        <?php endif; ?>
+        
       </div>
     </main>
   </div>

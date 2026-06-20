@@ -325,6 +325,12 @@ select:focus {
     color: var(--white);
 }
 
+.no-tags {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
 .no-results {
     text-align: center;
     padding: 60px 20px;

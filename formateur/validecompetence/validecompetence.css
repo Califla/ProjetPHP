@@ -29,12 +29,13 @@ h6 {
 }
 
 .eyebrow {
-    font-size: 0.95rem;
-    color: var(--gray-text);
-    margin-top: 8px;
-    margin-bottom: 32px;
+  margin: 0 0 6px 10px;
+  color: var(--blue);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
 }
-
 .page-title p {
     color: #64748b;
     margin-bottom: 30px;
@@ -88,9 +89,10 @@ h6 {
 
 .stat-card-v {
     background: white;
-    padding: 20px;
+    padding: 24px 20px;
     border-radius: 15px;
     border: 1px solid #f1f5f9;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
 .stat-v-num {
@@ -189,6 +191,7 @@ h6 {
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .v-btn-validate {
@@ -199,6 +202,7 @@ h6 {
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .filiere-select {
@@ -336,7 +340,18 @@ h6 {
         font-size: 24px;
     }
 
-    .v-card-item {
+.empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    color: #8a9bb8;
+    font-size: 1rem;
+    font-weight: 500;
+    background: #f4f7fc;
+    border-radius: 16px;
+    border: 2px dashed #d0d8e4;
+}
+
+.v-card-item {
         padding: 18px;
     }
 

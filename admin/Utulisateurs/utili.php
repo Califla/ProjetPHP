@@ -54,7 +54,7 @@ $suspendus = $db->query("SELECT COUNT(*) FROM utilisateurs WHERE statut = 'suspe
     <aside class="sidebar">
       <div class="sidebar-logo"><span>ISMO-SkillSwap</span></div>
       <nav class="sidebar-nav">
-        <div class="nav-item" onclick="location.href='../Tableau de bord/table.php'">
+        <div class="nav-item" onclick="location.href='../tableaubord/table.php'">
           <span class="nav-icon">🏠</span>
           <span>Tableau de bord</span>
         </div>

@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           exit();
         }
       } catch (PDOException $e) {
-        die("Erreur lors de l'inscription : " . $e->getMessage());
+        echo "Erreur: " . $e->getMessage();
         exit();
       }
     }
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ISMO-SkillSwap – Marketplace Formateur</title>
   <link rel="stylesheet" href="../../1-css/style.css" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="../../1-css/marketplace.css" />
   <style>
     .page-header {
       display: flex;
@@ -300,33 +300,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <button type="button" class="btn btn-primary" onclick="ouvrirModal('modalAjout')">+ publier une demande</button>
       </div>
+      <form method="GET" action="marketplace.php" style="display:contents;">
       <section class="controls-row">
         <div class="control-group search-group">
           <svg class="control-icon" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="7" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
-          <input id="searchInput" type="search" placeholder="Rechercher par mot-clé, compétence, technologie..." />
+          <input name="search" type="search" placeholder="Rechercher par mot-clé, compétence, technologie..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" />
         </div>
         <div class="control-group right-group">
-          <select>
+          <select name="filiere">
             <option value="all">Toutes les filières</option>
-            <option value="DEV">DEV</option>
-            <option value="CYBERSEC">CYBERSEC</option>
-            <option value="DATA">DATA</option>
+            <option value="DEV" <?php echo (isset($_GET['filiere']) && $_GET['filiere'] == 'DEV') ? 'selected' : ''; ?>>DEV</option>
+            <option value="CYBERSEC" <?php echo (isset($_GET['filiere']) && $_GET['filiere'] == 'CYBERSEC') ? 'selected' : ''; ?>>CYBERSEC</option>
+            <option value="DATA" <?php echo (isset($_GET['filiere']) && $_GET['filiere'] == 'DATA') ? 'selected' : ''; ?>>DATA</option>
           </select>
-          <select>
-            <option value="all">Tous les niveaux</option>
-            <option value="Débutant">Débutant</option>
-            <option value="Intermédiaire">Intermédiaire</option>
-            <option value="Avancé">Avancé</option>
-          </select>
-          <select>
-            <option value="all">Tous les statuts</option>
-            <option value="ouvert">Ouvert</option>
-            <option value="fermé">Fermé</option>
-          </select>
-          <button class="filter-btn" id="filterBtn">
+
+          <button type="submit" class="filter-btn" id="filterBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round">
               <line x1="4" y1="21" x2="4" y2="14" />
@@ -339,16 +330,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               <line x1="9" y1="8" x2="15" y2="8" />
               <line x1="17" y1="16" x2="23" y2="16" />
             </svg>
-            Filtres
+            Filtrer
           </button>
         </div>
       </section>
+      </form>
       <div class="demandes-list">
         <?php
         include("../../database/config.php");
-        $stmt = $db->query("SELECT aide.*, utilisateurs.nom, utilisateurs.prenom FROM aide JOIN utilisateurs ON aide.id_user = utilisateurs.id_user WHERE aide.status = 'ouvert'");
-        $stmt->execute();
-        $demandes = $stmt->fetchAll();
+        try {
+          $stmt = $db->query("SELECT a.*, u.nom, u.prenom, u.filiere FROM aide a JOIN utilisateurs u ON a.id_user = u.id_user WHERE a.status = 'ouvert' ORDER BY a.date_pub DESC");
+          $demandes = $stmt->fetchAll();
+        } catch (PDOException $e) {
+          echo "Erreur: " . $e->getMessage();
+        }
         if (count($demandes) == 0) {
           echo '<div class="empty-state">Aucune demande d\'aide disponible pour le moment.</div>';
         }
@@ -360,8 +355,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <h2><?php echo htmlspecialchars($demand['titre']); ?></h2>
                 <p><?php echo htmlspecialchars($demand['description']); ?></p>
                 <p style="font-size:0.85rem;color:#999;margin-top:8px;">
-                  Par : <span
-                    style="color:var(--accent);font-weight:600;"><?php echo htmlspecialchars($demand['nom'] . ' ' . $demand['prenom']); ?></span>
+                  Par :<span style="color:var(--accent);font-weight:600;"><?php echo htmlspecialchars($demand['nom'] . ' ' . $demand['prenom']); ?></span>
+                  <?php if (!empty($demand['filiere'])): ?>
+                    &nbsp;<span style="font-size:0.75rem;background:#eef2f7;padding:2px 8px;border-radius:4px;"><?php echo htmlspecialchars($demand['filiere']); ?></span>
+                  <?php endif; ?>
                 </p>
               </div>
               <div class="header-right">
@@ -439,6 +436,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') fermerModal('modalAjout');
     });
+    function filterCards() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const status = document.getElementById('statusFilter').value;
+      document.querySelectorAll('.demande-card').forEach(card => {
+        const matchSearch = !search || card.dataset.title.includes(search) || card.dataset.desc.includes(search) || card.dataset.tags.includes(search) || card.dataset.auteur.includes(search);
+        const matchStatus = status === 'all' || card.dataset.status === status;
+        card.style.display = matchSearch && matchStatus ? '' : 'none';
+      });
+    }
+    document.getElementById('searchInput').addEventListener('input', filterCards);
+    document.getElementById('statusFilter').addEventListener('change', filterCards);
     function dismissToast() {
       var t = document.getElementById('toastMsg');
       if (t) {
