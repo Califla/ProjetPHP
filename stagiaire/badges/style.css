@@ -15,10 +15,11 @@ body {
     display: flex;
 }
 
-/* Main content area */
+.main {
+    padding: 0 14px 100px 0;
+    min-height: calc(100vh - var(--header-h));
+}
 
-
-/* Page title and subtitle */
 .page-title {
     font-family: 'Sora', sans-serif;
     font-size: 2rem;
@@ -35,299 +36,103 @@ body {
     font-weight: 400;
 }
 
-/* Stats Section */
-.badges-stats {
+.badges-section { margin-bottom: 40px; }
+.badges-section h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: #1e293b; }
+
+.badges-grid { display: flex; flex-wrap: wrap; gap: 16px; }
+.badges-grid .badge-item { flex: 1 1 280px; max-width: 100%; }
+
+.badge-item {
     display: flex;
+    align-items: center;
     gap: 16px;
-    margin-bottom: 40px;
-    flex-wrap: wrap;
-}
-
-.badges-stats .stat-card {
-    flex: 0 0 220px;
-}
-
-.stat-card {
-    background: white;
-    padding: 22px 24px;
+    background: #fff;
     border-radius: 16px;
-    border: 1px solid #eef2f6;
-    position: relative;
+    padding: 16px 20px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    border: 1px solid #eef2f7;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.stat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-}
-
-.card-icon {
-    position: absolute;
-    top: 22px;
-    right: 22px;
-    width: 22px;
-    height: 22px;
-    stroke: var(--accent);
-    fill: none;
-    stroke-width: 1.8;
-}
-
-.stat-label {
-    font-size: 0.875rem;
-    color: #64748b;
-    margin-bottom: 10px;
-    padding-right: 35px;
-}
-
-.stat-number {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--navy);
-    padding-right: 35px;
-}
-
-/* Badges Grid */
-.badges-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-    margin-bottom: 48px;
-}
-
-.badge-item {
-    background: white;
-    border-radius: 16px;
-    padding: 28px 24px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: all 0.2s ease;
-}
-
 .badge-item:hover {
-    box-shadow: 0 4px 12px rgba(46, 111, 202, 0.15);
     transform: translateY(-2px);
-    border-color: rgba(46, 111, 202, 0.2);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
+
+.badge-item.locked { opacity: 0.6; }
+.badge-item.locked:hover { opacity: 0.8; }
 
 .badge-icon {
-    display: inline-flex;
+    font-size: 2rem;
+    width: 48px;
+    height: 48px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 16px;
+    border-radius: 12px;
+    background: #f4f7fc;
     flex-shrink: 0;
-    font-size: 2rem;
-    width: auto;
-    height: auto;
-    background: transparent;
-    border-radius: 0;
-    color: inherit;
-}
-
-.badge-icon svg {
-    width: 36px;
-    height: 36px;
 }
 
 .badge-icon.gold,
 .badge-icon.purple,
 .badge-icon.orange {
-    background: transparent;
-    margin-bottom: 6px;
-    letter-spacing: -0.2px;
+    background: #f4f7fc;
 }
 
-.badge-content p {
-    font-size: 0.875rem;
-    color: #7a8b99;
-    margin-bottom: 12px;
-    font-weight: 400;
-}
+.badge-content { flex: 1; min-width: 0; }
+.badge-content h3 { font-size: 0.95rem; font-weight: 700; margin: 0 0 2px; color: #1e293b; }
+.badge-content p { font-size: 0.8rem; color: #64748b; margin: 0 0 4px; }
+.badge-date { font-size: 0.75rem; color: #94a3b8; }
 
-.badge-date {
+.btn-claim {
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 18px;
     font-size: 0.8rem;
-    color: #a0aab8;
-    font-weight: 500;
-}
-
-/* Badges to Unlock Section */
-.badges-to-unlock {
-    margin-top: 48px;
-}
-
-.badges-to-unlock h2 {
-    font-family: 'Sora', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #0d2240;
-    margin-bottom: 24px;
-    letter-spacing: -0.2px;
-}
-
-.badges-unlock-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-}
-
-.badge-unlock-item {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    border: 2px dashed #d0d8e0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    opacity: 0.75;
-}
-
-.badge-icon-unlock {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: #e8eef5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 14px;
+    font-weight: 600;
+    cursor: pointer;
     flex-shrink: 0;
-    color: #a0aab8;
+    transition: background 0.2s, transform 0.15s;
 }
 
-.badge-icon-unlock svg {
-    width: 28px;
-    height: 28px;
+.btn-claim:hover { background: #2563eb; transform: scale(1.04); }
+.btn-claim:active { transform: scale(0.96); }
+
+.badge-stats { display: flex; gap: 16px; margin-bottom: 28px; }
+
+.badge-stats .stat-card {
+    flex: 1;
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    border: 1px solid #eef2f7;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: transform 0.2s;
 }
 
-.badge-unlock-content h4 {
-    font-family: 'Sora', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #0d2240;
-    margin-bottom: 4px;
-    letter-spacing: -0.1px;
-}
+.badge-stats .stat-card:hover { transform: translateY(-2px); }
 
-.badge-unlock-content p {
-    font-size: 0.8rem;
-    color: #a0aab8;
-    font-weight: 400;
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
-    .badges-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .badges-unlock-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
+.badge-stats .stat-card .stat-number { font-size: 1.8rem; font-weight: 800; color: #1e293b; line-height: 1; }
+.badge-stats .stat-card .stat-label { font-size: 0.8rem; color: #64748b; }
 
 @media (max-width: 700px) {
-    .page-title {
-        font-size: 1.5rem;
-    }
-
-    .page-sub {
-        font-size: 0.85rem;
-    }
-
-    .badges-stats {
-        flex-direction: column;
-        gap: 12px;
-        margin-bottom: 24px;
-    }
-
-    .stat-card {
-        padding: 16px 18px;
-    }
-
-    .card-icon {
-        top: 16px;
-        right: 16px;
-        width: 18px;
-        height: 18px;
-    }
-
-    .stat-number {
-        font-size: 1.6rem;
-    }
-
-    .stat-label {
-        font-size: 0.8rem;
-    }
-
-    .badges-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-        margin-bottom: 32px;
-    }
-
-    .badge-item {
-        padding: 16px;
-    }
-
-    .badge-icon {
-        width: 52px;
-        height: 52px;
-    }
-
-    .badge-icon svg {
-        width: 28px;
-        height: 28px;
-    }
-
-    .badges-to-unlock h2 {
-        font-size: 1.2rem;
-        margin-bottom: 16px;
-    }
-
-    .badges-unlock-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
+    .page-title { font-size: 1.5rem; }
+    .page-sub { font-size: 0.85rem; }
+    .badge-stats { flex-direction: column; gap: 12px; }
+    .badges-grid .badge-item { flex: 1 1 100%; }
+    .badge-item { padding: 12px 16px; }
+    .badge-icon { width: 40px; height: 40px; font-size: 1.5rem; }
+    .badges-section h2 { font-size: 1rem; }
 }
 
 @media (max-width: 480px) {
-
-    .badges-stats {
-        gap: 8px;
-    }
-
-    .stat-card {
-        padding: 12px;
-    }
-
-    .stat-number {
-        font-size: 1.75rem;
-    }
-
-    .stat-label {
-        font-size: 0.8rem;
-    }
-
-    .badge-item {
-        padding: 12px;
-    }
-
-    .badge-icon {
-        width: 44px;
-        height: 44px;
-        margin-bottom: 12px;
-    }
-
-    .badge-content h3 {
-        font-size: 0.95rem;
-    }
-
-    .badge-content p {
-        font-size: 0.8rem;
-    }
+    .badge-stats { gap: 8px; margin-bottom: 20px; }
+    .badge-stats .stat-card { padding: 14px; }
+    .badge-stats .stat-card .stat-number { font-size: 1.4rem; }
 }

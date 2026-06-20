@@ -6,6 +6,8 @@ if (isset($_GET['iduser']) && isset($_GET['idcompetence'])) {
         $stmt = $db->prepare("UPDATE validation_competence SET status = 'validee', date_validation = NOW(), id_validateur = ? WHERE id_user = ? AND id_competence = ?");
         $stmt->execute([$_GET['id_validateur'], $_GET['iduser'], $_GET['idcompetence']]);
         if($stmt==false) {
+            $stmt = $db->prepare("UPDATE utilisateurs SET score = score + 100 WHERE id_user = ?");
+            $stmt->execute([$id_user]);
             header("Location: validecompetence.php?msg=valide_success");
         } else {
             header("Location: validecompetence.php?error=update_failed");

@@ -34,34 +34,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['filiere'] = $user['filiere'];
         $_SESSION['statut'] = $user['statut'];
         $_SESSION['date_inscription'] = $user['date_inscription'];
-        if ($user["role"] === "stagiaire") {
-          header("Location: ../../stagiaire/tableaubord/index.html?msg=Connexion réussie !");
-        } else {
-          header("Location: ../../mentor/tableaubord/index.html?msg=Connexion réussie !");
-        }
-        exit();
-      } elseif ($user["role"] === "admin" || $user["role"] === "formateur") {
-        $_SESSION['id_user'] = $user['id_user'];
-        $_SESSION['nom'] = $user['nom'];
-        $_SESSION['prenom'] = $user['prenom'];
-        $_SESSION['email'] = $user['email'];
-        $_SESSION['role'] = $user['role'];
-        $_SESSION['score'] = $user['score'];
-        $_SESSION['photo'] = $user['photo'];
-        $_SESSION['statut'] = $user['statut'];
-        $_SESSION['date_inscription'] = $user['date_inscription'];
-        if ($user["role"] === "admin") {
-          header("Location: ../../admin/tableaubord/table.php?msg=Connexion réussie !");
-        } else {
-          header("Location: ../../formateur/tableaubord/tableaubord.php?msg=Connexion réussie !");
-        }
+        header("Location: ../../stagiaire/tableaubord/index.php?msg=Connexion réussie !");
         exit();
       }
-    } else {
-      header("Location: index.php?error=Email ou mot de passe incorrect.");
+     elseif ($user["role"] === "admin" || $user["role"] === "formateur") {
+      $_SESSION['id_user'] = $user['id_user'];
+      $_SESSION['nom'] = $user['nom'];
+      $_SESSION['prenom'] = $user['prenom'];
+      $_SESSION['email'] = $user['email'];
+      $_SESSION['role'] = $user['role'];
+      $_SESSION['score'] = $user['score'];
+      $_SESSION['photo'] = $user['photo'];
+      $_SESSION['filiere'] = $user['filiere'];
+      $_SESSION['statut'] = $user['statut'];
+      $_SESSION['date_inscription'] = $user['date_inscription'];
+      if ($user["role"] === "admin") {
+        header("Location: ../../admin/tableaubord/table.php?msg=Connexion réussie !");
+      } else {
+        header("Location: ../../formateur/tableaubord/tableaubord.php?msg=Connexion réussie !");
+      }
       exit();
     }
+  } else {
+    header("Location: index.php?error=Email ou mot de passe incorrect.");
+    exit();
   }
+}
 }
 ?>
 <!DOCTYPE html>
@@ -142,12 +140,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <div class="field">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" placeholder="votre.email@ismo.ma" autocomplete="email" />
-            <?php if (isset($err['email']))echo '<div style="color: red;">' . htmlspecialchars($err['email']) . '</div>'; ?>
+            <?php if (isset($err['email']))
+              echo '<div style="color: red;">' . htmlspecialchars($err['email']) . '</div>'; ?>
           </div>
           <label for="password">Mot de passe</label>
           <div class="password-wrapper">
-            <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" />
-            <?php if (isset($err['password']))echo '<div style="color: red;">' . htmlspecialchars($err['password']) . '</div>'; ?>
+            <input type="password" id="password" name="password" placeholder="••••••••"
+              autocomplete="current-password" />
+            <?php if (isset($err['password']))
+              echo '<div style="color: red;">' . htmlspecialchars($err['password']) . '</div>'; ?>
             <button type="button" class="toggle-pw" onclick="togglePassword('password', this)"
               aria-label="Afficher le mot de passe">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"

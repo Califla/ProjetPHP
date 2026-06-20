@@ -5,10 +5,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ISMO-SkillSwap – Mes badges</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet" />
   <link rel="stylesheet" href="../../1-css/style.css">
   <link rel="stylesheet" href="style.css" />
+  
 </head>
 
 <body>
@@ -40,83 +39,123 @@
           <span class="nav-icon">🛒</span>
           <span>Marketplace</span>
         </div>
-  </div>
-  </nav>
-  </aside>
+      </nav>
+    </aside>
 
-  <header class="header">
-          
-     <form class="header-search" action="#" onsubmit="return false;">
-       <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-         <circle cx="11" cy="11" r="7" />
-         <line x1="21" y1="21" x2="16.65" y2="16.65" />
-       </svg>
-       <input id="globalSearch" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
-     </form>
-    <div class="user-pill" data-email="ahmed@ismo.ma">
-      <div class="user-info">
-        <div class="user-name">Ahmed Idrissi</div>
-        <div class="user-role">Stagiaire DEV 101</div>
+    <header class="header">
+      <form class="header-search" action="#" onsubmit="return false;">
+        <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input id="globalSearch" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
+      </form>
+      <div class="user-pill" data-email="ahmed@ismo.ma">
+        <div class="user-info">
+          <div class="user-name">Ahmed Idrissi</div>
+          <div class="user-role">Stagiaire DEV 101</div>
+        </div>
+        <div class="user-avatar">AI</div>
       </div>
-      <div class="user-avatar">AI</div>
-    </div>
-  </header>
+    </header>
 
-  <main class="main">
-    <div class="page-title">Mes badges</div>
-    <div class="page-sub">Vos badges de reconnaissance obtenus grâce à vos contributions</div>
+    <main class="main">
+      <div class="page-title">Mes badges</div>
+      <div class="page-sub">Vos badges de reconnaissance obtenus grâce à vos contributions</div>
 
-    <section class="badges-stats">
-      <div class="stat-card">
-        <div class="stat-label">Badges obtenus</div>
-        <div class="stat-number">4</div>
-        <svg class="card-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <div class="badge-stats">
+        <div class="stat-card">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <div>
+            <div class="stat-number">4</div>
+            <div class="stat-label">Badges obtenus</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <div>
+            <div class="stat-number">8</div>
+            <div class="stat-label">Compétences validées</div>
+          </div>
+        </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Compétences validées</div>
-        <div class="stat-number">8</div>
-        <svg class="card-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      </div>
-    </section>
 
-    <section class="badges-grid">
-      <article class="badge-item">
-        <div class="badge-icon">🎯</div>
-        <div class="badge-content">
-          <h3>Premier pas</h3>
-          <p>Première demande d'aide soumise</p>
-          <span class="badge-date">Obtenu le 15/01/2026</span>
+      <section class="badges-section">
+        <h2>🎖️ Mes badges obtenus</h2>
+        <div class="badges-grid">
+          <article class="badge-item">
+            <div class="badge-icon">🎯</div>
+            <div class="badge-content">
+              <h3>Premier pas</h3>
+              <p>Première demande d'aide soumise</p>
+              <span class="badge-date">Obtenu le 15/01/2026</span>
+            </div>
+          </article>
+          <article class="badge-item">
+            <div class="badge-icon gold">📈</div>
+            <div class="badge-content">
+              <h3>Apprenant</h3>
+              <p>5 aides reçues avec succès</p>
+              <span class="badge-date">Obtenu le 20/02/2026</span>
+            </div>
+          </article>
+          <article class="badge-item">
+            <div class="badge-icon purple">⚛️</div>
+            <div class="badge-content">
+              <h3>Expert React</h3>
+              <p>5 compétences React validées</p>
+              <span class="badge-date">Obtenu le 10/03/2026</span>
+            </div>
+          </article>
+          <article class="badge-item">
+            <div class="badge-icon orange">🚀</div>
+            <div class="badge-content">
+              <h3>Motivé</h3>
+              <p>10 heures d'apprentissage</p>
+              <span class="badge-date">Obtenu le 01/04/2026</span>
+            </div>
+          </article>
         </div>
-      </article>
+      </section>
 
-      <article class="badge-item">
-        <div class="badge-icon gold">📈</div>
-        <div class="badge-content">
-          <h3>Apprenant</h3>
-          <p>5 aides reçues avec succès</p>
-          <span class="badge-date">Obtenu le 20/02/2026</span>
+      <section class="badges-section">
+        <h2>🔒 Badges disponibles</h2>
+        <div class="badges-grid">
+          <article class="badge-item locked">
+            <div class="badge-icon">🤝</div>
+            <div class="badge-content">
+              <h3>Collaborateur</h3>
+              <p>5 mentors différents notés</p>
+            </div>
+            <button class="btn-claim">Réclamer</button>
+          </article>
+          <article class="badge-item locked">
+            <div class="badge-icon">🏆</div>
+            <div class="badge-content">
+              <h3>Top contributeur</h3>
+              <p>20 aides proposées</p>
+            </div>
+            <button class="btn-claim">Réclamer</button>
+          </article>
+          <article class="badge-item locked">
+            <div class="badge-icon">🔒</div>
+            <div class="badge-content">
+              <h3>Sécurité Pro</h3>
+              <p>Formation cybersécurité complétée</p>
+            </div>
+            <button class="btn-claim">Réclamer</button>
+          </article>
+          <article class="badge-item locked">
+            <div class="badge-icon">🎓</div>
+            <div class="badge-content">
+              <h3>Diplômé</h3>
+              <p>Formation terminée avec succès</p>
+            </div>
+            <button class="btn-claim">Réclamer</button>
+          </article>
         </div>
-      </article>
-
-      <article class="badge-item">
-        <div class="badge-icon purple">⚛️</div>
-        <div class="badge-content">
-          <h3>Expert React</h3>
-          <p>5 compétences React validées</p>
-          <span class="badge-date">Obtenu le 10/03/2026</span>
-        </div>
-      </article>
-
-      <article class="badge-item">
-        <div class="badge-icon orange">🚀</div>
-        <div class="badge-content">
-          <h3>Motivé</h3>
-          <p>10 heures d'apprentissage</p>
-          <span class="badge-date">Obtenu le 01/04/2026</span>
-        </div>
-      </article>
-    </section>
-  </main>
+      </section>
+    </main>
   </div>
 
   <script src="script.js"></script>

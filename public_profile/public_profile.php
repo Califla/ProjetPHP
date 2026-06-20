@@ -16,22 +16,22 @@
     <aside class="sidebar">
       <div class="sidebar-logo"><span>ISMO-SkillSwap</span></div>
       <nav class="sidebar-nav">
-        <div class="nav-item" onclick="location.href='stagiaire/tableaubord/index.html'">
+        <div class="nav-item" onclick="location.href='stagiaire/tableaubord/index.php'">
           <span class="nav-icon">🏠</span><span>Tableau de bord</span>
         </div>
-        <div class="nav-item" onclick="location.href='stagiaire/mes%20demandes/index.html'">
+        <div class="nav-item" onclick="location.href='stagiaire/mes%20demandes/index.php'">
           <span class="nav-icon">📋</span><span>Mes demandes</span>
         </div>
-        <div class="nav-item" onclick="location.href='stagiaire/competences/index.html'">
+        <div class="nav-item" onclick="location.href='stagiaire/competences/index.php'">
           <span class="nav-icon">🏷️</span><span>Compétences</span>
         </div>
-        <div class="nav-item" onclick="location.href='stagiaire/badges/index.html'">
+        <div class="nav-item" onclick="location.href='stagiaire/badges/index.php'">
           <span class="nav-icon">🎖️</span><span>Badges</span>
         </div>
-        <div class="nav-item" onclick="location.href='stagiaire/passeport/index.html'">
+        <div class="nav-item" onclick="location.href='stagiaire/passeport/index.php'">
           <span class="nav-icon">👤</span><span>Passeport</span>
         </div>
-        <div class="nav-item" onclick="location.href='stagiaire/marketplace/index.html'">
+        <div class="nav-item" onclick="location.href='stagiaire/marketplace/index.php'">
           <span class="nav-icon">🛒</span><span>Marketplace</span>
         </div>
       </nav>

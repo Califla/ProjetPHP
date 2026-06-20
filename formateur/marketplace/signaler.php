@@ -11,8 +11,8 @@ if (!isset($_GET["id"])) {
         $req->execute([$_GET["id"]]);
         $redir = match ($_SESSION['role']) {
             'admin' => '../../admin/Marketplace/market.php',
-            'mentor' => '../../mentor/marketplace/index.html',
-            'stagiaire' => '../../stagiaire/marketplace/index.html',
+            'mentor' => '../../stagiaire/marketplace/index.php',
+            'stagiaire' => '../../stagiaire/marketplace/index.php',
             default => 'marketplace.php',
         };
         if ($req == false) {

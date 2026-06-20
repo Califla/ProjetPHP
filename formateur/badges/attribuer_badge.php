@@ -18,6 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Location: badge.php?msg=Badge attribué avec succès.");
             exit();
         } else {
+            $stmt = $db->prepare("UPDATE utilisateurs SET score = score + 100 WHERE id_user = ?");
+            $stmt->execute([$id_user]);
             header("Location: badge.php?error=Erreur lors de l'attribution du badge.");
             exit();
         }
