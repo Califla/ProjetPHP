@@ -6,7 +6,7 @@ if (isset($_SESSION)){
 try{
     include('../../database/config.php');
     # Récupérer les publications signalées
-    $req = $db->prepare("SELECT p.*, u.nom, u.prenom FROM aide p JOIN utilisateurs u ON p.id_user = u.id_user WHERE p.signal = 1 ORDER BY p.date_pub DESC");
+    $req = $db->prepare("SELECT p.*, u.nom, u.prenom FROM aide p JOIN utilisateurs u ON p.id_user = u.id_user WHERE p.signal > 0 ORDER BY p.date_pub DESC");
     $req->execute();
     $result = $req->fetchAll(PDO::FETCH_ASSOC);
 
@@ -21,8 +21,8 @@ try{
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Modération</title>
-  <link rel="stylesheet" href="mode.css" />
-  <link rel="stylesheet" href="../../1-css/style.css" />
+  <link rel="stylesheet" href="../../1-css/style.css?v=2" />
+  <link rel="stylesheet" href="mode.css?v=2" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -99,11 +99,11 @@ try{
         </article>
         <article class="stat-card">
           <span class="stat-label">Approuvées ce mois</span>
-          <strong>28</strong>
+          <strong>12</strong>
         </article>
         <article class="stat-card danger">
           <span class="stat-label">Supprimées ce mois</span>
-          <strong>5</strong>
+          <strong>3</strong>
         </article>
       </div>
       <div class="moderation-items">
@@ -118,31 +118,27 @@ try{
                 <h2><?php echo $row['titre']; ?></h2>
               </div>
               <div class="user-meta">
-                <div class="user-avatar">Yo</div>
+                <?php
+                  $initial = strtoupper(substr($row['nom'] ?? '?', 0, 1) . substr($row['prenom'] ?? '?', 0, 1));
+                ?>
+                <div class="user-avatar"><?= $initial ?></div>
                 <div class="user-details">
-                  <span class="user-name"><?php echo $row['nom'] . " " . $row['prenom']; ?></span>
-                  <span class="date"><?php echo $row['date_pub']; ?></span>
+                  <span class="user-name card-user-name"><?= htmlspecialchars(($row['nom'] ?? 'Inconnu') . ' ' . ($row['prenom'] ?? '')) ?></span>
+                  <span class="date"><?= $row['date_pub'] ?></span>
                 </div>
               </div>
+              <div class="report-count">
+                <div class="count"><?php echo $row['signal']; ?></div>
+                <div class="label">signalements</div>
+              </div>
             </div>
-            <div class="report-count">
-              <div class="count">2</div>
-              <div class="label">signalements</div>
-            </div>
-          </div>
-
           <div class="content-body">
-            <p>Besoin d'aide urgente pour configurer Docker sur mon projet...</p>
-          </div>
-
-          <div class="report-reasons">
-            <span class="reason-tag">Spam</span>
+            <p><?php echo htmlspecialchars($row['description']); ?></p>
           </div>
 
           <div class="card-actions">
-            <button class="btn-link">Voir détails</button>
-            <button class="btn btn-keep">✓ Garder</button>
-            <button class="btn btn-delete">🗑️ Supprimer</button>
+            <a href="garder.php?id=<?php echo $row['id_demande']; ?>" class="btn btn-keep">✓ Garder</a>
+            <a href="supprimer.php?id=<?php echo $row['id_demande']; ?>" class="btn btn-delete">🗑️ Supprimer</a>
           </div>
         </article>
         <?php endforeach; ?>

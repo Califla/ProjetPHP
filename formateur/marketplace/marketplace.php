@@ -46,191 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ISMO-SkillSwap – Marketplace Formateur</title>
   <link rel="stylesheet" href="../../1-css/style.css" />
-  <link rel="stylesheet" href="../../1-css/marketplace.css" />
-  <style>
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 48px 20px;
-      color: #8a9bb8;
-      font-size: 1rem;
-      font-weight: 500;
-      background: #f4f7fc;
-      border-radius: 16px;
-      border: 2px dashed #d0d8e4;
-    }
-
-    .modal-window {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-
-    .modal-window.show {
-      display: flex;
-    }
-
-    .modal-window .modal-content {
-      background: #fff;
-      border-radius: 20px;
-      padding: 28px;
-      width: 90%;
-      max-width: 480px;
-      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.15);
-    }
-
-    .modal-window .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .modal-window .modal-header h2 {
-      margin: 0;
-      font-size: 1.2rem;
-    }
-
-    .modal-window .modal-close {
-      background: none;
-      border: none;
-      font-size: 26px;
-      color: #6b7a99;
-      cursor: pointer;
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal-window .modal-close:hover {
-      background: #f4f7fb;
-    }
-
-    .modal-window .modal-body {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-bottom: 24px;
-    }
-
-    .modal-window .modal-label {
-      font-weight: 600;
-      font-size: 0.85rem;
-      color: #101d33;
-    }
-
-    .modal-window .modal-input {
-      padding: 12px 14px;
-      border: 1px solid #e8ecf1;
-      border-radius: 12px;
-      font-size: 0.9rem;
-      font-family: 'Sora', sans-serif;
-      outline: none;
-      width: 100%;
-    }
-
-    .modal-window .modal-input:focus {
-      border-color: #2e6fca;
-    }
-
-    .modal-window .modal-footer {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-    }
-
-    .modal-window .btn-cancel {
-      background: #f4f7fb;
-      color: #101d33;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px 20px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      font-family: 'Sora', sans-serif;
-    }
-
-    .modal-window .btn-cancel:hover {
-      background: #e2e8f0;
-    }
-
-    .modal-window .btn-primary {
-      background: #0d2240;
-      color: #fff;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px 20px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      font-family: 'Sora', sans-serif;
-    }
-
-    .modal-window .btn-primary:hover {
-      background: #163158;
-    }
-
-    .toast {
-      padding: 16px 20px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      animation: toastIn 0.4s ease;
-      border: 1px solid;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    }
-
-    .toast.success {
-      background: #e6f7e6;
-      color: #1e7e34;
-      border-color: #b7e4b7;
-    }
-
-    .toast.error {
-      background: #fde8e8;
-      color: #c0392b;
-      border-color: #f5c6cb;
-    }
-
-    .toast-hide {
-      animation: toastOut 0.4s ease forwards;
-    }
-
-    @keyframes toastIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes toastOut {
-      from { opacity: 1; transform: translateY(0); }
-      to   { opacity: 0; transform: translateY(-20px); }
-    }
-  </style>
+  <link rel="stylesheet" href="../../1-css/marcketplace.css" />
+  
 </head>
 
 <body>
@@ -298,7 +115,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <div class="page-title">Marketplace Formateur</div>
           <div class="page-sub">Gérez les demandes d'aide et proposez votre soutien aux stagiaires.</div>
         </div>
+        <?php if ($_SESSION['role'] === 'mentor' || $_SESSION['role'] === 'stagiaire'): ?>
         <button type="button" class="btn btn-primary" onclick="ouvrirModal('modalAjout')">+ publier une demande</button>
+        <?php endif; ?>
       </div>
       <form method="GET" action="marketplace.php" style="display:contents;">
       <section class="controls-row">
@@ -461,8 +280,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     ouvrirModal('modalAjout');
     <?php endif; ?>
   </script>
-  <script src="../2-script/profile-menu.js"></script>
-  <script src="../2-script/search.js"></script>
+  <script src="../../2-script/profile-menu.js"></script>
+  <script src="../../2-script/search.js"></script>
 </body>
 
 </html>

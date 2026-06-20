@@ -4,6 +4,7 @@ if (!isset($_GET['id']) || !isset($_GET['statut'])) {
     exit();
 } else {
     try {
+        include('../../database/config.php');
         $req = $db->prepare('UPDATE utilisateurs SET statut = ? WHERE id_user = ?');
         $req->execute([$_GET['statut'], $_GET['id']]);
         header('Location: utili.php?msucc=STATUT CHANGÉ AVEC SUCCEÉ');

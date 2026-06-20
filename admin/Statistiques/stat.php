@@ -3,6 +3,50 @@ session_start();
 if (isset($_SESSION)){
     extract($_SESSION);
 }
+try {
+    include('../../database/config.php');
+
+    $total_aides = $db->query("SELECT COUNT(*) FROM aide")->fetchColumn();
+    $resolues = $db->query("SELECT COUNT(*) FROM aide WHERE status = 'resolu'")->fetchColumn();
+    $taux_resolution = $total_aides > 0 ? round(($resolues / $total_aides) * 100) : 0;
+    $total_formateurs = $db->query("SELECT COUNT(*) FROM utilisateurs WHERE role = 'formateur'")->fetchColumn();
+    $actifs = $db->query("SELECT COUNT(*) FROM utilisateurs WHERE statut = 'actif'")->fetchColumn();
+
+    # Compétences les plus demandées
+    $req_comp = $db->prepare("SELECT c.nom, COUNT(v.id_competence) AS total
+        FROM validation_competence v
+        JOIN competences c ON v.id_competence = c.id_competence
+        GROUP BY v.id_competence ORDER BY total DESC LIMIT 6");
+    $req_comp->execute();
+    $competences = $req_comp->fetchAll(PDO::FETCH_ASSOC);
+    $max_comp = count($competences) > 0 ? max(array_column($competences, 'total')) : 1;
+    $bar_colors = ['#2e6fca', '#16a34a', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
+
+    # Activité par filière
+    $req_filiere = $db->prepare("SELECT filiere, COUNT(*) AS total FROM utilisateurs WHERE filiere IS NOT NULL AND filiere != '' GROUP BY filiere");
+    $req_filiere->execute();
+    $filieres = $req_filiere->fetchAll(PDO::FETCH_ASSOC);
+    $total_filieres = array_sum(array_column($filieres, 'total'));
+    $filiere_colors = ['#2e6fca', '#16a34a', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#e11d48'];
+
+    # Évolution mensuelle (12 derniers mois)
+    $req_evo = $db->prepare("SELECT DATE_FORMAT(date_pub, '%Y-%m') AS mois, COUNT(*) AS total
+        FROM aide WHERE date_pub >= NOW() - INTERVAL 12 MONTH
+        GROUP BY mois ORDER BY mois ASC");
+    $req_evo->execute();
+    $evolutions = $req_evo->fetchAll(PDO::FETCH_ASSOC);
+    $max_evo = count($evolutions) > 0 ? max(array_column($evolutions, 'total')) : 1;
+
+    # Top mentors
+    $req_mentors = $db->prepare("SELECT u.id_user, u.nom, u.prenom, COUNT(ae.id_proposition) AS nb_aides, ROUND(AVG(ae.note_mentor), 1) AS note_moyenne
+        FROM aide_effectuee ae
+        JOIN utilisateurs u ON ae.id_mentor = u.id_user
+        GROUP BY u.id_user ORDER BY nb_aides DESC LIMIT 5");
+    $req_mentors->execute();
+    $mentors = $req_mentors->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "ERREUR DE CONNEXION À LA BASE DE DONNÉES: " . $e->getMessage();
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -88,32 +132,28 @@ if (isset($_SESSION)){
           <div class="kpi-icon">📈</div>
           <div class="kpi-content">
             <span class="kpi-label">Total aides</span>
-            <div class="kpi-value">1567</div>
-            <span class="kpi-trend">+23% ce mois</span>
+            <div class="kpi-value"><?= $total_aides ?></div>
           </div>
         </article>
-
         <article class="kpi-card">
           <div class="kpi-icon">🎯</div>
           <div class="kpi-content">
             <span class="kpi-label">Taux de résolution</span>
-            <div class="kpi-value">87%</div>
+            <div class="kpi-value"><?= $taux_resolution ?>%</div>
           </div>
         </article>
-
         <article class="kpi-card">
           <div class="kpi-icon">⭐</div>
           <div class="kpi-content">
-            <span class="kpi-label">nombre forma</span>
-            <div class="kpi-value">4.6</div>
+            <span class="kpi-label">Formateurs</span>
+            <div class="kpi-value"><?= $total_formateurs ?></div>
           </div>
         </article>
-
         <article class="kpi-card">
           <div class="kpi-icon">👥</div>
           <div class="kpi-content">
             <span class="kpi-label">Utilisateurs actifs</span>
-            <div class="kpi-value">187</div>
+            <div class="kpi-value"><?= $actifs ?></div>
           </div>
         </article>
       </div>
@@ -122,34 +162,22 @@ if (isset($_SESSION)){
         <section class="chart-section">
           <h2>Compétences les plus demandées</h2>
           <div class="chart-container bar-chart">
-            <svg viewBox="0 0 600 350" xmlns="http://www.w3.org/2000/svg">
-              <!-- Y-axis labels -->
-              <text x="30" y="340" class="axis-label">0</text>
-              <text x="20" y="270" class="axis-label">15</text>
-              <text x="20" y="200" class="axis-label">30</text>
-              <text x="20" y="130" class="axis-label">45</text>
-              <text x="20" y="60" class="axis-label">60</text>
-
-              <!-- Y-axis -->
-              <line x1="50" y1="30" x2="50" y2="330" stroke="#ddd" stroke-width="1" />
-              <!-- X-axis -->
-              <line x1="50" y1="330" x2="580" y2="330" stroke="#ddd" stroke-width="1" />
-
-              <!-- Bars -->
-              <rect x="70" y="210" width="40" height="120" fill="#2e6fca" rx="4" />
-              <rect x="130" y="270" width="40" height="60" fill="#2e6fca" rx="4" />
-              <rect x="190" y="150" width="40" height="180" fill="#2e6fca" rx="4" />
-              <rect x="250" y="270" width="40" height="60" fill="#2e6fca" rx="4" />
-              <rect x="310" y="240" width="40" height="90" fill="#2e6fca" rx="4" />
-              <rect x="370" y="280" width="40" height="50" fill="#2e6fca" rx="4" />
-
-              <!-- X-axis labels -->
-              <text x="90" y="355" class="axis-label">React</text>
-              <text x="140" y="355" class="axis-label">Python</text>
-              <text x="200" y="355" class="axis-label">Git</text>
-              <text x="255" y="355" class="axis-label">Docker</text>
-              <text x="310" y="355" class="axis-label">SQL</text>
-              <text x="370" y="355" class="axis-label">Node.js</text>
+            <svg viewBox="0 0 <?= count($competences) * 80 + 80 ?> 350" xmlns="http://www.w3.org/2000/svg">
+              <?php
+                $bar_w = 40;
+                $gap = 80;
+                $start_x = 60;
+                $chart_h = 300;
+                $base_y = 330;
+                foreach ($competences as $i => $comp):
+                  $bar_h = round(($comp['total'] / $max_comp) * 250);
+                  $x = $start_x + $i * $gap;
+                  $color = $bar_colors[$i % count($bar_colors)];
+              ?>
+              <rect x="<?= $x ?>" y="<?= $base_y - $bar_h ?>" width="<?= $bar_w ?>" height="<?= $bar_h ?>" fill="<?= $color ?>" rx="4" />
+              <text x="<?= $x + $bar_w / 2 ?>" y="<?= $base_y + 15 ?>" text-anchor="middle" class="axis-label"><?= htmlspecialchars($comp['nom']) ?></text>
+              <text x="<?= $x + $bar_w / 2 ?>" y="<?= $base_y - $bar_h - 8 ?>" text-anchor="middle" class="axis-label" fill="<?= $color ?>"><?= $comp['total'] ?></text>
+              <?php endforeach; ?>
             </svg>
           </div>
         </section>
@@ -158,64 +186,79 @@ if (isset($_SESSION)){
           <h2>Activité par filière</h2>
           <div class="chart-container pie-chart">
             <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-              <!-- Pie chart representation using circles/paths -->
-              <circle cx="150" cy="150" r="80" fill="none" stroke="#2e6fca" stroke-width="50" stroke-dasharray="210 660"
-                stroke-dashoffset="0" />
-              <circle cx="150" cy="150" r="80" fill="none" stroke="#16a34a" stroke-width="50" stroke-dasharray="198 660"
-                stroke-dashoffset="-210" />
-              <circle cx="150" cy="150" r="80" fill="none" stroke="#f97316" stroke-width="50" stroke-dasharray="105 660"
-                stroke-dashoffset="-408" />
-              <circle cx="150" cy="150" r="80" fill="none" stroke="#ef4444" stroke-width="50" stroke-dasharray="105 660"
-                stroke-dashoffset="-513" />
-
-              <!-- Labels -->
-              <text x="150" y="245" text-anchor="middle" class="pie-label">DEV 101 42%</text>
-              <text x="75" y="155" text-anchor="middle" class="pie-label" fill="#16a34a">DEV 102 30%</text>
-              <text x="210" y="200" text-anchor="middle" class="pie-label" fill="#f97316">INFRA 16%</text>
-              <text x="210" y="120" text-anchor="middle" class="pie-label" fill="#ef4444">CYBERSEC 12%</text>
+              <?php
+                $circ = 2 * pi() * 80;
+                $offset = 0;
+                foreach ($filieres as $i => $f):
+                  $pct = $total_filieres > 0 ? $f['total'] / $total_filieres : 0;
+                  $dash = $pct * $circ;
+                  $color = $filiere_colors[$i % count($filiere_colors)];
+                  $label_pct = round($pct * 100);
+              ?>
+              <circle cx="150" cy="150" r="80" fill="none" stroke="<?= $color ?>" stroke-width="50" stroke-dasharray="<?= $dash ?> <?= $circ ?>" stroke-dashoffset="<?= -$offset ?>" />
+              <?php $offset += $dash; ?>
+              <?php endforeach; ?>
+              <?php if ($total_filieres > 0): ?>
+              <text x="150" y="150" text-anchor="middle" dominant-baseline="central" class="pie-label" style="font-size:18px;font-weight:800"><?= $total_filieres ?></text>
+              <?php endif; ?>
             </svg>
+            <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+              <?php foreach ($filieres as $i => $f):
+                $pct = $total_filieres > 0 ? round(($f['total'] / $total_filieres) * 100) : 0;
+              ?>
+              <span style="display:flex;align-items:center;gap:4px;font-size:0.8rem;color:#6c7a94">
+                <span style="width:10px;height:10px;border-radius:50%;background:<?= $filiere_colors[$i % count($filiere_colors)] ?>"></span>
+                <?= htmlspecialchars($f['filiere']) ?> (<?= $pct ?>%)
+              </span>
+              <?php endforeach; ?>
+            </div>
           </div>
         </section>
       </div>
 
-      <div class="charts-grid">
-        <section class="chart-section full-width">
+      <div class="charts-grid full-width">
+        <section class="chart-section">
           <h2>Évolution mensuelle des aides</h2>
           <div class="chart-container line-chart">
+            <?php if (count($evolutions) == 0): ?>
+              <p style="color:#6c7a94;text-align:center">Aucune donnée pour le moment</p>
+            <?php else: ?>
             <svg viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg">
-              <!-- Grid lines -->
-              <line x1="50" y1="30" x2="50" y2="200" stroke="#ddd" stroke-width="1" />
-              <line x1="50" y1="200" x2="780" y2="200" stroke="#ddd" stroke-width="1" />
+              <?php
+                $nb_points = count($evolutions);
+                $chart_w = 700;
+                $pad_left = 60;
+                $step_x = $nb_points > 1 ? $chart_w / ($nb_points - 1) : 0;
+                $y_base = 200;
+                $y_top = 30;
+                $y_range = $y_base - $y_top;
 
-              <!-- Y-axis labels -->
-              <text x="25" y="210" class="axis-label">0</text>
-              <text x="15" y="160" class="axis-label">70</text>
-              <text x="10" y="110" class="axis-label">140</text>
-              <text x="10" y="60" class="axis-label">210</text>
-              <text x="10" y="10" class="axis-label">280</text>
+                $points = [];
+                foreach ($evolutions as $i => $e):
+                  $x = $pad_left + ($nb_points > 1 ? $i * $step_x : $chart_w / 2);
+                  $y = $y_base - ($max_evo > 0 ? ($e['total'] / $max_evo) * $y_range : 0);
+                  $points[] = "$x,$y";
+                endforeach;
+              ?>
+              <line x1="<?= $pad_left ?>" y1="<?= $y_top ?>" x2="<?= $pad_left ?>" y2="<?= $y_base ?>" stroke="#ddd" stroke-width="1" />
+              <line x1="<?= $pad_left ?>" y1="<?= $y_base ?>" x2="<?= $pad_left + $chart_w ?>" y2="<?= $y_base ?>" stroke="#ddd" stroke-width="1" />
+              <text x="<?= $pad_left - 10 ?>" y="<?= $y_base + 4 ?>" class="axis-label" text-anchor="end">0</text>
+              <text x="<?= $pad_left - 10 ?>" y="<?= $y_top + 4 ?>" class="axis-label" text-anchor="end"><?= $max_evo ?></text>
 
-              <!-- Line chart -->
-              <polyline points="80,160 150,180 220,140 290,120 360,110 430,100 500,80" fill="none" stroke="#2e6fca"
-                stroke-width="3" />
+              <?php if ($nb_points > 1): ?>
+              <polyline points="<?= implode(' ', $points) ?>" fill="none" stroke="#2e6fca" stroke-width="3" />
+              <?php endif; ?>
 
-              <!-- Data points -->
-              <circle cx="80" cy="160" r="5" fill="#2e6fca" />
-              <circle cx="150" cy="180" r="5" fill="#2e6fca" />
-              <circle cx="220" cy="140" r="5" fill="#2e6fca" />
-              <circle cx="290" cy="120" r="5" fill="#2e6fca" />
-              <circle cx="360" cy="110" r="5" fill="#2e6fca" />
-              <circle cx="430" cy="100" r="5" fill="#2e6fca" />
-              <circle cx="500" cy="80" r="5" fill="#2e6fca" />
-
-              <!-- X-axis labels -->
-              <text x="70" y="225" class="axis-label">Oct</text>
-              <text x="130" y="225" class="axis-label">Nov</text>
-              <text x="205" y="225" class="axis-label">Déc</text>
-              <text x="275" y="225" class="axis-label">Jan</text>
-              <text x="345" y="225" class="axis-label">Fév</text>
-              <text x="415" y="225" class="axis-label">Mar</text>
-              <text x="485" y="225" class="axis-label">Avr</text>
+              <?php foreach ($evolutions as $i => $e):
+                $x = $pad_left + ($nb_points > 1 ? $i * $step_x : $chart_w / 2);
+                $y = $y_base - ($max_evo > 0 ? ($e['total'] / $max_evo) * $y_range : 0);
+                $mois_label = substr($e['mois'], 5, 2) . '/' . substr($e['mois'], 2, 2);
+              ?>
+              <circle cx="<?= $x ?>" cy="<?= $y ?>" r="5" fill="#2e6fca" />
+              <text x="<?= $x ?>" y="<?= $y_base + 20 ?>" text-anchor="middle" class="axis-label"><?= $mois_label ?></text>
+              <?php endforeach; ?>
             </svg>
+            <?php endif; ?>
           </div>
         </section>
       </div>
@@ -223,70 +266,26 @@ if (isset($_SESSION)){
       <section class="top-mentors">
         <h2>Top Mentors</h2>
         <div class="mentors-list">
+          <?php if (count($mentors) == 0): ?>
+            <div class="mentor-item"><p style="color:#6c7a94">Aucun mentor pour le moment</p></div>
+          <?php else: ?>
+          <?php foreach ($mentors as $i => $m):
+            $initial = strtoupper(substr($m['nom'] ?? '?', 0, 1) . substr($m['prenom'] ?? '?', 0, 1));
+          ?>
           <article class="mentor-item">
-            <div class="mentor-rank">#1</div>
-            <div class="mentor-avatar">Sa</div>
+            <div class="mentor-rank">#<?= $i + 1 ?></div>
+            <div class="mentor-avatar"><?= $initial ?></div>
             <div class="mentor-info">
-              <div class="mentor-name">Sara El Amrani</div>
-              <div class="mentor-aides">47 aides</div>
+              <div class="mentor-name"><?= htmlspecialchars($m['nom'] . ' ' . $m['prenom']) ?></div>
+              <div class="mentor-aides"><?= $m['nb_aides'] ?> aides</div>
             </div>
             <div class="mentor-rating">
               <span class="star">⭐</span>
-              <span class="rating">4.9</span>
+              <span class="rating"><?= $m['note_moyenne'] ?></span>
             </div>
           </article>
-
-          <article class="mentor-item">
-            <div class="mentor-rank">#2</div>
-            <div class="mentor-avatar">Yo</div>
-            <div class="mentor-info">
-              <div class="mentor-name">Youssef Benali</div>
-              <div class="mentor-aides">38 aides</div>
-            </div>
-            <div class="mentor-rating">
-              <span class="star">⭐</span>
-              <span class="rating">4.8</span>
-            </div>
-          </article>
-
-          <article class="mentor-item">
-            <div class="mentor-rank">#3</div>
-            <div class="mentor-avatar">Ah</div>
-            <div class="mentor-info">
-              <div class="mentor-name">Ahmed Idrissi</div>
-              <div class="mentor-aides">35 aides</div>
-            </div>
-            <div class="mentor-rating">
-              <span class="star">⭐</span>
-              <span class="rating">4.7</span>
-            </div>
-          </article>
-
-          <article class="mentor-item">
-            <div class="mentor-rank">#4</div>
-            <div class="mentor-avatar">Fa</div>
-            <div class="mentor-info">
-              <div class="mentor-name">Fatima Zahrae</div>
-              <div class="mentor-aides">32 aides</div>
-            </div>
-            <div class="mentor-rating">
-              <span class="star">⭐</span>
-              <span class="rating">4.6</span>
-            </div>
-          </article>
-
-          <article class="mentor-item">
-            <div class="mentor-rank">#5</div>
-            <div class="mentor-avatar">Ka</div>
-            <div class="mentor-info">
-              <div class="mentor-name">Karim Alaoui</div>
-              <div class="mentor-aides">28 aides</div>
-            </div>
-            <div class="mentor-rating">
-              <span class="star">⭐</span>
-              <span class="rating">4.5</span>
-            </div>
-          </article>
+          <?php endforeach; ?>
+          <?php endif; ?>
         </div>
       </section>
     </main>

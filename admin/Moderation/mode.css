@@ -166,7 +166,7 @@ input {
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .warning-icon {
@@ -211,6 +211,7 @@ input {
   font-weight: 700;
   font-size: 0.85rem;
   flex-shrink: 0;
+  text-transform: uppercase;
 }
 
 .user-details {
@@ -219,7 +220,7 @@ input {
   gap: 2px;
 }
 
-.user-name {
+.card-user-name {
   font-size: 0.95rem;
   font-weight: 600;
   color: #0d2240;
@@ -233,6 +234,7 @@ input {
 .report-count {
   text-align: right;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .report-count .count {
@@ -248,7 +250,7 @@ input {
 }
 
 .content-body {
-  margin: 16px 0;
+  margin: 20px 0;
   padding: 12px;
   background: var(--surface-soft);
   border-radius: 10px;
@@ -259,13 +261,6 @@ input {
 
 .content-body p {
   margin: 0;
-}
-
-.report-reasons {
-  display: flex;
-  gap: 8px;
-  margin: 16px 0;
-  flex-wrap: wrap;
 }
 
 .reason-tag {

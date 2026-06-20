@@ -3,6 +3,18 @@ session_start();
 if (isset($_SESSION)) {
     extract($_SESSION);
 }
+include("../../database/config.php");
+try{
+$badges = $db->query("SELECT * FROM badges")->fetchAll(PDO::FETCH_ASSOC);
+$stagiaires = $db->query("SELECT id_user, nom, prenom, filiere FROM utilisateurs WHERE role = 'stagiaire' OR role = 'mentor' ORDER BY nom ASC")->fetchAll(PDO::FETCH_ASSOC);
+$historique = $db->query("SELECT ob.date_obtention, u.nom, u.prenom, b.icone, b.nom AS badge_nom
+    FROM obtention_badges ob
+    JOIN utilisateurs u ON ob.id_user = u.id_user
+    JOIN badges b ON ob.id_badge = b.id_badge
+    ORDER BY ob.date_obtention DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
+}catch(PDOException $e){
+    echo "Erreur: " . $e->getMessage();
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -94,6 +106,11 @@ if (isset($_SESSION)) {
         </header>
 
         <main class="main-content">
+            <?php if (isset($_GET['msg'])): ?>
+            <div class="toast success">✓ Badge attribué avec succès</div>
+            <?php elseif (isset($_GET['error'])): ?>
+            <div class="toast error"><?= htmlspecialchars($_GET['error']) ?></div>
+            <?php endif; ?>
             <div class="page-title">
                 <h1>Gestion des badges</h1>
                 <p class="eyebrow">Attribuez des badges aux stagiaires méritants</p>
@@ -102,70 +119,62 @@ if (isset($_SESSION)) {
             <div class="badges-layout">
                 <section class="badges-list-container">
                     <h2 class="panel-title">Badges disponibles</h2>
-                    <?php
-                    include("../../database/config.php");
-                    $stmt = $db->query("SELECT * FROM badges");
-                    $stmt->execute();
-                    $badges = $stmt->fetchAll();
-                    if (count($badges) == 0) {
-                        echo '<div class="empty-state">Aucun badge disponible pour le moment.</div>';
-                    }
-                    ?>
+                    <?php if (count($badges) == 0): ?>
+                        <div class="empty-state">Aucun badge disponible pour le moment.</div>
+                    <?php endif; ?>
                     <?php foreach ($badges as $badge): ?>
-                    <div class="badge-item-row">
-                        <div class="badge-icon-box"><?php echo $badge['icone']; ?></div>
+                    <div class="badge-item-row" data-id-badge="<?= $badge['id_badge'] ?>">
+                        <div class="badge-icon-box"><?= htmlspecialchars($badge['icone']) ?></div>
                         <div class="badge-details">
-                            <h3><?php echo $badge['nom']; ?></h3>
-                            <p><?php echo $badge['points_requis']; ?> points requis</p>
+                            <h3><?= htmlspecialchars($badge['nom']) ?></h3>
+                            <p><?= $badge['points_requis'] ?> points requis</p>
                         </div>
-                        <button class="btn-outline">Attribuer</button>
+                        <button type="button" class="btn-outline">Attribuer</button>
                     </div>
                     <?php endforeach; ?>
                 </section>
 
                 <aside class="badges-right-side">
-                    <div class="action-panel">
+                    <form class="action-panel" method="POST" action="attribuer_badge.php">
                         <h2>Attribuer un badge</h2>
                         <div class="input-group">
                             <label>Badge à attribuer</label>
-                            <select class="custom-select">
-                                <option>Sélectionner un badge</option>
-                                <option>🎯 Premier pas</option>
-                                <option>⭐ Mentor actif</option>
-                                <option>⚛️ Expert React</option>
-                                <option>🤝 Collaborateur</option>
-                                <option>🏆 Top contributeur</option>
-                                <option>🔒 Sécurité Pro</option>
+                            <select name="id_badge" class="custom-select" required>
+                                <option value="">-- Sélectionner un badge --</option>
+                                <?php foreach ($badges as $b): ?>
+                                <option value="<?= $b['id_badge'] ?>"><?= htmlspecialchars($b['icone'] . ' ' . $b['nom']) ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="input-group">
                             <label>Stagiaire</label>
-                            <input list="stagiaires-list" class="custom-search-input"
-                                placeholder="Sélectionner un stagiaire">
+                            <input list="stagiaires-list" id="stagiaire-input" name="stagiaire" class="custom-search-input"
+                                placeholder="Sélectionner un stagiaire" autocomplete="off" required>
                             <datalist id="stagiaires-list">
-                                <option>Ahmed Idrissi-dev101</option>
-                                <option>Sara El Amrani-dev201</option>
+                                <?php foreach ($stagiaires as $s): ?>
+                                <option value="<?= htmlspecialchars($s['nom'] . ' ' . $s['prenom'] . ' - ' . $s['filiere']) ?>" data-id="<?= $s['id_user'] ?>">
+                                <?php endforeach; ?>
                             </datalist>
+                            <input type="hidden" name="id_user" id="id_user_hidden">
                         </div>
-                        <button class="btn-primary-muted">Attribuer le badge</button>
-                    </div>
+                        <button type="submit" class="btn-primary-muted">Attribuer le badge</button>
+                    </form>
 
                     <div class="history-panel">
                         <h2>Attributions récentes</h2>
+                        <?php if (count($historique) == 0): ?>
+                            <div class="history-item"><p style="color:#8a9bb8">Aucune attribution pour le moment</p></div>
+                        <?php else: ?>
+                        <?php foreach ($historique as $h): ?>
                         <div class="history-item">
-                            <div class="history-icon">🎯</div>
+                            <div class="history-icon"><?= htmlspecialchars($h['icone']) ?></div>
                             <div class="history-info">
-                                <strong>Ahmed Idrissi</strong>
-                                <span>Premier pas • 26/04/2026</span>
+                                <strong><?= htmlspecialchars($h['nom'] . ' ' . $h['prenom']) ?></strong>
+                                <span><?= htmlspecialchars($h['badge_nom']) ?> • <?= date('d/m/Y', strtotime($h['date_obtention'])) ?></span>
                             </div>
                         </div>
-                        <div class="history-item">
-                            <div class="history-icon">⭐</div>
-                            <div class="history-info">
-                                <strong>Sara El Amrani</strong>
-                                <span>Mentor actif • 25/04/2026</span>
-                            </div>
-                        </div>
+                        <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
                 </aside>
             </div>

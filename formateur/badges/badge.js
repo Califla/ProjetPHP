@@ -1,23 +1,32 @@
-document.addEventListener('DOMContentLoaded', ()=>{
-  document.querySelectorAll('.badge-item-row .btn-outline').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.badge-item-row .btn-outline').forEach(btn => {
+    btn.addEventListener('click', () => {
       const row = btn.closest('.badge-item-row');
-      const statNum = row.querySelector('.stat-num');
-      statNum.textContent = (parseInt(statNum.textContent)||0) + 1;
-
-      const historyContainer = document.querySelector('.history-panel');
-      if(historyContainer){
-        const badgeIcon = row.querySelector('.badge-icon-box')?.textContent || '';
-        const badgeName = row.querySelector('h3')?.textContent || 'Badge';
-        const newItem = document.createElement('div');
-        newItem.className = 'history-item';
-        newItem.innerHTML = `<div class="history-icon">${badgeIcon}</div><div class="history-info"><strong>Vous</strong><span>${badgeName} • maintenant</span></div>`;
-        historyContainer.appendChild(newItem);
-      }
-
-      // tiny feedback
-      btn.textContent = 'Attribué';
-      btn.disabled = true;
+      const form = document.querySelector('.action-panel');
+      const badgeSelect = document.querySelector('select[name="id_badge"]');
+      if (badgeSelect) badgeSelect.value = row.dataset.idBadge;
+      if (form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
+  });
+
+  const stagiaireInput = document.getElementById('stagiaire-input');
+  const idUserHidden = document.getElementById('id_user_hidden');
+  if (!stagiaireInput || !idUserHidden) return;
+
+  function resolveStagiaire() {
+    const val = stagiaireInput.value.trim();
+    let found = '';
+    document.querySelectorAll('#stagiaires-list option').forEach(o => {
+      if (o.value === val) found = o.getAttribute('data-id');
+    });
+    idUserHidden.value = found;
+  }
+
+  stagiaireInput.addEventListener('input', resolveStagiaire);
+  stagiaireInput.addEventListener('change', resolveStagiaire);
+
+  document.querySelector('.action-panel')?.addEventListener('submit', e => {
+    resolveStagiaire();
+    if (!idUserHidden.value) { e.preventDefault(); stagiaireInput.focus(); }
   });
 });
