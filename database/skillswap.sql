@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `aide` (
   `signal` INT DEFAULT 0,
   `titre` VARCHAR(150) DEFAULT NULL,
   `description` TEXT DEFAULT NULL,
-  `status` ENUM('ouvert','ferme','resolu') DEFAULT NULL,
+  `status` ENUM('ouvert','en_cour','resolu') DEFAULT NULL,
   `date_pub` DATETIME DEFAULT NULL,
   `tags` TEXT DEFAULT NULL,
   `id_user` INT DEFAULT NULL,

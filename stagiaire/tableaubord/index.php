@@ -52,8 +52,8 @@ try {
   <title>ISMO-SkillSwap – Tableau de bord</title>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="../../1-css/style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>

@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['photo'] = $user['photo'];
         $_SESSION['filiere'] = $user['filiere'];
         $_SESSION['statut'] = $user['statut'];
+        $_SESSION['note_moyenne'] = $user['note_moyenne'];
         $_SESSION['date_inscription'] = $user['date_inscription'];
         header("Location: ../../stagiaire/tableaubord/index.php?msg=Connexion réussie !");
         exit();

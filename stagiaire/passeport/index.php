@@ -7,6 +7,24 @@ if (isset($_SESSION)) {
     exit();
   }
 }
+try{
+  include('../../database/config.php');
+    $nbaide = $db->prepare("SELECT COUNT(*) FROM aide_effectuee WHERE id_mentor = ?");
+    $nbaide->execute([$id_user]);
+    $nbaide = $nbaide->fetchColumn();
+
+    $competencesvalidees = $db->prepare("SELECT * FROM validation_competence JOIN competences ON validation_competence.id_competence = competences.id_competence WHERE id_user = ? AND `status` = 'validee'");
+    $competencesvalidees->execute([$id_user]);
+    $competencesvalidees = $competencesvalidees->fetchAll(PDO::FETCH_ASSOC);
+
+    $badges = $db->prepare("SELECT * FROM obtention_badges JOIN badges ON obtention_badges.id_badge = badges.id_badge WHERE id_user = ?");
+    $badges->execute([$id_user]);
+    $badges = $badges->fetchAll(PDO::FETCH_ASSOC);
+
+}catch(PDOException $e){
+  echo "Erreur :".$e->getMessage();
+  exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -40,11 +58,11 @@ if (isset($_SESSION)) {
           <span class="nav-icon">🏷️</span>
           <span>Compétences</span>
         </div>
-        <?php if ($role === 'mentor'):?>
-        <div class="nav-item" onclick="location.href='../mes propositions/index.php'">
-          <span class="nav-icon">🤝</span>
-          <span>Mes propositions</span>
-        </div>
+        <?php if ($role === 'mentor'): ?>
+          <div class="nav-item" onclick="location.href='../mes propositions/index.php'">
+            <span class="nav-icon">🤝</span>
+            <span>Mes propositions</span>
+          </div>
         <?php endif; ?>
         <div class="nav-item" onclick="location.href='../badges/index.php'">
           <span class="nav-icon">🎖️</span>
@@ -91,21 +109,28 @@ if (isset($_SESSION)) {
           <h1 class="page-title">Votre profil complet </h1>
           <p class="page-label">Mon passeport de compétences est exportable pour valoriser vos acquis</p>
         </div>
-        <button class="export-btn">Exporter en PDF</button>
+        <button class="export-btn" onclick="window.print()">Exporter en PDF</button>
       </section>
 
       <section class="passport-summary">
         <div class="profile-card">
-          <div class="profile-badge">AI</div>
+
+          <?php
+          if ($photo) {
+            echo '<img class="profile-badge" src="../../pagelogin/photo/' . $photo . '" alt="Photo de profil">';
+          } else {
+            echo '<div class="profile-badge">' . substr($nom, 0, 1) . substr($prenom, 0, 1) . '</div>';
+          }
+          ?>
           <div class="profile-info">
-          <div class="profile-name">Ahmed Idrissi</div>
-          <div class="profile-role">Stagiaire DEV 101 - Développement Digital</div>
+            <div class="profile-name"><?php echo htmlspecialchars($nom . " " . $prenom); ?></div>
+            <div class="profile-role"><?php echo htmlspecialchars($role) . " - " . htmlspecialchars($filiere); ?></div>
           </div>
         </div>
         <div class="summary-stats">
           <div class="stat-block">
             <div class="stat-label">Points</div>
-            <div class="stat-value">450</div>
+            <div class="stat-value"><?php echo htmlspecialchars($score); ?></div>
           </div>
           <div class="stat-block">
             <div class="stat-label">Rang</div>
@@ -113,8 +138,15 @@ if (isset($_SESSION)) {
           </div>
           <div class="stat-block">
             <div class="stat-label">Aides</div>
-            <div class="stat-value">12</div>
+            <div class="stat-value"><?php echo htmlspecialchars($nbaide); ?></div>
           </div>
+          <?php if ($_SESSION["role"] == "mentor"): ?>
+            <div class="stat-block">
+              <div class="stat-label">Note moyenne</div>
+              <div class="stat-value" id="avgRating"><?php echo htmlspecialchars($_SESSION['note_moyenne']); ?></div>
+            </div>
+          <?php endif; ?>
+
         </div>
       </section>
 
@@ -122,45 +154,35 @@ if (isset($_SESSION)) {
         <article class="card competencies-card">
           <div class="card-title">Compétences validées</div>
           <div class="competence-list">
-            <div class="comp-item"><span>React</span><span class="comp-level">Intermédiaire</span></div>
-            <div class="comp-item"><span>JavaScript ES6+</span><span class="comp-level">Expert</span></div>
-            <div class="comp-item"><span>Tailwind CSS</span><span class="comp-level">Intermédiaire</span></div>
-            <div class="comp-item"><span>Git &amp; GitHub</span><span class="comp-level">Intermédiaire</span></div>
-            <div class="comp-item"><span>Docker</span><span class="comp-level">Débutant</span></div>
+            <?php if (empty($competencesvalidees)): ?>
+              <div class="no-competences">Aucune compétence validée pour le moment.</div>
+            <?php else: ?>
+            <?php foreach ($competencesvalidees as $competence): ?>
+              <div class="comp-item">
+                <span><?php echo htmlspecialchars($competence['nom']); ?></span>
+                <span class="comp-level <?php echo strtolower(htmlspecialchars($competence['niveau'])); ?>"><?php echo htmlspecialchars($competence['niveau']); ?></span>
+              </div>
+            <?php endforeach; ?>
+            <?php endif; ?>
           </div>
         </article>
 
         <article class="card badges-card">
           <div class="card-title">Badges obtenus</div>
           <div class="badge-grid">
-            <div class="badge-card">
-              <div class="badge-icon">🎯</div>
-              <div>
-                <div class="badge-name">Premier pas</div>
-                <div class="badge-date">15/01/2026</div>
+            <?php if (empty($badges)): ?>
+              <div class="no-badges">Aucun badge obtenu pour le moment.</div>
+            <?php else: ?>
+            <?php foreach ($badges as $badge): ?>
+              <div class="badge-card">
+                <div class="badge-icon"><?php echo htmlspecialchars($badge['icone']); ?></div>
+                <div>
+                  <div class="badge-name"><?php echo htmlspecialchars($badge['nom']); ?></div>
+                  <div class="badge-date"><?php echo htmlspecialchars(date('d/m/Y', strtotime($badge['date_obtention']))); ?></div>
+                </div>
               </div>
-            </div>
-            <div class="badge-card">
-              <div class="badge-icon">⭐</div>
-              <div>
-                <div class="badge-name">Mentor actif</div>
-                <div class="badge-date">20/02/2026</div>
-              </div>
-            </div>
-            <div class="badge-card">
-              <div class="badge-icon">⚛️</div>
-              <div>
-                <div class="badge-name">Expert React</div>
-                <div class="badge-date">10/03/2026</div>
-              </div>
-            </div>
-            <div class="badge-card">
-              <div class="badge-icon">🤝</div>
-              <div>
-                <div class="badge-name">Collaborateur</div>
-                <div class="badge-date">01/04/2026</div>
-              </div>
-            </div>
+            <?php endforeach; ?>
+            <?php endif; ?>
           </div>
         </article>
       </section>
@@ -169,5 +191,4 @@ if (isset($_SESSION)) {
   <script src="../../2-script/profile-menu.js"></script>
   <script src="../../2-script/search.js"></script>
 </body>
-
 </html>

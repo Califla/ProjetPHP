@@ -13,6 +13,8 @@
   --header-h: 64px;
   --green: #22c55e;
   --orange: #f97316;
+  --purple: #8b5cf6;
+  --red: #ef4444;
 }
 
 * { box-sizing: border-box; }
@@ -54,9 +56,52 @@ html, body {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 18px 20px;
+  padding: 20px;
   text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
 }
+
+.mini-stat::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 14px 14px 0 0;
+}
+
+.mini-stat:nth-child(1)::before { background: linear-gradient(90deg, var(--accent), var(--accent-soft)); }
+.mini-stat:nth-child(2)::before { background: linear-gradient(90deg, var(--orange), #fb923c); }
+.mini-stat:nth-child(3)::before { background: linear-gradient(90deg, var(--green), #4ade80); }
+.mini-stat:nth-child(4)::before { background: linear-gradient(90deg, var(--red), #f87171); }
+
+.mini-stat:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(13,34,64,0.08);
+}
+
+.stat-icon-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.stat-icon {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.8;
+  fill: none;
+}
+
+.mini-stat:nth-child(1) .stat-icon { stroke: var(--accent); }
+.mini-stat:nth-child(2) .stat-icon { stroke: var(--orange); }
+.mini-stat:nth-child(3) .stat-icon { stroke: var(--green); }
+.mini-stat:nth-child(4) .stat-icon { stroke: var(--red); }
 
 .mini-stat-value {
   display: block;
@@ -69,6 +114,7 @@ html, body {
 .mini-stat-label {
   font-size: 0.8rem;
   color: var(--gray-text);
+  font-weight: 500;
 }
 
 /* Filters */
@@ -89,6 +135,12 @@ html, body {
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 10px 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-group:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(46,111,202,0.1);
 }
 
 .search-icon {
@@ -115,6 +167,41 @@ html, body {
   font-size: 0.95rem;
   color: var(--text-dark);
   background: var(--white);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.filters-row select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  border-radius: 12px;
+  padding: 11px 18px;
+  color: var(--text-dark);
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-family: 'Sora', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  background: var(--accent);
+  color: var(--white);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(46,111,202,0.2);
+}
+
+.filter-btn svg {
+  stroke: currentColor;
 }
 
 /* Proposals list */
@@ -133,23 +220,42 @@ html, body {
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 18px 22px;
-  transition: box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .proposal-card:hover {
-  box-shadow: 0 4px 16px rgba(13,34,64,0.06);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(13,34,64,0.08);
+}
+
+.proposal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
 }
 
 .proposal-info h3 {
   font-size: 1rem;
   font-weight: 600;
-  margin: 0 0 4px;
+  margin: 0;
   color: var(--text-dark);
+}
+
+.proposal-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .proposal-date {
   font-size: 0.8rem;
   color: var(--gray-text);
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .proposal-badge {
@@ -159,6 +265,9 @@ html, body {
   border-radius: 999px;
   white-space: nowrap;
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .proposal-badge.en_attente {
@@ -178,11 +287,11 @@ html, body {
 
 .empty-state {
   text-align: center;
-  padding: 60px 20px;
+  padding: 80px 20px;
   color: var(--gray-text);
   font-size: 1.1rem;
   background: var(--white);
-  border: 1px solid var(--border);
+  border: 2px dashed var(--border);
   border-radius: 18px;
 }
 
@@ -193,5 +302,17 @@ html, body {
 
   .filters-row {
     flex-direction: column;
+  }
+  
+  .proposal-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 500px) {
+  .stats-row {
+    grid-template-columns: 1fr;
   }
 }

@@ -99,7 +99,7 @@ body {
 
 .summary-stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -143,6 +143,18 @@ body {
   font-weight: 700;
 }
 
+.no-competences,
+.no-badges {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--gray-text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: #f8fafc;
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+}
+
 .competence-list,
 .badge-grid {
   display: grid;
@@ -154,30 +166,61 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  background: #f8fafc;
+  background: #fff;
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 14px 16px;
   font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.comp-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(13,34,64,0.06);
+  border-color: var(--accent);
 }
 
 .comp-level {
-  color: var(--gray-text);
   font-size: 0.82rem;
-  background: #fff;
-  border: 1px solid #e2e8f0;
+  font-weight: 600;
   border-radius: 999px;
-  padding: 6px 12px;
+  padding: 6px 14px;
+  border: 1px solid;
+}
+
+.comp-level.debutant {
+  color: #92400e;
+  background: #fef3c7;
+  border-color: #fcd34d;
+}
+
+.comp-level.intermediaire {
+  color: #1d4ed8;
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
+
+.comp-level.avance {
+  color: #15803d;
+  background: #dcfce7;
+  border-color: #86efac;
 }
 
 .badge-card {
   display: flex;
   align-items: center;
   gap: 16px;
-  background: #f8fafc;
+  background: #fff;
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 16px 18px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.badge-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(13,34,64,0.06);
+  border-color: var(--accent);
 }
 
 .badge-icon {
@@ -218,5 +261,37 @@ body {
   }
   .summary-stats {
     grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  @page {
+    margin: 18mm 16mm;
+  }
+  body {
+    background: #fff;
+  }
+  .sidebar,
+  .header,
+  .export-btn {
+    display: none !important;
+  }
+  .layout {
+    display: block !important;
+  }
+  .main {
+    padding: 0 !important;
+  }
+  .card,
+  .profile-card,
+  .stat-block {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+  .comp-item:hover,
+  .badge-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
   }
 }

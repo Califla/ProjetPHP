@@ -203,8 +203,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pub'])) {
               </div>
             </div>
             <div class="action-row">
-              <?php if ($_SESSION['role'] === 'mentor'): ?>
-                <button class="primary-btn">Proposer mon aide</button>
+              <?php if ($_SESSION['role'] === 'mentor' && $_SESSION['id_user'] !== $demand['id_user']): ?>
+                <a href="proposer_aide.php?id_demande=<?php echo $demand['id_demande']; ?>" class="primary-btn">Proposer mon aide</a>
               <?php endif; ?>
               <div class="action-right">
                 <a href="../../formateur/marketplace/signaler.php?id=<?php echo $demand['id_demande']; ?>" class="ghost-btn report-btn">Signaler</a>

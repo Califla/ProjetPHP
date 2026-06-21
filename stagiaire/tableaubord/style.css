@@ -10,10 +10,7 @@
       --orange:      #f97316;
     }
 
-    html, body { height: 100%; font-family: 'Sora', sans-serif; background: var(--gray-bg); color: var(--text-dark); }
-
-    /* ── LAYOUT ── */
-    .layout { display: flex; min-height: 100vh; }
+    html, body { height: 100%; margin:0; font-family: 'Sora', sans-serif; background: var(--gray-bg); color: var(--text-dark); }
 
     /* ── MAIN ── */
     .main {
