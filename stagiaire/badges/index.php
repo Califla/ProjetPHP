@@ -125,7 +125,11 @@ try {
                 <div class="badge-icon"><?php echo $badge_obtenu['icone']; ?></div>
                 <div class="badge-content">
                   <h3><?php echo $badge_obtenu['nom']; ?></h3>
-                  <span class="badge-date">Obtenu le <?php echo $badge_obtenu['date_obtention']; ?></span>
+                  <?php
+                  $date = new DateTime($badge_obtenu['date_obtention']);
+                  $date_formatee = $date->format('d/m/Y');
+                  ?>
+                  <span class="badge-date">Obtenu le <?php echo htmlspecialchars($date_formatee); ?></span>
                 </div>
               </article>
             <?php endforeach; ?>

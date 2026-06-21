@@ -199,7 +199,11 @@ try {
                 <span class="badge-emoji"><?php echo $b['icone']; ?></span>
                 <div style="flex:1">
                   <div style="font-weight:600"><?php echo $b['nom']; ?></div>
-                  <div style="font-size:0.75rem;color:var(--gray-text)">Obtenu le <?php echo $b['date_obtention']; ?></div>
+                  <?php
+                  $date = new DateTime($b['date_obtention']);
+                  $date_formatee = $date->format('d/m/Y');
+                  ?>
+                   <div style="font-size:0.75rem;color:var(--gray-text)">Obtenu le <?php echo htmlspecialchars($date_formatee); ?></div>
                 </div>
               </div>
             <?php endforeach; ?>
@@ -223,7 +227,7 @@ try {
                 <span class="mentor-rank">#<?php echo $i; ?></span>
                 <div class="mentor-avatar" style="background:<?php echo $colors[($i - 1) % 5]; ?>"><?php echo substr($m['prenom'], 0, 1) . substr($m['nom'], 0, 1); ?></div>
                 <div class="mentor-info">
-                  <div class="mentor-name"><?php echo htmlspecialchars(substr($m['prenom'], 0, 8) . '…'); ?></div>
+                  <div class="mentor-name"><?php echo htmlspecialchars($m['prenom'] . ' ' . $m['nom']); ?></div>
                   <div class="mentor-aides"><?php echo $m['nb_aides']; ?> aide<?php echo $m['nb_aides'] > 1 ? 's' : ''; ?></div>
                 </div>
                 <div class="mentor-rating">

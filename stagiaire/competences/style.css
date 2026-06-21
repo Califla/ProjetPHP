@@ -65,18 +65,18 @@ body {
 
 .stats-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
   margin-bottom: 20px;
 }
 
 .stat-box {
   background: white;
-  border-radius: 16px;
-  padding: 20px 22px;
+  border-radius: 14px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   border: 1px solid var(--border);
   transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -104,6 +104,11 @@ body {
 .stat-pending .stat-icon-wrap {
   background: #fef3c7;
   color: #d97706;
+}
+
+.stat-refused .stat-icon-wrap {
+  background: #fee2e2;
+  color: #dc2626;
 }
 
 .stat-total .stat-icon-wrap {
@@ -183,15 +188,19 @@ body {
   box-shadow: 0 24px 52px rgba(16, 37, 79, 0.1);
 }
 
-.skill-card.validated {
+.skill-card.validee {
   border-top: 4px solid #16a34a;
 }
 
-.skill-card.pending {
+.skill-card.en_attente {
   border-top: 4px solid #f59e0b;
   background: #fffbeb;
 }
 
+.skill-card.refusee {
+  border-top: 4px solid #bd2a2a;
+  background: #fef2f2;
+}
 .skill-card-header {
   display: flex;
   justify-content: space-between;
@@ -214,12 +223,16 @@ body {
   white-space: nowrap;
 }
 
-.status-badge.valid {
+.status-badge.validee {
   background: #dcfce7;
   color: #15803d;
 }
+.status-badge.refusee {
+  background: #fee2e2;
+  color: #b91c1c;
+}
 
-.status-badge.wait {
+.status-badge.en_attente {
   background: #fef3c7;
   color: #b45309;
 }
@@ -248,7 +261,153 @@ body {
   color: var(--text-dark);
   font-weight: 600;
 }
+.modal-window {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
 
+    .modal-window.show {
+      display: flex;
+    }
+
+    .modal-window .modal-content {
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px;
+      width: 90%;
+      max-width: 480px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-window .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-window .modal-header h2 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .modal-window .modal-close {
+      background: none;
+      border: none;
+      font-size: 26px;
+      color: #6b7a99;
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-window .modal-close:hover {
+      background: #f4f7fb;
+    }
+
+    .modal-window .modal-body {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .modal-window .modal-label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #101d33;
+    }
+
+    .modal-window .modal-input {
+      padding: 12px 14px;
+      border: 1px solid #e8ecf1;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-family: 'Sora', sans-serif;
+      outline: none;
+      width: 100%;
+    }
+
+    .modal-window .modal-input:focus {
+      border-color: #2e6fca;
+    }
+
+    .modal-window .modal-footer {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .modal-window .btn-cancel {
+      background: #f4f7fb;
+      color: #101d33;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: 'Sora', sans-serif;
+    }
+
+    .modal-window .btn-cancel:hover {
+      background: #e2e8f0;
+    }
+
+    .modal-window .btn-primary {
+      background: #0d2240;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: 'Sora', sans-serif;
+    }
+
+    .modal-window .btn-primary:hover {
+      background: #163158;
+    }
+
+.btn-supprimer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: 'Sora', sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.btn-supprimer:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
 @media (max-width: 900px) {
   .main { padding-right: 16px; }
   .page-top { flex-direction: column; }

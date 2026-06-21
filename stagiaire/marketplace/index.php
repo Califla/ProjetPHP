@@ -42,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pub'])) {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -49,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pub'])) {
   <link rel="stylesheet" href="../../1-css/marcketplace.css" />
   <link rel="stylesheet" href="../../1-css/style.css" />
 </head>
+
 <body>
   <div class="layout">
     <aside class="sidebar">
@@ -66,11 +68,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pub'])) {
           <span class="nav-icon">🏷️</span>
           <span>Compétences</span>
         </div>
-        <?php if ($role === 'mentor'):?>
-        <div class="nav-item" onclick="location.href='../mes propositions/index.php'">
-          <span class="nav-icon">🤝</span>
-          <span>Mes propositions</span>
-        </div>
+        <?php if ($role === 'mentor'): ?>
+          <div class="nav-item" onclick="location.href='../mes propositions/index.php'">
+            <span class="nav-icon">🤝</span>
+            <span>Mes propositions</span>
+          </div>
         <?php endif; ?>
         <div class="nav-item" onclick="location.href='../badges/index.php'">
           <span class="nav-icon">🎖️</span>
@@ -116,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pub'])) {
       <?php elseif (isset($_GET["error"])): ?>
         <div id="toastMsg" class="toast error">❌ <?php echo $_GET["error"]; ?></div>
       <?php endif; ?>
-      
+
       <div class="page-header">
         <div>
           <div class="page-title">Marketplace - Demandes d'aide</div>
@@ -126,25 +128,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pub'])) {
       </div>
 
       <form method="GET" action="index.php" style="display:contents;">
-      <section class="controls-row">
-        <div class="control-group search-group">
-          <svg class="control-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input name="search" type="search" placeholder="Rechercher par mot-clé, compétence, technologie..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" />
-        </div>
-        <div class="control-group right-group">
-          <select name="filiere">
-            <option value="all">Toutes les filières</option>
-            <option value="DEV" <?php echo (isset($_GET['filiere']) && $_GET['filiere'] == 'DEV') ? 'selected' : ''; ?>>DEV</option>
-            <option value="CYBERSEC" <?php echo (isset($_GET['filiere']) && $_GET['filiere'] == 'CYBERSEC') ? 'selected' : ''; ?>>CYBERSEC</option>
-            <option value="DATA" <?php echo (isset($_GET['filiere']) && $_GET['filiere'] == 'DATA') ? 'selected' : ''; ?>>DATA</option>
-          </select>
-          <button type="submit" class="filter-btn" id="filterBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
-            Filtrer
-          </button>
-        </div>
-      </section>
+        <section class="controls-row">
+          <div class="control-group search-group">
+            <svg class="control-icon" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input name="search" type="search" placeholder="Rechercher par mot-clé, compétence, technologie..."
+              value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" />
+          </div>
+          <div class="control-group right-group">
+            <select name="filiere">
+              <option value="all">Toutes les filières</option>
+              <option value="DEV" <?php echo (isset($_GET['filiere']) && $_GET['filiere'] == 'DEV') ? 'selected' : ''; ?>>
+                DEV</option>
+              <option value="CYBERSEC" <?php echo (isset($_GET['filiere']) && $_GET['filiere'] == 'CYBERSEC') ? 'selected' : ''; ?>>CYBERSEC</option>
+              <option value="DATA" <?php echo (isset($_GET['filiere']) && $_GET['filiere'] == 'DATA') ? 'selected' : ''; ?>>DATA</option>
+            </select>
+            <button type="submit" class="filter-btn" id="filterBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <line x1="4" y1="21" x2="4" y2="14" />
+                <line x1="4" y1="10" x2="4" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="12" />
+                <line x1="12" y1="8" x2="12" y2="3" />
+                <line x1="20" y1="21" x2="20" y2="16" />
+                <line x1="20" y1="12" x2="20" y2="3" />
+                <line x1="1" y1="14" x2="7" y2="14" />
+                <line x1="9" y1="8" x2="15" y2="8" />
+                <line x1="17" y1="16" x2="23" y2="16" />
+              </svg>
+              Filtrer
+            </button>
+          </div>
+        </section>
       </form>
 
       <div class="demandes-list">
@@ -175,9 +192,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pub'])) {
                 <h2><?php echo htmlspecialchars($demand['titre']); ?></h2>
                 <p><?php echo htmlspecialchars($demand['description']); ?></p>
                 <p style="font-size:0.85rem;color:#999;margin-top:8px;">
-                  Par :<span style="color:var(--accent);font-weight:600;"><?php echo htmlspecialchars($demand['nom'] . ' ' . $demand['prenom']); ?></span>
+                  Par :<span
+                    style="color:var(--accent);font-weight:600;"><?php echo htmlspecialchars($demand['nom'] . ' ' . $demand['prenom']); ?></span>
                   <?php if (!empty($demand['filiere'])): ?>
-                    &nbsp;<span style="font-size:0.75rem;background:#eef2f7;padding:2px 8px;border-radius:4px;"><?php echo htmlspecialchars($demand['filiere']); ?></span>
+                    &nbsp;<span
+                      style="font-size:0.75rem;background:#eef2f7;padding:2px 8px;border-radius:4px;"><?php echo htmlspecialchars($demand['filiere']); ?></span>
                   <?php endif; ?>
                 </p>
               </div>
@@ -199,15 +218,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pub'])) {
             </div>
             <div class="card-footer">
               <div class="footer-left">
-                <span>Publié le <?php echo htmlspecialchars($demand['date_pub']); ?></span>
+                <?php
+                $date = new DateTime($demand['date_pub']);
+                $date_formatee = $date->format('d/m/Y');
+                ?>
+                <span>Publié le <?php echo htmlspecialchars($date_formatee); ?></span>
               </div>
             </div>
             <div class="action-row">
               <?php if ($_SESSION['role'] === 'mentor' && $_SESSION['id_user'] !== $demand['id_user']): ?>
-                <a href="proposer_aide.php?id_demande=<?php echo $demand['id_demande']; ?>" class="primary-btn">Proposer mon aide</a>
+                <a href="proposer_aide.php?id_demande=<?php echo $demand['id_demande']; ?>" class="primary-btn">Proposer mon
+                  aide</a>
               <?php endif; ?>
               <div class="action-right">
-                <a href="../../formateur/marketplace/signaler.php?id=<?php echo $demand['id_demande']; ?>" class="ghost-btn report-btn">Signaler</a>
+                <a href="../../formateur/marketplace/signaler.php?id=<?php echo $demand['id_demande']; ?>"
+                  class="ghost-btn report-btn">Signaler</a>
               </div>
             </div>
           </article>
@@ -228,17 +253,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pub'])) {
           <?php if (isset($err['titre'])): ?>
             <span style="color:red;font-size:0.8rem;"><?php echo $err['titre']; ?></span>
           <?php endif; ?>
-          <input class="modal-input" type="text" name="titre" placeholder="Ex: Aide sur les algorithmes..." value="<?php echo isset($titre) ? htmlspecialchars($titre) : ''; ?>">
+          <input class="modal-input" type="text" name="titre" placeholder="Ex: Aide sur les algorithmes..."
+            value="<?php echo isset($titre) ? htmlspecialchars($titre) : ''; ?>">
           <label class="modal-label">Description</label>
           <?php if (isset($err['description'])): ?>
             <span style="color:red;font-size:0.8rem;"><?php echo $err['description']; ?></span>
           <?php endif; ?>
-          <textarea class="modal-input" name="description" rows="4" placeholder="Décrivez votre demande..."><?php echo isset($description) ? htmlspecialchars($description) : ''; ?></textarea>
+          <textarea class="modal-input" name="description" rows="4"
+            placeholder="Décrivez votre demande..."><?php echo isset($description) ? htmlspecialchars($description) : ''; ?></textarea>
           <label class="modal-label">Tags (séparés par des virgules)</label>
           <?php if (isset($err['tags'])): ?>
             <span style="color:red;font-size:0.8rem;"><?php echo $err['tags']; ?></span>
           <?php endif; ?>
-          <input class="modal-input" type="text" name="tags" placeholder="Ex: Python, Débutant" value="<?php echo isset($tags) ? htmlspecialchars($tags) : ''; ?>">
+          <input class="modal-input" type="text" name="tags" placeholder="Ex: Python, Débutant"
+            value="<?php echo isset($tags) ? htmlspecialchars($tags) : ''; ?>">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn-cancel" onclick="fermerModal('modalAjout')">Annuler</button>
@@ -269,10 +297,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pub'])) {
       setTimeout(dismissToast, 4500);
     <?php endif; ?>
     <?php if (!empty($err) || isset($_GET['error'])): ?>
-    ouvrirModal('modalAjout');
+      ouvrirModal('modalAjout');
     <?php endif; ?>
   </script>
   <script src="../../2-script/profile-menu.js"></script>
   <script src="../../2-script/search.js"></script>
 </body>
+
 </html>

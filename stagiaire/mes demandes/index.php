@@ -6,7 +6,29 @@ if (isset($_SESSION)) {
     header('Location: ../../pagelogin/connexion/index.php');
     exit();
   }
+try{
+  include('../../database/config.php');
+  $aides= $db->prepare("SELECT * FROM aide WHERE id_user = ? AND `status` IN ('ouvert', 'en_coure') ORDER BY date_pub DESC");
+  $aides->execute([$id_user]);
+  $aides=$aides->fetchAll(PDO::FETCH_ASSOC);
+
+  $pro= $db->prepare("SELECT p.id_proposition, p.status, p.date_prop, u.nom, u.prenom, a.id_demande FROM propositions_aide p JOIN aide a ON p.id_demande = a.id_demande JOIN utilisateurs u ON p.id_user = u.id_user WHERE a.id_user = ?");
+  $pro->execute([$id_user]);
+  $pro=$pro->fetchAll(PDO::FETCH_ASSOC);
+
+  #aporter les demandes résolues insi que le nom et prenom du mentor qui a résolu la demande et la note donnée par le stagiaire et la date de résolution
+  $demandes_resolues= $db->prepare("SELECT d.id_demande, d.titre, d.description, d.tags, d.date_pub, u.nom AS mentor_nom, u.prenom AS mentor_prenom, r.note_mentor, r.commentaire, r.date_intervention FROM aide d JOIN propositions_aide p ON d.id_demande = p.id_demande AND p.status = 'acceptee' JOIN aide_effectuee r ON p.id_proposition = r.id_proposition JOIN utilisateurs u ON r.id_mentor = u.id_user WHERE d.id_user = ? AND d.status = 'resolu' ORDER BY r.date_intervention DESC");
+  $demandes_resolues->execute([$id_user]);
+  $demandes_resolues=$demandes_resolues->fetchAll(PDO::FETCH_ASSOC);
+  echo "<pre>";
+
+  echo "</pre>";
+}catch(PDOException $e){
+  echo "Erreur :".$e->getMessage();
+  exit();
 }
+}
+$showModifier = false;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -84,6 +106,13 @@ if (isset($_SESSION)) {
       <div class="page-title">Mes demandes d'aide</div>
       <div class="page-sub">Gérez vos demandes et suivez leur progression</div>
 
+      <?php if (isset($_GET['message'])): ?>
+        <div class="alert alert-success"><?= htmlspecialchars($_GET['message']) ?></div>
+      <?php endif; ?>
+      <?php if (isset($_GET['error'])): ?>
+        <div class="alert alert-error"><?= htmlspecialchars($_GET['error']) ?></div>
+      <?php endif; ?>
+
       <section class="controls-row">
         <div class="control-group search-group">
           <svg class="control-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -104,100 +133,129 @@ if (isset($_SESSION)) {
         </div>
       </section>
 
-      <div class="demandes-list" id="demandesList">
-        <article class="demande-card" data-status="resolu" data-mentor="Youssef Benali">
-          <div class="card-header">
-            <div>
-              <h2>Aide sur React Hooks useEffect</h2>
-              <p>Je n'arrive pas à comprendre le lifecycle avec useEffect et les dépendances.</p>
-            </div>
-            <span class="badge-status resolu">Résolu</span>
-          </div>
-          <div class="tag-row">
-            <span class="tag">React</span>
-            <span class="tag">JavaScript</span>
-            <span class="tag">Hooks</span>
-          </div>
-          <div class="card-footer">
-            <span>Publié le 24/04/2026</span>
-            <span>Mentor: Youssef Benali</span>
-          </div>
-          <div class="action-row">
-            <button class="ghost-btn">Modifier</button>
-            <button class="ghost-btn rating-btn" data-mentor="Youssef Benali">⭐ Noter le mentor</button>
-            <select class="status-select">
-              <option value="ouvert">Ouvert</option>
-              <option value="resolu">Résolu</option>
-              <option value="ferme">Fermé</option>
-            </select>
-          </div>
-          <div class="proposals-section"></div>
-        </article>
+      <div class="section-divider">
+        <span class="section-divider-icon">📋</span>
+        <h2 class="section-divider-title">Demandes actives</h2>
+        <span class="section-divider-line"></span>
+      </div>
 
-        <article class="demande-card" data-status="ouvert">
+      <div class="demandes-list" id="demandesList">
+        <?php if (count($aides) === 0): ?>
+          <p class="empty-state">Aucune demande d'aide trouvée</p>
+        <?php endif; ?>
+        <?php foreach ($aides as $d): ?>
+        <article class="demande-card" data-id_demande="<?= $d['id_demande'] ?>" data-titre="<?= htmlspecialchars($d['titre']) ?>" data-description="<?= htmlspecialchars($d['description']) ?>" data-tags="<?= htmlspecialchars($d['tags']) ?>">
           <div class="card-header">
             <div>
-              <h2>Problème avec Git merge conflicts</h2>
-              <p>Conflits lors du merge de ma branche feature avec main.</p>
+              <h2><?php echo htmlspecialchars($d['titre']); ?></h2>
+              <p><?php echo htmlspecialchars($d['description']); ?></p>
             </div>
-            <span class="badge-status ouvert">Ouvert</span>
+            <span class="badge-status <?php echo strtolower(htmlspecialchars($d['status'])); ?>"><?php echo htmlspecialchars($d['status']); ?></span>
           </div>
           <div class="tag-row">
-            <span class="tag">Git</span>
-            <span class="tag">Version Control</span>
+            <?php
+              if ($d['tags']) {
+                $tagsArray = explode(',', $d['tags']);
+                foreach ($tagsArray as $tag) {
+                  echo '<span class="tag">' . htmlspecialchars(trim($tag)) . '</span>';
+                }
+              } else {
+                echo "<span class='no-tags'>Aucun tag</span>";
+              }
+              ?>
           </div>
           <div class="card-footer">
-            <span>Publié le 26/04/2026</span>
-            <span>Mentor: Karim Benali</span>
+            <?php
+            $date = new DateTime($d['date_pub']);
+            $date_formatee = $date->format('d/m/Y');
+            ?>
+            <div>Publié le <?php echo htmlspecialchars($date_formatee); ?></div>
           </div>
           <div class="action-row">
-            <button class="ghost-btn">Modifier</button>
-            <button class="ghost-btn rating-btn" data-mentor="Karim Benali">⭐ Noter le mentor</button>
-            <select class="status-select">
-              <option value="ouvert">Ouvert</option>
-              <option value="resolu">Résolu</option>
-              <option value="ferme">Fermé</option>
-            </select>
+            <button type="button" class="ghost-btn" onclick="openModifier(this)">Modifier</button>
+            <?php if ($d['status'] === 'en_coure'): ?>
+              <button class="btn-resolu" onclick="openRating(<?= $d['id_demande'] ?>)">✓ Marquer comme résolu</button>
+            <?php endif; ?>
           </div>
-          <div class="proposals-section"></div>
-        </article>
-        
-        <article class="demande-card" data-status="ouvert">
-          <div class="card-header">
-            <div>
-              <h2>Besoin d'aide sur les requêtes SQL complexes</h2>
-              <p>J'ai du mal avec les JOIN et les sous-requêtes en SQL.</p>
+          <?php if ($d['status'] === 'ouvert'): ?>
+            <?php $proposals = array_filter($pro, fn($p) => $p['id_demande'] == $d['id_demande'] && $p['status'] === 'en_attente'); ?>
+            <?php if (!empty($proposals)): ?>
+          <div class="proposals-section">
+            <div class="proposals-title">Propositions reçues :</div>
+            <?php foreach ($proposals as $p): ?>
+            <div class="proposal-item">
+              <span class="proposal-proposer"><?= htmlspecialchars($p['nom'] . ' ' . $p['prenom']) ?></span>
+              <span class="proposal-badge en_attente">En attente</span>
+              <div class="proposal-actions">
+                <button class="accept-btn" onclick="location.href='repondre_proposition.php?id_proposition=<?= $p['id_proposition'] ?>&action=accept&id_demande=<?= $d['id_demande'] ?>'">✓ Accepter</button>
+                <button class="refuse-btn" onclick="location.href='repondre_proposition.php?id_proposition=<?= $p['id_proposition'] ?>&action=refuse&id_demande=<?= $d['id_demande'] ?>'">✗ Refuser</button>
+              </div>
             </div>
-            <span class="badge-status ouvert">Ouvert</span>
+            <?php endforeach; ?>
           </div>
-          <div class="tag-row">
-            <span class="tag">SQL</span>
-            <span class="tag">Base de données</span>
-          </div>
-          <div class="card-footer">
-            <span>Publié le 27/04/2026</span>
-            <span>Mentor: Sara El Fassi</span>
-          </div>
-          <div class="action-row">
-            <button class="ghost-btn">Modifier</button>
-            <button class="ghost-btn rating-btn" data-mentor="Sara El Fassi">⭐ Noter le mentor</button>
-            <select class="status-select">
-              <option value="ouvert">Ouvert</option>
-              <option value="resolu">Résolu</option>
-              <option value="ferme">Fermé</option>
-            </select>
-          </div>
-          <div class="proposals-section"></div>
+            <?php endif; ?>
+          <?php endif; ?>
+
         </article>
+        <?php endforeach ?>
+      </div>
+
+      <div class="section-divider">
+        <span class="section-divider-icon">✅</span>
+        <h2 class="section-divider-title">Demandes résolues</h2>
+        <span class="section-divider-line"></span>
+      </div>
+
+      <div class="demandes-resolues" id="demandesResolues">
+        <?php if (count($demandes_resolues) > 0): ?>
+          <?php foreach ($demandes_resolues as $resolue): ?>
+            <?php
+              $date_pub = new DateTime($resolue['date_pub']);
+              $date_intervention = new DateTime($resolue['date_intervention']);
+            ?>
+            <article class="demande-card resolu">
+              <div class="card-header">
+                <div>
+                  <h2><?= htmlspecialchars($resolue['titre']) ?></h2>
+                  <p><?= htmlspecialchars($resolue['description']) ?></p>
+                </div>
+                <span class="badge-status resolu">Résolu</span>
+              </div>
+              <div class="tag-row">
+                <?php
+                  if ($resolue['tags']) {
+                    $tagsArray = explode(',', $resolue['tags']);
+                    foreach ($tagsArray as $tag) {
+                      echo '<span class="tag">' . htmlspecialchars(trim($tag)) . '</span>';
+                    }
+                  } else {
+                    echo "<span class='no-tags'>Aucun tag</span>";
+                  }
+                ?>
+              </div>
+              <div class="card-footer">
+                <span>Publié le <?= $date_pub->format('d/m/Y') ?></span>
+                <span>Mentor: <?= htmlspecialchars($resolue['mentor_prenom'] . ' ' . $resolue['mentor_nom']) ?></span>
+              </div>
+              <div class="action-row">
+                <span class="resolu-info">✅ Résolu le <?= $date_intervention->format('d/m/Y') ?></span>
+                <span class="resolu-note">⭐ <?= htmlspecialchars($resolue['note_mentor']) ?></span>
+              </div>
+            </article>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <p class="empty-state">Aucune demande résolue</p>
+        <?php endif; ?>
       </div>
     </main>
   </div>
 
+  <form method="POST" action="resolu.php">
   <div class="modal-overlay" id="ratingModal">
     <div class="modal-content">
-      <button class="modal-close" id="closeModal">&times;</button>
+      <button class="modal-close" type="button" id="closeModal">&times;</button>
       <h2>Noter le mentor</h2>
-      <p class="modal-mentor" id="modalMentorName">—</p>
+      <input type="hidden" name="id_demande" id="ratingIdDemande" value="">
       <div class="star-rating" id="starRating">
         <span class="star" data-value="1">☆</span>
         <span class="star" data-value="2">☆</span>
@@ -205,13 +263,95 @@ if (isset($_SESSION)) {
         <span class="star" data-value="4">☆</span>
         <span class="star" data-value="5">☆</span>
       </div>
+      <input type="hidden" name="note_mentor" id="noteMentor" value="0">
       <p class="rating-label" id="ratingLabel">Sélectionnez une note</p>
-      <textarea class="rating-comment" id="ratingComment" placeholder="Laissez un commentaire (optionnel)" rows="3"></textarea>
-      <button class="primary-btn submit-rating" id="submitRating">Envoyer la note</button>
+      <textarea class="rating-comment" name="commentaire" placeholder="Laissez un commentaire (optionnel)" rows="3"></textarea>
+      <button type="submit" name="resoudre" class="primary-btn submit-rating">Envoyer la note</button>
+    </div>
+  </div>
+  </form>
+
+  <div class="modal-overlay" id="modifierModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="document.getElementById('modifierModal').classList.remove('show')">&times;</button>
+      <h2>Modifier la demande</h2>
+      <form method="POST" action="modifier_demande.php">
+        <input type="hidden" name="id_demande" value="">
+        <div class="modal-body">
+          <label class="modal-label">Titre</label>
+          <input class="modal-input" type="text" name="titre" required>
+          <label class="modal-label">Description</label>
+          <textarea class="modal-input" name="description" rows="3" required></textarea>
+          <label class="modal-label">Tags (séparés par des virgules)</label>
+          <input class="modal-input" type="text" name="tags" placeholder="Ex: React, JavaScript">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" onclick="document.getElementById('modifierModal').classList.remove('show')">Annuler</button>
+          <button type="submit" name="modifier" class="btn-primary">Enregistrer</button>
+        </div>
+      </form>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    function openModifier(btn) {
+      const article = btn.closest('.demande-card');
+      document.querySelector('#modifierModal [name="id_demande"]').value = article.dataset.id_demande;
+      document.querySelector('#modifierModal [name="titre"]').value = article.dataset.titre;
+      document.querySelector('#modifierModal [name="description"]').value = article.dataset.description;
+      document.querySelector('#modifierModal [name="tags"]').value = article.dataset.tags;
+      document.getElementById('modifierModal').classList.add('show');
+    }
+
+    let selectedRating = 0;
+    const ratingModal = document.getElementById('ratingModal');
+    const stars = document.querySelectorAll('#starRating .star');
+    const ratingLabel = document.getElementById('ratingLabel');
+    const noteInput = document.getElementById('noteMentor');
+
+    function openRating(id) {
+      document.getElementById('ratingIdDemande').value = id;
+      selectedRating = 0;
+      noteInput.value = 0;
+      stars.forEach(s => s.textContent = '☆');
+      ratingLabel.textContent = 'Sélectionnez une note';
+      ratingModal.style.display = 'flex';
+    }
+
+    document.getElementById('closeModal').addEventListener('click', () => {
+      ratingModal.style.display = 'none';
+    });
+    ratingModal.addEventListener('click', (e) => {
+      if (e.target === ratingModal) ratingModal.style.display = 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') ratingModal.style.display = 'none';
+    });
+
+    stars.forEach(star => {
+      star.addEventListener('mouseenter', () => {
+        const val = parseInt(star.dataset.value);
+        stars.forEach((s, i) => s.textContent = i < val ? '★' : '☆');
+      });
+      star.addEventListener('mouseleave', () => {
+        stars.forEach((s, i) => s.textContent = i < selectedRating ? '★' : '☆');
+      });
+      star.addEventListener('click', () => {
+        selectedRating = parseInt(star.dataset.value);
+        noteInput.value = selectedRating;
+        stars.forEach((s, i) => s.textContent = i < selectedRating ? '★' : '☆');
+        const labels = ['', 'Très insuffisant', 'Insuffisant', 'Moyen', 'Bien', 'Excellent'];
+        ratingLabel.textContent = labels[selectedRating];
+      });
+    });
+
+    document.querySelector('#ratingModal .submit-rating').addEventListener('click', (e) => {
+      if (selectedRating === 0) {
+        e.preventDefault();
+        ratingLabel.textContent = 'Veuillez sélectionner une note';
+      }
+    });
+  </script>
   <script src="../../2-script/profile-menu.js"></script>
   <script src="../../2-script/search.js"></script>
 </body>
