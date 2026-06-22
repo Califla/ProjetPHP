@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ../../pagelogin/connexion/index.php');
+    exit();
+}
 include('../../database/config.php');
 try{
     $req=$db->prepare("DELETE FROM aide WHERE id_demande = ?");

@@ -103,12 +103,12 @@ try{
     </aside>
 
     <header class="header">
-      <form class="header-search" action="#" onsubmit="return false;">
+      <form class="header-search" action="../../search.php" method="GET">
         <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="7" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
-        <input id="globalSearch" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
+        <input name="q" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
       </form>
       <div class="user-pill" data-email="<?php echo $email; ?>">
         <div class="user-info">
@@ -216,7 +216,7 @@ try{
     </main>
   </div>
   <script src="../../2-script/profile-menu.js"></script>
-  <script src="../../2-script/search.js"></script>
+  
 </body>
 
 </html>

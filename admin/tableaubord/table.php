@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ../../pagelogin/connexion/index.php');
+    exit();
+}
 if (isset($_SESSION)){
     extract($_SESSION);
 }
@@ -27,17 +31,18 @@ try{
 
 
     $req_act = $db->prepare("
-        (SELECT 'inscription' AS type, u.id_user, u.date_inscription AS date_action, CONCAT(u.nom, ' ', u.prenom) AS user_name, NULL AS details1, NULL AS details2 FROM utilisateurs u WHERE u.date_inscription >= NOW() - INTERVAL 7 DAY)
+        (SELECT 'inscription' AS type, u.id_user, u.date_inscription AS date_action, CONCAT(u.nom, ' ', u.prenom) AS user_name, NULL AS details1, NULL AS details2 FROM utilisateurs u WHERE u.date_inscription >= NOW() - INTERVAL 15 HOUR)
         UNION ALL
-        (SELECT 'publication' AS type, a.id_user, a.date_pub AS date_action, CONCAT(u.nom, ' ', u.prenom) AS user_name, a.titre AS details1, NULL AS details2 FROM aide a JOIN utilisateurs u ON a.id_user = u.id_user WHERE a.date_pub >= NOW() - INTERVAL 7 DAY)
+        (SELECT 'publication' AS type, a.id_user, a.date_pub AS date_action, CONCAT(u.nom, ' ', u.prenom) AS user_name, a.titre AS details1, NULL AS details2 FROM aide a JOIN utilisateurs u ON a.id_user = u.id_user WHERE a.date_pub >= NOW() - INTERVAL 15 HOUR)
         UNION ALL
-        (SELECT 'proposition' AS type, p.id_user, p.date_prop AS date_action, CONCAT(u.nom, ' ', u.prenom) AS user_name, a.titre AS details1, NULL AS details2 FROM propositions_aide p JOIN utilisateurs u ON p.id_user = u.id_user JOIN aide a ON p.id_demande = a.id_demande WHERE p.date_prop >= NOW() - INTERVAL 7 DAY)
+        (SELECT 'proposition' AS type, p.id_user, p.date_prop AS date_action, CONCAT(u.nom, ' ', u.prenom) AS user_name, a.titre AS details1, NULL AS details2 FROM propositions_aide p JOIN utilisateurs u ON p.id_user = u.id_user JOIN aide a ON p.id_demande = a.id_demande WHERE p.date_prop >= NOW() - INTERVAL 15 HOUR)
         UNION ALL
-        (SELECT 'badge' AS type, o.id_user, o.date_obtention AS date_action, CONCAT(u.nom, ' ', u.prenom) AS user_name, b.nom AS details1, NULL AS details2 FROM obtention_badges o JOIN utilisateurs u ON o.id_user = u.id_user JOIN badges b ON o.id_badge = b.id_badge WHERE o.date_obtention >= NOW() - INTERVAL 7 DAY)
+        (SELECT 'badge' AS type, o.id_user, o.date_obtention AS date_action, CONCAT(u.nom, ' ', u.prenom) AS user_name, b.nom AS details1, NULL AS details2 FROM obtention_badges o JOIN utilisateurs u ON o.id_user = u.id_user JOIN badges b ON o.id_badge = b.id_badge WHERE o.date_obtention >= NOW() - INTERVAL 15 HOUR)
         UNION ALL
-        (SELECT 'validation' AS type, v.id_user, v.date_validation AS date_action, CONCAT(u.nom, ' ', u.prenom) AS user_name, c.nom AS details1, v.niveau AS details2 FROM validation_competence v JOIN utilisateurs u ON v.id_user = u.id_user JOIN competences c ON v.id_competence = c.id_competence WHERE v.date_validation >= NOW() - INTERVAL 7 DAY AND v.status = 'validee')
+        (SELECT 'validation' AS type, v.id_user, v.date_validation AS date_action, CONCAT(u.nom, ' ', u.prenom) AS user_name, c.nom AS details1, v.niveau AS details2 FROM validation_competence v JOIN utilisateurs u ON v.id_user = u.id_user JOIN competences c ON v.id_competence = c.id_competence WHERE v.date_validation >= NOW() - INTERVAL 15 HOUR AND v.status = 'validee')
         ORDER BY date_action DESC
     ");
+
     $req_act->execute();
     $activities = $req_act->fetchAll(PDO::FETCH_ASSOC);
     # Répartition par rôle
@@ -83,7 +88,7 @@ try{
     <aside class="sidebar">
       <div class="sidebar-logo"><span>ISMO-SkillSwap</span></div>
       <nav class="sidebar-nav">
-        <div class="nav-item active" onclick="location.href='../Tableau de bord/table.php'">
+        <div class="nav-item active" onclick="location.href='table.php'">
           <span class="nav-icon">🏠</span>
           <span>Tableau de bord</span>
         </div>
@@ -111,14 +116,14 @@ try{
     </aside>
 
     <header class="header">
-      <form class="header-search" action="#" onsubmit="return false;">
+      <form class="header-search" action="../../search.php" method="GET">
         <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="7" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
-        <input id="globalSearch" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
+        <input name="q" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
       </form>
-      <div class="user-pill" data-email="admin@ismo.ma">
+      <div class="user-pill" data-email="<?php echo $email; ?>">
         <div class="user-info">
           <div class="user-name"><?php echo $nom . " " . $prenom; ?></div>
           <div class="user-role"><?php echo $role ?></div>
@@ -234,7 +239,7 @@ try{
   </div>
   </div>
   <script src="../../2-script/profile-menu.js"></script>
-  <script src="../../2-script/search.js"></script>
+  
 </body>
 
 </html>

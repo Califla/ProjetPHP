@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'formateur') {
+    header('Location: ../../pagelogin/connexion/index.php');
+    exit();
+}
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     extract($_POST);
     include("../../database/config.php");
@@ -15,11 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = $db->prepare("INSERT INTO obtention_badges (id_user, id_badge, date_obtention) VALUES (?, ?, NOW())");
         $stmt->execute([ $id_user, $id_badge]);
         if ($stmt->rowCount() > 0) {
+            $stmt = $db->prepare("UPDATE utilisateurs SET score = score + 100 WHERE id_user = ?");
+            $stmt->execute([$id_user]);
             header("Location: badge.php?msg=Badge attribué avec succès.");
             exit();
         } else {
-            $stmt = $db->prepare("UPDATE utilisateurs SET score = score + 100 WHERE id_user = ?");
-            $stmt->execute([$id_user]);
+            
             header("Location: badge.php?error=Erreur lors de l'attribution du badge.");
             exit();
         }

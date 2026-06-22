@@ -24,13 +24,13 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
 
 CREATE TABLE IF NOT EXISTS `aide` (
   `id_demande` INT NOT NULL AUTO_INCREMENT,
-  `signal` INT DEFAULT 0,
   `titre` VARCHAR(150) DEFAULT NULL,
   `description` TEXT DEFAULT NULL,
-  `status` ENUM('ouvert','en_cour','resolu') DEFAULT NULL,
+  `status` ENUM('ouvert','en_coure','resolu') DEFAULT NULL,
   `date_pub` DATETIME DEFAULT NULL,
   `tags` TEXT DEFAULT NULL,
   `id_user` INT DEFAULT NULL,
+  `signal` INT DEFAULT 0,
   PRIMARY KEY (`id_demande`),
   KEY `id_user` (`id_user`),
   CONSTRAINT `aide_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `utilisateurs` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE

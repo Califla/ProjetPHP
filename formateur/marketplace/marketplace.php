@@ -1,7 +1,11 @@
 ﻿<?php
 session_start();
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'formateur') {
+    header('Location: ../../pagelogin/connexion/index.php');
+    exit();
+}
 if (isset($_SESSION)) {
-  extract($_SESSION);
+    extract($_SESSION);
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   include("../../database/config.php");
@@ -83,12 +87,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </aside>
 
     <header class="header">
-      <form class="header-search" action="#" onsubmit="return false;">
+      <form class="header-search" action="../../search.php" method="GET">
         <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="7" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
-        <input id="globalSearch" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
+        <input name="q" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
       </form>
       <div class="user-pill" data-email="">
         <div class="user-info">
@@ -115,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <div class="page-title">Marketplace Formateur</div>
           <div class="page-sub">Gérez les demandes d'aide et proposez votre soutien aux stagiaires.</div>
         </div>
-        <?php if ($_SESSION['role'] === 'mentor' || $_SESSION['role'] === 'stagiaire'): ?>
+        <?php if (false): ?>
         <button type="button" class="btn btn-primary" onclick="ouvrirModal('modalAjout')">+ publier une demande</button>
         <?php endif; ?>
       </div>
@@ -256,16 +260,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       if (e.key === 'Escape') fermerModal('modalAjout');
     });
     function filterCards() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      const status = document.getElementById('statusFilter').value;
+      const searchInput = document.getElementById('searchInput');
+      const statusFilter = document.getElementById('statusFilter');
+      if (!searchInput || !statusFilter) return;
+      const search = searchInput.value.toLowerCase();
+      const status = statusFilter.value;
       document.querySelectorAll('.demande-card').forEach(card => {
         const matchSearch = !search || card.dataset.title.includes(search) || card.dataset.desc.includes(search) || card.dataset.tags.includes(search) || card.dataset.auteur.includes(search);
         const matchStatus = status === 'all' || card.dataset.status === status;
         card.style.display = matchSearch && matchStatus ? '' : 'none';
       });
     }
-    document.getElementById('searchInput').addEventListener('input', filterCards);
-    document.getElementById('statusFilter').addEventListener('change', filterCards);
+    document.addEventListener('input', function(e) { if (e.target.id === 'searchInput') filterCards(); });
+    document.addEventListener('change', function(e) { if (e.target.id === 'statusFilter') filterCards(); });
     function dismissToast() {
       var t = document.getElementById('toastMsg');
       if (t) {
@@ -281,7 +288,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php endif; ?>
   </script>
   <script src="../../2-script/profile-menu.js"></script>
-  <script src="../../2-script/search.js"></script>
+  
 </body>
 
 </html>

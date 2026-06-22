@@ -1,11 +1,15 @@
 <?php
 session_start();
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'formateur') {
+    header('Location: ../../pagelogin/connexion/index.php');
+    exit();
+}
 if (isset($_SESSION)) {
     extract($_SESSION);
 }
 include("../../database/config.php");
 try {
-    $stagiairesActifs = $db->query("SELECT COUNT(*) FROM utilisateurs WHERE role='stagiaire' or role='mentor' AND statut='actif'")->fetchColumn();
+    $stagiairesActifs = $db->query("SELECT COUNT(*) FROM utilisateurs WHERE (role='stagiaire' OR role='mentor') AND statut='actif'")->fetchColumn();
     $competencesEnAttente = $db->query("SELECT COUNT(*) FROM validation_competence WHERE status='en_attente'")->fetchColumn();
     $aidesEchangees = $db->query("SELECT COUNT(*) FROM aide_effectuee")->fetchColumn();
     $aidesSemaine = $db->query("SELECT COUNT(*) FROM aide_effectuee WHERE date_intervention >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)")->fetchColumn();
@@ -69,15 +73,15 @@ try {
         </aside>
 
         <header class="header">
-            <form class="header-search" action="#" onsubmit="return false;">
+            <form class="header-search" action="../../search.php" method="GET">
                 <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="7" />
                     <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
-                <input id="globalSearch" class="header-search-input" type="search"
+                <input name="q" class="header-search-input" type="search"
                     placeholder="Rechercher un stagiaire...">
             </form>
-            <div class="user-pill" data-email="jouariya@ismo.ma">
+            <div class="user-pill" data-email="<?php echo $email; ?>">
                 <div class="user-info">
                     <div class="user-name"><?php echo $nom . " " . $prenom; ?></div>
                     <div class="user-role"><?php echo $role; ?></div>
@@ -219,7 +223,7 @@ try {
         </main>
     </div>
     <script src="../../2-script/profile-menu.js"></script>
-    <script src="../../2-script/search.js"></script>
+    
     <script src="tableaubord.js"></script>
 </body>
 

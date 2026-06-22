@@ -23,7 +23,7 @@ if(!$badge){
 
 <h2>Modifier un badge</h2>
 
-<form action="update_badge.php" method="POST" enctype="multipart/form-data">
+<form action="modifier.php" method="POST" enctype="multipart/form-data">
 
     <input type="hidden" name="id_badge"
            value="<?= $badge['id_badge'] ?>">

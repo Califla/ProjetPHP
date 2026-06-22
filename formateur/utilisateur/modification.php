@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'formateur') {
+    header('Location: ../../pagelogin/connexion/index.php');
+    exit();
+}
 include("../../database/config.php");
 if (!isset($_GET['id'])) {
     header("Location: index.php?error=missing_id");

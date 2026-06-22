@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ../../pagelogin/connexion/index.php');
+    exit();
+}
 include('../../database/config.php');
 try{
     $req=$db->prepare("UPDATE aide SET `signal` = 0 WHERE id_demande = ?");

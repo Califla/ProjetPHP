@@ -20,9 +20,6 @@ try{
   $demandes_resolues= $db->prepare("SELECT d.id_demande, d.titre, d.description, d.tags, d.date_pub, u.nom AS mentor_nom, u.prenom AS mentor_prenom, r.note_mentor, r.commentaire, r.date_intervention FROM aide d JOIN propositions_aide p ON d.id_demande = p.id_demande AND p.status = 'acceptee' JOIN aide_effectuee r ON p.id_proposition = r.id_proposition JOIN utilisateurs u ON r.id_mentor = u.id_user WHERE d.id_user = ? AND d.status = 'resolu' ORDER BY r.date_intervention DESC");
   $demandes_resolues->execute([$id_user]);
   $demandes_resolues=$demandes_resolues->fetchAll(PDO::FETCH_ASSOC);
-  echo "<pre>";
-
-  echo "</pre>";
 }catch(PDOException $e){
   echo "Erreur :".$e->getMessage();
   exit();
@@ -79,12 +76,12 @@ $showModifier = false;
     </aside>
 
     <header class="header">
-      <form class="header-search" action="#" onsubmit="return false;">
+      <form class="header-search" action="../../search.php" method="GET">
         <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="7" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
-        <input id="globalSearch" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
+        <input name="q" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
       </form>
       <div class="user-pill" data-email="<?php echo $email; ?>">
         <div class="user-info">
@@ -353,6 +350,6 @@ $showModifier = false;
     });
   </script>
   <script src="../../2-script/profile-menu.js"></script>
-  <script src="../../2-script/search.js"></script>
+  
 </body>
 </html>

@@ -1,9 +1,21 @@
 <?php
 session_start();
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ../../pagelogin/connexion/index.php');
+    exit();
+}
 if (isset($_SESSION)) {
   extract($_SESSION);
 }
 include("../../database/config.php");
+
+$editBadge = null;
+$modifErrors = [];
+$modifOld = [];
+
+$showModal = false;
+$err = [];
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if (isset($_POST['enr'])) {
     extract($_POST);
@@ -34,9 +46,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
   }
 }
+
+if (isset($_GET['edit'])) {
+  $id = (int) $_GET['edit'];
+  $req = $db->prepare("SELECT * FROM badges WHERE id_badge = ?");
+  $req->execute([$id]);
+  $editBadge = $req->fetch(PDO::FETCH_ASSOC);
+}
+
+$modifErrors = $_GET['e'] ?? [];
+$modifOld = $_GET['old'] ?? [];
+
 $totalbadges= $db->query("SELECT COUNT(*) FROM badges")->fetchColumn();
 $totalattributes= $db->query("SELECT COUNT(*) FROM obtention_badges ")->fetchColumn();
-$showModal = isset($err) && !empty($err);
+$showModal = !empty($err);
+$showModalModif = (isset($_GET['edit']) && $editBadge) || !empty($modifErrors);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -191,14 +215,14 @@ $showModal = isset($err) && !empty($err);
     </aside>
 
     <header class="header">
-      <form class="header-search" action="#" onsubmit="return false;">
+      <form class="header-search" action="../../search.php" method="GET">
         <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="7" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
-        <input id="globalSearch" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
+        <input name="q" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
       </form>
-      <div class="user-pill" data-email="admin@ismo.ma">
+      <div class="user-pill" data-email="<?php echo $email; ?>">
         <div class="user-info">
           <div class="user-name"><?php echo $nom . " " . $prenom; ?></div>
           <div class="user-role"><?php echo $role ?></div>
@@ -228,7 +252,6 @@ $showModal = isset($err) && !empty($err);
         </div>
 
         <?php
-        include("../../database/config.php");
         $totalBadges = $db->query("SELECT COUNT(*) FROM badges")->fetchColumn();
         $totalAttrib = $db->query("SELECT COUNT(*) FROM obtention_badges")->fetchColumn();
         ?>
@@ -245,7 +268,6 @@ $showModal = isset($err) && !empty($err);
 
         <div class="badge-list">
           <?php
-          include("../../database/config.php");
           $aff = $db->prepare("SELECT * FROM badges");
           $aff->execute();
           $badges = $aff->fetchAll(PDO::FETCH_ASSOC);
@@ -258,8 +280,8 @@ $showModal = isset($err) && !empty($err);
                     <p>' . $b['points_requis'] . ' points requis</p>
                   </div>
                   <div class="badge-actions">
-                    <a href="edit_badge.php?id=' . $b['id_badge'] . '" class="icon-btn" aria-label="Modifier">✏️</a>
-                    <a href="delete_badge.php?id=' . $b['id_badge'] . '" class="icon-btn danger" aria-label="Supprimer" onclick="return confirm(\'Supprimer ce badge ?\')">🗑️</a>
+                    <a href="badges.php?edit=' . $b['id_badge'] . '" class="icon-btn" aria-label="Modifier">✏️</a>
+                    <a href="supprimer.php?id=' . $b['id_badge'] . '" class="icon-btn danger" aria-label="Supprimer" onclick="return confirm(\'Supprimer ce badge ?\')">🗑️</a>
                   </div>
                 </article>';
             }
@@ -300,6 +322,36 @@ $showModal = isset($err) && !empty($err);
     </div>
   </div>
 
+  <div class="modal-window<?php if ($showModalModif) echo ' show'; ?>" id="modalModif" onclick="if(event.target==this)fermerModal('modalModif')">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Modifier le badge</h2>
+        <button class="modal-close" onclick="fermerModal('modalModif')">&times;</button>
+      </div>
+      <form action="modifier.php" method="POST">
+        <input type="hidden" name="id_badge" value="<?= $editBadge['id_badge'] ?? ($modifOld['id_badge'] ?? '') ?>">
+        <div class="modal-body">
+          <label class="modal-label">Nom du badge</label>
+          <?php if (isset($modifErrors['nom'])) echo "<div class='err'>" . $modifErrors['nom'] . "</div>" ?>
+          <input class="modal-input" type="text" name="lenom" value="<?= htmlspecialchars($modifOld['lenom'] ?? ($editBadge['nom'] ?? '')) ?>" placeholder="Ex: Premier pas, Mentor actif...">
+
+          <label class="modal-label">Points requis</label>
+          <?php if (isset($modifErrors['points'])) echo "<div class='err'>" . $modifErrors['points'] . "</div>" ?>
+          <input class="modal-input" type="number" name="lpoints" value="<?= htmlspecialchars($modifOld['lpoints'] ?? ($editBadge['points_requis'] ?? '')) ?>" placeholder="Ex: 100">
+
+          <label class="modal-label">Icône</label>
+          <a href="https://emojidb.org/badge-emojis" target="_blank" class="icon-link">Trouver des icônes 🎯</a>
+          <?php if (isset($modifErrors['icone'])) echo "<div class='err'>" . $modifErrors['icone'] . "</div>" ?>
+          <input class="modal-input" type="text" name="licone" value="<?= htmlspecialchars($modifOld['licone'] ?? ($editBadge['icone'] ?? '')) ?>" placeholder="Ex: 🎯">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-cancel" onclick="fermerModal('modalModif')">Annuler</button>
+          <button type="submit" name="modif" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     function dismissToast() {
       var t = document.getElementById('toastMsg');
@@ -311,11 +363,11 @@ $showModal = isset($err) && !empty($err);
     function ouvrirModal(id) { document.getElementById(id).classList.add('show'); }
     function fermerModal(id) { document.getElementById(id).classList.remove('show'); }
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') fermerModal('modalAjout');
+      if (e.key === 'Escape') { fermerModal('modalAjout'); fermerModal('modalModif'); }
     });
   </script>
   <script src="../../2-script/profile-menu.js"></script>
-  <script src="../../2-script/search.js"></script>
+  
 </body>
 
 </html>
