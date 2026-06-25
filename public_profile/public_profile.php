@@ -1,14 +1,82 @@
+<?php
+session_start();
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+if ($id <= 0) {
+  header('Location: ../search.php');
+  exit;
+}
 
+include '../database/config.php';
+
+$stmt = $db->prepare("SELECT id_user, nom, prenom, email, role, filiere, photo, score, note_moyenne FROM utilisateurs WHERE id_user = ?");
+$stmt->execute([$id]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$user) {
+  echo "Utilisateur introuvable.";
+  exit;
+}
+
+$nom = $user['nom'];
+$prenom = $user['prenom'];
+$role = $user['role'];
+$filiere = $user['filiere'];
+$photo = $user['photo'];
+$score = $user['score'];
+$note_moyenne = $user['note_moyenne'];
+$initials = strtoupper(substr($nom, 0, 1) . substr($prenom, 0, 1));
+
+// stagiaire / mentor: validated competences + badges
+$competences = [];
+$badges = [];
+$aide_count = 0;
+
+if ($role === 'stagiaire' || $role === 'mentor') {
+  $stmt = $db->prepare("SELECT c.nom, vc.niveau, vc.date_validation FROM validation_competence vc JOIN competences c ON vc.id_competence = c.id_competence WHERE vc.id_user = ? AND vc.status = 'validee' ORDER BY vc.date_validation DESC");
+  $stmt->execute([$id]);
+  $competences = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  $stmt = $db->prepare("SELECT b.nom, b.icone, ob.date_obtention FROM obtention_badges ob JOIN badges b ON ob.id_badge = b.id_badge WHERE ob.id_user = ? ORDER BY ob.date_obtention DESC");
+  $stmt->execute([$id]);
+  $badges = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// mentor: aids given
+if ($role === 'mentor') {
+  $stmt = $db->prepare("SELECT COUNT(*) FROM aide_effectuee WHERE id_mentor = ?");
+  $stmt->execute([$id]);
+  $aide_count = intval($stmt->fetchColumn());
+}
+
+// formateur: confirmed competences + attributed badges
+$confirmed_competences = [];
+$attributed_badges = [];
+if ($role === 'formateur') {
+  $stmt = $db->prepare("SELECT c.nom, vc.niveau, vc.date_validation, u.nom AS unom, u.prenom AS uprenom FROM validation_competence vc JOIN competences c ON vc.id_competence = c.id_competence JOIN utilisateurs u ON vc.id_user = u.id_user WHERE vc.id_validateur = ? AND vc.status = 'validee' ORDER BY vc.date_validation DESC");
+  $stmt->execute([$id]);
+  $confirmed_competences = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  $stmt = $db->prepare("SELECT b.nom, b.icone, ob.date_obtention, u.nom AS unom, u.prenom AS uprenom FROM obtention_badges ob JOIN badges b ON ob.id_badge = b.id_badge JOIN utilisateurs u ON ob.id_user = u.id_user WHERE ob.confirmed_by = ? ORDER BY ob.date_obtention DESC");
+  $stmt->execute([$id]);
+  $attributed_badges = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// stats
+$comp_count = count($competences);
+$badge_count = count($badges);
+$confirmed_count = count($confirmed_competences);
+$attributed_count = count($attributed_badges);
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ISMO-SkillSwap – Profil public</title>
+  <title>ISMO-SkillSwap – Profil de <?= htmlspecialchars($nom . ' ' . $prenom) ?></title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="1-css/style.css" />
+  <link rel="stylesheet" href="../1-css/style.css" />
   <link rel="stylesheet" href="public_profile.css" />
 </head>
 <body>
@@ -16,252 +84,196 @@
     <aside class="sidebar">
       <div class="sidebar-logo"><span>ISMO-SkillSwap</span></div>
       <nav class="sidebar-nav">
-        <div class="nav-item" onclick="location.href='stagiaire/tableaubord/index.php'">
-          <span class="nav-icon">🏠</span><span>Tableau de bord</span>
-        </div>
-        <div class="nav-item" onclick="location.href='stagiaire/mes%20demandes/index.php'">
-          <span class="nav-icon">📋</span><span>Mes demandes</span>
-        </div>
-        <div class="nav-item" onclick="location.href='stagiaire/competences/index.php'">
-          <span class="nav-icon">🏷️</span><span>Compétences</span>
-        </div>
-        <div class="nav-item" onclick="location.href='stagiaire/badges/index.php'">
-          <span class="nav-icon">🎖️</span><span>Badges</span>
-        </div>
-        <div class="nav-item" onclick="location.href='stagiaire/passeport/index.php'">
-          <span class="nav-icon">👤</span><span>Passeport</span>
-        </div>
-        <div class="nav-item" onclick="location.href='stagiaire/marketplace/index.php'">
-          <span class="nav-icon">🛒</span><span>Marketplace</span>
+        <?php if (isset($_SESSION['role'])): ?>
+          <div class="nav-item" onclick="location.href='<?= $_SESSION['role'] === 'admin' ? '../admin/tableaubord/table.php' : ($_SESSION['role'] === 'formateur' ? '../formateur/tableaubord/tableaubord.php' : '../stagiaire/tableaubord/index.php') ?>'">
+            <span class="nav-icon">🏠</span><span>Tableau de bord</span>
+          </div>
+        <?php endif; ?>
+        <div class="nav-item" onclick="location.href='../search.php'">
+          <span class="nav-icon">🔍</span><span>Recherche</span>
         </div>
       </nav>
     </aside>
 
     <header class="header">
-      <button class="pub-back" onclick="history.back()" style="margin-right:12px;">← Retour</button>
-      <form class="header-search" action="#" onsubmit="return false;">
+      <button class="pub-back" onclick="history.back()">← Retour</button>
+      <form class="header-search" action="../search.php" method="GET">
         <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="7" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
-        <input id="globalSearch" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
+        <input class="header-search-input" type="search" name="q" placeholder="Rechercher un stagiaire...">
       </form>
       <div class="user-pill">
         <div class="user-info">
-          <div class="user-name">Visiteur</div>
-          <div class="user-role">Profil public</div>
+          <div class="user-name"><?= isset($_SESSION['nom']) ? htmlspecialchars($_SESSION['nom'] . ' ' . $_SESSION['prenom']) : 'Visiteur' ?></div>
+          <div class="user-role"><?= isset($_SESSION['role']) ? $_SESSION['role'] : 'Profil public' ?></div>
         </div>
-        <div class="user-avatar">?</div>
+        <div class="user-avatar"><?= isset($_SESSION['nom']) ? strtoupper(substr($_SESSION['nom'], 0, 1) . substr($_SESSION['prenom'], 0, 1)) : '?' ?></div>
       </div>
     </header>
 
     <main class="main">
-      <div class="pub-card" id="profileCard">
-        <div class="pub-avatar" id="pubAvatar">?</div>
+      <div class="pub-card">
+        <div class="pub-avatar">
+          <?php if ($photo): ?>
+            <img src="../pagelogin/photo/<?= htmlspecialchars($photo) ?>" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+          <?php else: ?>
+            <?= $initials ?>
+          <?php endif; ?>
+        </div>
         <div class="pub-info">
-          <h1 id="pubName">—</h1>
-          <div class="pub-role" id="pubRole">—</div>
-          <div class="pub-rating" id="pubRatingBlock">
-            <span class="stars" id="pubStars"></span>
-            <span class="score" id="pubScore"></span>
-            <span class="count" id="pubCount"></span>
+          <h1><?= htmlspecialchars($nom . ' ' . $prenom) ?></h1>
+          <div class="pub-role"><?= htmlspecialchars(ucfirst($role) . ($filiere ? ' — ' . $filiere : '')) ?></div>
+          <?php if ($role === 'mentor'): ?>
+          <div class="pub-rating">
+            <span class="stars"><?php if ($note_moyenne > 0): ?><?= str_repeat('★', min(5, intval($note_moyenne))) . str_repeat('☆', 5 - min(5, intval($note_moyenne))) ?><?php else: ?>☆☆☆☆☆<?php endif; ?></span>
+            <span class="score"><?= $note_moyenne > 0 ? number_format($note_moyenne, 1) : '—' ?></span>
           </div>
+          <?php endif; ?>
         </div>
       </div>
 
       <div class="pub-stats">
-        <div class="pub-stat">
-          <div class="val" id="stat1">—</div>
-          <div class="lbl" id="stat1Label">—</div>
-        </div>
-        <div class="pub-stat">
-          <div class="val" id="stat2">—</div>
-          <div class="lbl" id="stat2Label">—</div>
-        </div>
-        <div class="pub-stat">
-          <div class="val" id="stat3">—</div>
-          <div class="lbl" id="stat3Label">—</div>
-        </div>
+        <?php if ($role === 'stagiaire' || $role === 'mentor'): ?>
+          <div class="pub-stat">
+            <div class="val"><?= $comp_count ?></div>
+            <div class="lbl">Compétences validées</div>
+          </div>
+          <div class="pub-stat">
+            <div class="val"><?= $badge_count ?></div>
+            <div class="lbl">Badges obtenus</div>
+          </div>
+          <div class="pub-stat">
+            <div class="val"><?= $role === 'mentor' ? $aide_count : $score ?></div>
+            <div class="lbl"><?= $role === 'mentor' ? 'Aides effectuées' : 'Score' ?></div>
+          </div>
+        <?php elseif ($role === 'formateur'): ?>
+          <div class="pub-stat">
+            <div class="val"><?= $confirmed_count ?></div>
+            <div class="lbl">Compétences confirmées</div>
+          </div>
+          <div class="pub-stat">
+            <div class="val"><?= $attributed_count ?></div>
+            <div class="lbl">Badges attribués</div>
+          </div>
+          <div class="pub-stat">
+            <div class="val"><?= $score ?></div>
+            <div class="lbl">Score</div>
+          </div>
+        <?php elseif ($role === 'admin'): ?>
+          <div class="pub-stat">
+            <div class="val"><?= $score ?></div>
+            <div class="lbl">Score</div>
+          </div>
+          <div class="pub-stat">
+            <div class="val">Admin</div>
+            <div class="lbl">Rôle</div>
+          </div>
+          <div class="pub-stat">
+            <div class="val">—</div>
+            <div class="lbl">Plateforme</div>
+          </div>
+        <?php endif; ?>
       </div>
 
-      <div class="pub-grid" id="pubBottom">
-    </main>
-  </div>
-
-  <script src="2-script/profile-menu.js"></script>
-  <script src="2-script/search.js"></script>
-  <script>
-    const profiles = {
-      "Youssef Benali": {
-        role: "Mentor - Développement Digital",
-        type: "mentor",
-        initials: "YB",
-        stat1: 12, stat1Label: "Aides effectuées",
-        stat2: 5, stat2Label: "Compétences",
-        stat3: 4, stat3Label: "Badges"
-      },
-      "Jean Martin": {
-        role: "Stagiaire CYBERSEC",
-        type: "stagiaire",
-        initials: "JM",
-        stat1: 3, stat1Label: "Aides reçues",
-        stat2: 3, stat2Label: "Compétences",
-        stat3: 2, stat3Label: "Badges"
-      },
-      "Sophie Bernard": {
-        role: "Stagiaire DEV",
-        type: "stagiaire",
-        initials: "SB",
-        stat1: 5, stat1Label: "Aides reçues",
-        stat2: 4, stat2Label: "Compétences",
-        stat3: 3, stat3Label: "Badges"
-      },
-      "Alex Chen": {
-        role: "Stagiaire DATA",
-        type: "stagiaire",
-        initials: "AC",
-        stat1: 2, stat1Label: "Aides reçues",
-        stat2: 3, stat2Label: "Compétences",
-        stat3: 1, stat3Label: "Badges"
-      },
-      "Thomas Lefevre": {
-        role: "Stagiaire CYBERSEC",
-        type: "stagiaire",
-        initials: "TL",
-        stat1: 4, stat1Label: "Aides reçues",
-        stat2: 4, stat2Label: "Compétences",
-        stat3: 2, stat3Label: "Badges"
-      },
-      "Ahmed Idrissi": {
-        role: "Stagiaire DEV 101",
-        type: "stagiaire",
-        initials: "AI",
-        stat1: 6, stat1Label: "Aides reçues",
-        stat2: 5, stat2Label: "Compétences",
-        stat3: 3, stat3Label: "Badges"
-      },
-      "Marie Dupont": {
-        role: "Stagiaire DEV",
-        type: "stagiaire",
-        initials: "MD",
-        stat1: 3, stat1Label: "Aides reçues",
-        stat2: 3, stat2Label: "Compétences",
-        stat3: 2, stat3Label: "Badges"
-      },
-      "Lafhal Jouariya": {
-        role: "Formateur",
-        type: "formateur",
-        initials: "LJ",
-        stat1: 24, stat1Label: "Stagiaires encadrés",
-        stat2: 42, stat2Label: "Compétences validées",
-        stat3: 18, stat3Label: "Badges attribués"
-      }
-    };
-
-    const params = new URLSearchParams(window.location.search);
-    const name = params.get('name') || 'Youssef Benali';
-    const profile = profiles[name] || { role: 'Utilisateur', type: '', initials: '?', stat1: '—', stat1Label: '—', stat2: '—', stat2Label: '—', stat3: '—', stat3Label: '—' };
-
-    document.getElementById('pubName').textContent = name;
-    document.getElementById('pubAvatar').textContent = profile.initials;
-    document.getElementById('pubRole').textContent = profile.role;
-    document.getElementById('stat1').textContent = profile.stat1;
-    document.getElementById('stat1Label').textContent = profile.stat1Label;
-    document.getElementById('stat2').textContent = profile.stat2;
-    document.getElementById('stat2Label').textContent = profile.stat2Label;
-    document.getElementById('stat3').textContent = profile.stat3;
-    document.getElementById('stat3Label').textContent = profile.stat3Label;
-
-    const isMentor = profile.type === 'mentor';
-    const ratingBlock = document.getElementById('pubRatingBlock');
-
-    if (isMentor) {
-      const ratings = JSON.parse(localStorage.getItem('mentorRatings') || '{}');
-      const list = ratings[name];
-      if (list && list.length > 0) {
-        const sum = list.reduce((a, r) => a + r.rating, 0);
-        const avg = (sum / list.length).toFixed(1);
-        const full = Math.round(parseFloat(avg));
-        document.getElementById('pubStars').textContent = '★'.repeat(full) + '☆'.repeat(5 - full);
-        document.getElementById('pubScore').textContent = avg;
-        document.getElementById('pubCount').textContent = '(' + list.length + ' avis)';
-      } else {
-        document.getElementById('pubStars').textContent = '☆☆☆☆☆';
-        document.getElementById('pubScore').textContent = '—';
-        document.getElementById('pubCount').textContent = '(aucun avis)';
-      }
-    } else {
-      ratingBlock.style.display = 'none';
-    }
-
-    const bottomEl = document.getElementById('pubBottom');
-    if (profile.type === 'formateur') {
-      bottomEl.innerHTML = `
-        <div class="pub-card-section">
-          <div class="pub-card-title">Modules enseignés</div>
-          <div class="comp-list">
-            <div class="comp-item"><span>Développement Web</span><span class="comp-level">DEV 101</span></div>
-            <div class="comp-item"><span>Algorithmique avancée</span><span class="comp-level">DEV 201</span></div>
-            <div class="comp-item"><span>Cybersécurité</span><span class="comp-level">SEC 101</span></div>
-            <div class="comp-item"><span>Base de données</span><span class="comp-level">DATA 101</span></div>
-            <div class="comp-item"><span>Projet tutoré</span><span class="comp-level">DEV 301</span></div>
-          </div>
-        </div>
-        <div class="pub-card-section">
-          <div class="pub-card-title">Dernières validations</div>
-          <div class="badge-list">
-            <div class="badge-item">
-              <div class="icon">✅</div>
-              <div><div class="name">TypeScript</div><div class="date">Ahmed Idrissi - 26/04</div></div>
-            </div>
-            <div class="badge-item">
-              <div class="icon">✅</div>
-              <div><div class="name">React Hooks</div><div class="date">Marie Dupont - 24/04</div></div>
-            </div>
-            <div class="badge-item">
-              <div class="icon">✅</div>
-              <div><div class="name">Python avancé</div><div class="date">Sophie Bernard - 22/04</div></div>
-            </div>
-            <div class="badge-item">
-              <div class="icon">✅</div>
-              <div><div class="name">Git & GitHub</div><div class="date">Jean Martin - 20/04</div></div>
-            </div>
-          </div>
-        </div>`;
-    } else {
-      bottomEl.innerHTML = `
+      <?php if ($role === 'stagiaire' || $role === 'mentor'): ?>
+      <div class="pub-grid">
         <div class="pub-card-section">
           <div class="pub-card-title">Compétences validées</div>
+          <?php if (count($competences) > 0): ?>
           <div class="comp-list">
-            <div class="comp-item"><span>React</span><span class="comp-level">Intermédiaire</span></div>
-            <div class="comp-item"><span>JavaScript ES6+</span><span class="comp-level">Expert</span></div>
-            <div class="comp-item"><span>Tailwind CSS</span><span class="comp-level">Intermédiaire</span></div>
-            <div class="comp-item"><span>Git &amp; GitHub</span><span class="comp-level">Intermédiaire</span></div>
-            <div class="comp-item"><span>Docker</span><span class="comp-level">Débutant</span></div>
+            <?php foreach ($competences as $c): ?>
+              <div class="comp-item">
+                <span><?= htmlspecialchars($c['nom']) ?></span>
+                <span class="comp-level"><?= htmlspecialchars(ucfirst($c['niveau'])) ?></span>
+              </div>
+            <?php endforeach; ?>
           </div>
+          <?php else: ?>
+          <p style="color:#94a3b8;font-size:0.9rem;">Aucune compétence validée pour le moment.</p>
+          <?php endif; ?>
         </div>
         <div class="pub-card-section">
           <div class="pub-card-title">Badges obtenus</div>
+          <?php if (count($badges) > 0): ?>
           <div class="badge-list">
-            <div class="badge-item">
-              <div class="icon">🎯</div>
-              <div><div class="name">Premier pas</div><div class="date">15/01/2026</div></div>
-            </div>
-            <div class="badge-item">
-              <div class="icon">⭐</div>
-              <div><div class="name">Mentor actif</div><div class="date">20/02/2026</div></div>
-            </div>
-            <div class="badge-item">
-              <div class="icon">⚛️</div>
-              <div><div class="name">Expert React</div><div class="date">10/03/2026</div></div>
-            </div>
-            <div class="badge-item">
-              <div class="icon">🤝</div>
-              <div><div class="name">Collaborateur</div><div class="date">01/04/2026</div></div>
-            </div>
+            <?php foreach ($badges as $b): ?>
+              <div class="badge-item">
+                <div class="icon"><?= htmlspecialchars($b['icone'] ?? '🎖️') ?></div>
+                <div>
+                  <div class="name"><?= htmlspecialchars($b['nom']) ?></div>
+                  <div class="date"><?= $b['date_obtention'] ? date('d/m/Y', strtotime($b['date_obtention'])) : '—' ?></div>
+                </div>
+              </div>
+            <?php endforeach; ?>
           </div>
-        </div>`;
-    }
-  </script>
+          <?php else: ?>
+          <p style="color:#94a3b8;font-size:0.9rem;">Aucun badge obtenu pour le moment.</p>
+          <?php endif; ?>
+        </div>
+      </div>
+      <?php endif; ?>
+
+      <?php if ($role === 'mentor' && $aide_count > 0): ?>
+      <div class="pub-card-section" style="margin-top:24px;">
+        <div class="pub-card-title">Aides effectuées</div>
+        <p style="color:#475569;">Ce mentor a effectué <strong><?= $aide_count ?></strong> intervention<?= $aide_count > 1 ? 's' : '' ?> d'aide.</p>
+      </div>
+      <?php endif; ?>
+
+      <?php if ($role === 'formateur'): ?>
+      <div class="pub-grid">
+        <div class="pub-card-section">
+          <div class="pub-card-title">Compétences confirmées</div>
+          <?php if (count($confirmed_competences) > 0): ?>
+          <div class="comp-list">
+            <?php foreach ($confirmed_competences as $c): ?>
+              <div class="comp-item">
+                <span><?= htmlspecialchars($c['nom']) ?> <span style="color:#94a3b8;font-weight:400;font-size:0.85rem;">— <?= htmlspecialchars($c['unom'] . ' ' . $c['uprenom']) ?></span></span>
+                <span class="comp-level"><?= htmlspecialchars(ucfirst($c['niveau'])) ?></span>
+              </div>
+            <?php endforeach; ?>
+          </div>
+          <?php else: ?>
+          <p style="color:#94a3b8;font-size:0.9rem;">Aucune compétence confirmée pour le moment.</p>
+          <?php endif; ?>
+        </div>
+        <div class="pub-card-section">
+          <div class="pub-card-title">Badges attribués</div>
+          <?php if (count($attributed_badges) > 0): ?>
+          <div class="badge-list">
+            <?php foreach ($attributed_badges as $b): ?>
+              <div class="badge-item">
+                <div class="icon"><?= htmlspecialchars($b['icone'] ?? '🎖️') ?></div>
+                <div>
+                  <div class="name"><?= htmlspecialchars($b['nom']) ?></div>
+                  <div class="date"><?= htmlspecialchars($b['unom'] . ' ' . $b['uprenom']) ?> — <?= $b['date_obtention'] ? date('d/m/Y', strtotime($b['date_obtention'])) : '—' ?></div>
+                </div>
+              </div>
+            <?php endforeach; ?>
+          </div>
+          <?php else: ?>
+          <p style="color:#94a3b8;font-size:0.9rem;">Aucun badge attribué pour le moment.</p>
+          <?php endif; ?>
+        </div>
+      </div>
+      <?php endif; ?>
+
+      <?php if ($role === 'admin'): ?>
+      <div class="pub-grid">
+        <div class="pub-card-section">
+          <div class="pub-card-title">À propos</div>
+          <p style="color:#475569;">Administrateur de la plateforme ISMO-SkillSwap.</p>
+        </div>
+        <div class="pub-card-section">
+          <div class="pub-card-title">Email</div>
+          <p style="color:#475569;"><?= htmlspecialchars($user['email']) ?></p>
+        </div>
+      </div>
+      <?php endif; ?>
+    </main>
+  </div>
+  <script src="../2-script/profile-menu.js"></script>
 </body>
 </html>
