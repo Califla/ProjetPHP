@@ -169,13 +169,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pub'])) {
         include("../../database/config.php");
         try {
           $searchCond = '';
+          $filiereCond = '';
           $params = [];
           if (!empty($_GET['search'])) {
             $searchCond = " AND (a.titre LIKE ? OR a.description LIKE ? OR a.tags LIKE ?)";
             $s = '%' . $_GET['search'] . '%';
             $params = [$s, $s, $s];
           }
-          $sql = "SELECT a.*, u.nom, u.prenom, u.filiere FROM aide a JOIN utilisateurs u ON a.id_user = u.id_user WHERE a.status = 'ouvert'" . $searchCond . " ORDER BY a.date_pub DESC";
+          $filiereList = ['DEV', 'CYBERSEC', 'DATA'];
+          if (!empty($_GET['filiere']) && $_GET['filiere'] !== 'all' && in_array($_GET['filiere'], $filiereList)) {
+            $filiereCond = " AND u.filiere = ?";
+            $params[] = $_GET['filiere'];
+          }
+          $sql = "SELECT a.*, u.nom, u.prenom, u.filiere FROM aide a JOIN utilisateurs u ON a.id_user = u.id_user WHERE a.status = 'ouvert'" . $searchCond . $filiereCond . " ORDER BY a.date_pub DESC";
           $stmt = $db->prepare($sql);
           $stmt->execute($params);
           $demandes = $stmt->fetchAll();

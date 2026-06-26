@@ -8,9 +8,36 @@ if (isset($_SESSION)) {
   extract($_SESSION);
 }
 include("../../database/config.php");
+
+// filters
+$searchFilter = isset($_GET['q']) ? trim($_GET['q']) : '';
+$roleFilter = isset($_GET['role']) ? $_GET['role'] : '';
+$statutFilter = isset($_GET['statut']) ? $_GET['statut'] : '';
+$rolesAutorises = ['', 'stagiaire', 'mentor'];
+$statutsAutorises = ['', 'actif', 'en_attente', 'suspendu'];
+if (!in_array($roleFilter, $rolesAutorises)) $roleFilter = '';
+if (!in_array($statutFilter, $statutsAutorises)) $statutFilter = '';
+
 try {
-  $utr = $db->query("SELECT * FROM utilisateurs WHERE role='stagiaire' OR role='mentor'");
-  $utr->execute();
+  $conditions = ["(`statut`='actif' and role='stagiaire' OR role='mentor' )"];
+  $params = [];
+  if ($roleFilter) {
+    $conditions[] = "role = ?";
+    $params[] = $roleFilter;
+  }
+  if ($statutFilter) {
+    $conditions[] = "statut = ?";
+    $params[] = $statutFilter;
+  }
+  if ($searchFilter) {
+    $conditions[] = "(CONCAT(nom, ' ', prenom) LIKE ? OR email LIKE ?)";
+    $s = '%' . $searchFilter . '%';
+    $params[] = $s;
+    $params[] = $s;
+  }
+  $sql = "SELECT * FROM utilisateurs WHERE " . implode(' AND ', $conditions) . " ORDER BY date_inscription DESC";
+  $utr = $db->prepare($sql);
+  $utr->execute($params);
   $utilisateurs = $utr->fetchAll(PDO::FETCH_ASSOC);
 
   $totalUsers = $db->query("SELECT COUNT(*) FROM utilisateurs")->fetchColumn();
@@ -118,31 +145,33 @@ try {
         </div>
 
         <section class="table-card">
+          <form method="GET" action="index.php">
           <div class="table-header">
             <div class="search-wrapper">
               <span class="search-icon">🔍</span>
-              <input type="search" placeholder="Rechercher par nom, email..." aria-label="Recherche utilisateurs" />
+              <input name="q" type="search" placeholder="Rechercher par nom, email..." aria-label="Recherche utilisateurs" value="<?= htmlspecialchars($searchFilter) ?>" />
             </div>
             <div class="filter-row">
               <label>
                 <span class="visually-hidden">Filtrer par rôle</span>
-                <select>
-                  <option>Tous les rôles</option>
-                  <option>Stagiaire</option>
-                  <option>Mentor</option>
+                <select name="role" onchange="this.form.submit()">
+                  <option value="">Tous les rôles</option>
+                  <option value="stagiaire" <?= $roleFilter === 'stagiaire' ? 'selected' : '' ?>>Stagiaire</option>
+                  <option value="mentor" <?= $roleFilter === 'mentor' ? 'selected' : '' ?>>Mentor</option>
                 </select>
               </label>
               <label>
                 <span class="visually-hidden">Filtrer par statut</span>
-                <select>
-                  <option>Tous les statuts</option>
-                  <option>Actif</option>
-                  <option>En attente</option>
-                  <option>Suspendu</option>
+                <select name="statut" onchange="this.form.submit()">
+                  <option value="">Tous les statuts</option>
+                  <option value="actif" <?= $statutFilter === 'actif' ? 'selected' : '' ?>>Actif</option>
+                  <option value="en_attente" <?= $statutFilter === 'en_attente' ? 'selected' : '' ?>>En attente</option>
+                  <option value="suspendu" <?= $statutFilter === 'suspendu' ? 'selected' : '' ?>>Suspendu</option>
                 </select>
               </label>
             </div>
           </div>
+          </form>
 
           <div class="table-responsive">
             <table>

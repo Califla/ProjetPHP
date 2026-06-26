@@ -13,7 +13,6 @@ try {
     $competencesEnAttente = $db->query("SELECT COUNT(*) FROM validation_competence WHERE status='en_attente'")->fetchColumn();
     $aidesEchangees = $db->query("SELECT COUNT(*) FROM aide_effectuee")->fetchColumn();
     $aidesSemaine = $db->query("SELECT COUNT(*) FROM aide_effectuee WHERE date_intervention >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)")->fetchColumn();
-    $noteMoyenne = $db->query("SELECT COALESCE(ROUND(AVG(note_moyenne),1),0) FROM utilisateurs WHERE role='stagiaire'")->fetchColumn();
 
     $competencesAValider = $db->query("SELECT vc.*, u.nom, u.prenom, c.nom AS nom_competence, vc.niveau FROM validation_competence vc JOIN utilisateurs u ON vc.id_user = u.id_user JOIN competences c ON vc.id_competence = c.id_competence WHERE vc.status='en_attente' ORDER BY vc.date_demande DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
 
@@ -126,15 +125,6 @@ try {
                     <svg class="card-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="2">
                         <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-                    </svg>
-                </div>
-                <div class="stat-card">
-                    <h3>Note moyenne</h3>
-                    <div class="val"><?php echo $noteMoyenne; ?></div>
-                    <svg class="card-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2">
-                        <polygon
-                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                     </svg>
                 </div>
             </div>

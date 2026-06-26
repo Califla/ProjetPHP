@@ -8,6 +8,7 @@ if (isset($_SESSION)) {
   extract($_SESSION);
 }
 
+include("../../database/config.php");
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if (isset($_POST['enr'])) {
@@ -18,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!isset($lacategorie) || empty($lacategorie))
       $err["categorie"] = "la categorie est obligatoire";
     if (empty($err)) {
-      include("../../database/config.php");
       $lenom = htmlspecialchars(trim($lenom));
       $lacategorie = htmlspecialchars(trim($lacategorie));
       try {
@@ -58,6 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
   }
 }
+
+$searchFilter = isset($_GET['q']) ? trim($_GET['q']) : '';
+$catFilter = isset($_GET['categorie']) ? $_GET['categorie'] : '';
+$catWhitelist = ['', 'Frontend', 'Backend', 'DevOps', 'Cybersécurité', 'Base de données'];
+if (!in_array($catFilter, $catWhitelist)) $catFilter = '';
 
 $editCompetence = null;
 if (isset($_GET['edit'])) {
@@ -156,25 +161,26 @@ $showModalModif = $showModalModif || ($editCompetence && !isset($_POST['modif'])
             compétence</a>
         </div>
 
+        <form method="GET" action="compe.php" style="display:contents;">
         <div class="search-panel">
           <div class="search-box">
             <span class="search-icon">🔍</span>
-            <input type="search" placeholder="Rechercher une compétence..." aria-label="Recherche compétence" />
+            <input name="q" type="search" placeholder="Rechercher une compétence..." aria-label="Recherche compétence" value="<?= htmlspecialchars($searchFilter) ?>" />
           </div>
           <div class="select-box">
-            <select aria-label="Toutes les catégories">
-              <option>Toutes les catégories</option>
-              <option>Frontend</option>
-              <option>Backend</option>
-              <option>DevOps</option>
-              <option>Cybersécurité</option>
-              <option>Base de données</option>
+            <select name="categorie" onchange="this.form.submit()" aria-label="Toutes les catégories">
+              <option value="">Toutes les catégories</option>
+              <option value="Frontend" <?= $catFilter === 'Frontend' ? 'selected' : '' ?>>Frontend</option>
+              <option value="Backend" <?= $catFilter === 'Backend' ? 'selected' : '' ?>>Backend</option>
+              <option value="DevOps" <?= $catFilter === 'DevOps' ? 'selected' : '' ?>>DevOps</option>
+              <option value="Cybersécurité" <?= $catFilter === 'Cybersécurité' ? 'selected' : '' ?>>Cybersécurité</option>
+              <option value="Base de données" <?= $catFilter === 'Base de données' ? 'selected' : '' ?>>Base de données</option>
             </select>
           </div>
         </div>
+        </form>
 
         <?php
-        include("../../database/config.php");
         $catList = ['Frontend', 'Backend', 'DevOps', 'Cybersécurité', 'Base de données'];
         $catReq = $db->query("SELECT categorie, COUNT(*) AS nb FROM competences GROUP BY categorie");
         $catCounts = [];
@@ -192,8 +198,19 @@ $showModalModif = $showModalModif || ($editCompetence && !isset($_POST['modif'])
         </div>
         <div class="cards-grid">
           <?php
-          $aff = $db->prepare("SELECT * FROM competences");
-          $aff->execute();
+          $affSql = "SELECT * FROM competences WHERE 1=1";
+          $affParams = [];
+          if ($searchFilter) {
+            $affSql .= " AND nom LIKE ?";
+            $affParams[] = '%' . $searchFilter . '%';
+          }
+          if ($catFilter) {
+            $affSql .= " AND categorie = ?";
+            $affParams[] = $catFilter;
+          }
+          $affSql .= " ORDER BY nom ASC";
+          $aff = $db->prepare($affSql);
+          $aff->execute($affParams);
           $competences = $aff->fetchAll(PDO::FETCH_ASSOC);
           if (count($competences) > 0) {
             foreach ($competences as $c) {

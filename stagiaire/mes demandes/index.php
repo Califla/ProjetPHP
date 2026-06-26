@@ -16,7 +16,6 @@ try{
   $pro->execute([$id_user]);
   $pro=$pro->fetchAll(PDO::FETCH_ASSOC);
 
-  #aporter les demandes résolues insi que le nom et prenom du mentor qui a résolu la demande et la note donnée par le stagiaire et la date de résolution
   $demandes_resolues= $db->prepare("SELECT d.id_demande, d.titre, d.description, d.tags, d.date_pub, u.nom AS mentor_nom, u.prenom AS mentor_prenom, r.note_mentor, r.commentaire, r.date_intervention FROM aide d JOIN propositions_aide p ON d.id_demande = p.id_demande AND p.status = 'acceptee' JOIN aide_effectuee r ON p.id_proposition = r.id_proposition JOIN utilisateurs u ON r.id_mentor = u.id_user WHERE d.id_user = ? AND d.status = 'resolu' ORDER BY r.date_intervention DESC");
   $demandes_resolues->execute([$id_user]);
   $demandes_resolues=$demandes_resolues->fetchAll(PDO::FETCH_ASSOC);
@@ -26,6 +25,11 @@ try{
 }
 }
 $showModifier = false;
+
+$searchFilter = isset($_GET['q']) ? trim($_GET['q']) : '';
+$statusFilter = isset($_GET['status']) ? $_GET['status'] : '';
+$statusWhitelist = ['', 'ouvert', 'resolu', 'ferme'];
+if (!in_array($statusFilter, $statusWhitelist)) $statusFilter = '';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -110,25 +114,46 @@ $showModifier = false;
         <div class="alert alert-error"><?= htmlspecialchars($_GET['error']) ?></div>
       <?php endif; ?>
 
+      <form method="GET" action="index.php" style="display:contents;">
       <section class="controls-row">
         <div class="control-group search-group">
           <svg class="control-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input id="searchInput" type="search" placeholder="Rechercher dans mes demandes..." />
+          <input name="q" type="search" placeholder="Rechercher dans mes demandes..." value="<?= htmlspecialchars($searchFilter) ?>" />
         </div>
         <div class="control-group right-group">
-          <select id="statusSelect">
-            <option value="all">Tous les statuts</option>
-            <option value="ouvert">Ouvert</option>
-            <option value="resolu">Résolu</option>
-            <option value="ferme">Fermé</option>
+          <select name="status" onchange="this.form.submit()">
+            <option value="">Tous les statuts</option>
+            <option value="ouvert" <?= $statusFilter === 'ouvert' ? 'selected' : '' ?>>Ouvert</option>
+            <option value="resolu" <?= $statusFilter === 'resolu' ? 'selected' : '' ?>>Résolu</option>
+            <option value="ferme" <?= $statusFilter === 'ferme' ? 'selected' : '' ?>>Fermé</option>
           </select>
-          <button class="filter-btn" id="filterBtn">
+          <button type="submit" class="filter-btn" id="filterBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
-            Filtres
+            Filtrer
           </button>
         </div>
       </section>
+      </form>
+
+      <?php
+      $aides_filtrees = $aides;
+      if ($searchFilter) {
+        $aides_filtrees = array_filter($aides_filtrees, function($d) use ($searchFilter) {
+          $s = mb_strtolower($searchFilter);
+          return mb_strpos(mb_strtolower($d['titre']), $s) !== false
+            || mb_strpos(mb_strtolower($d['description'] ?? ''), $s) !== false
+            || mb_strpos(mb_strtolower($d['tags'] ?? ''), $s) !== false;
+        });
+      }
+      if ($statusFilter === 'resolu' || $statusFilter === 'ferme') {
+        $aides_filtrees = [];
+      } elseif ($statusFilter === 'ouvert') {
+        $aides_filtrees = array_filter($aides_filtrees, function($d) use ($statusFilter) {
+          return $d['status'] === $statusFilter || $d['status'] === 'en_coure';
+        });
+      }
+      ?>
 
       <div class="section-divider">
         <span class="section-divider-icon">📋</span>
@@ -137,10 +162,10 @@ $showModifier = false;
       </div>
 
       <div class="demandes-list" id="demandesList">
-        <?php if (count($aides) === 0): ?>
+        <?php if (count($aides_filtrees) === 0): ?>
           <p class="empty-state">Aucune demande d'aide trouvée</p>
         <?php endif; ?>
-        <?php foreach ($aides as $d): ?>
+        <?php foreach ($aides_filtrees as $d): ?>
         <article class="demande-card" data-id_demande="<?= $d['id_demande'] ?>" data-titre="<?= htmlspecialchars($d['titre']) ?>" data-description="<?= htmlspecialchars($d['description']) ?>" data-tags="<?= htmlspecialchars($d['tags']) ?>">
           <div class="card-header">
             <div>
@@ -197,6 +222,21 @@ $showModifier = false;
         <?php endforeach ?>
       </div>
 
+      <?php
+      $resolues_filtrees = $demandes_resolues;
+      if ($searchFilter) {
+        $resolues_filtrees = array_filter($resolues_filtrees, function($d) use ($searchFilter) {
+          $s = mb_strtolower($searchFilter);
+          return mb_strpos(mb_strtolower($d['titre']), $s) !== false
+            || mb_strpos(mb_strtolower($d['description'] ?? ''), $s) !== false
+            || mb_strpos(mb_strtolower($d['tags'] ?? ''), $s) !== false;
+        });
+      }
+      if ($statusFilter === 'ouvert') {
+        $resolues_filtrees = [];
+      }
+      ?>
+
       <div class="section-divider">
         <span class="section-divider-icon">✅</span>
         <h2 class="section-divider-title">Demandes résolues</h2>
@@ -204,8 +244,8 @@ $showModifier = false;
       </div>
 
       <div class="demandes-resolues" id="demandesResolues">
-        <?php if (count($demandes_resolues) > 0): ?>
-          <?php foreach ($demandes_resolues as $resolue): ?>
+        <?php if (count($resolues_filtrees) > 0): ?>
+          <?php foreach ($resolues_filtrees as $resolue): ?>
             <?php
               $date_pub = new DateTime($resolue['date_pub']);
               $date_intervention = new DateTime($resolue['date_intervention']);

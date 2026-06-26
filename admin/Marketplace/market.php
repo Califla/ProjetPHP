@@ -161,7 +161,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php
         include("../../database/config.php");
         try {
-          $stmt = $db->query("SELECT a.*, u.nom, u.prenom, u.filiere FROM aide a JOIN utilisateurs u ON a.id_user = u.id_user ORDER BY a.date_pub DESC");
+          $searchCond = '';
+          $filiereCond = '';
+          $params = [];
+          if (!empty($_GET['search'])) {
+            $searchCond = " AND (a.titre LIKE ? OR a.description LIKE ? OR a.tags LIKE ?)";
+            $s = '%' . $_GET['search'] . '%';
+            $params = [$s, $s, $s];
+          }
+          $filiereList = ['DEV', 'CYBERSEC', 'DATA'];
+          if (!empty($_GET['filiere']) && $_GET['filiere'] !== 'all' && in_array($_GET['filiere'], $filiereList)) {
+            $filiereCond = " AND u.filiere = ?";
+            $params[] = $_GET['filiere'];
+          }
+          $sql = "SELECT a.*, u.nom, u.prenom, u.filiere FROM aide a JOIN utilisateurs u ON a.id_user = u.id_user WHERE 1=1" . $searchCond . $filiereCond . " ORDER BY a.date_pub DESC";
+          $stmt = $db->prepare($sql);
+          $stmt->execute($params);
           $demandes = $stmt->fetchAll();
         } catch (PDOException $e) {
           echo "Erreur: " . $e->getMessage();

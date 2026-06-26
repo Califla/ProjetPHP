@@ -16,7 +16,6 @@ try {
     $total_formateurs = $db->query("SELECT COUNT(*) FROM utilisateurs WHERE role = 'formateur'")->fetchColumn();
     $actifs = $db->query("SELECT COUNT(*) FROM utilisateurs WHERE statut = 'actif'")->fetchColumn();
 
-    # Compétences les plus demandées
     $req_comp = $db->prepare("SELECT c.nom, COUNT(v.id_competence) AS total
         FROM validation_competence v
         JOIN competences c ON v.id_competence = c.id_competence
@@ -26,14 +25,12 @@ try {
     $max_comp = count($competences) > 0 ? max(array_column($competences, 'total')) : 1;
     $bar_colors = ['#2e6fca', '#16a34a', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
 
-    # Activité par filière
     $req_filiere = $db->prepare("SELECT filiere, COUNT(*) AS total FROM utilisateurs WHERE filiere IS NOT NULL AND filiere != '' GROUP BY filiere");
     $req_filiere->execute();
     $filieres = $req_filiere->fetchAll(PDO::FETCH_ASSOC);
     $total_filieres = array_sum(array_column($filieres, 'total'));
     $filiere_colors = ['#2e6fca', '#16a34a', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#e11d48'];
 
-    # Évolution mensuelle (12 derniers mois)
     $req_evo = $db->prepare("SELECT DATE_FORMAT(date_pub, '%Y-%m') AS mois, COUNT(*) AS total
         FROM aide WHERE date_pub >= NOW() - INTERVAL 12 MONTH
         GROUP BY mois ORDER BY mois ASC");
@@ -41,7 +38,6 @@ try {
     $evolutions = $req_evo->fetchAll(PDO::FETCH_ASSOC);
     $max_evo = count($evolutions) > 0 ? max(array_column($evolutions, 'total')) : 1;
 
-    # Top mentors
     $req_mentors = $db->prepare("SELECT u.id_user, u.nom, u.prenom, COUNT(ae.id_proposition) AS nb_aides, ROUND(AVG(ae.note_mentor), 1) AS note_moyenne
         FROM aide_effectuee ae
         JOIN utilisateurs u ON ae.id_mentor = u.id_user

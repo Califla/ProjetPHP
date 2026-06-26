@@ -26,7 +26,6 @@ $score = $user['score'];
 $note_moyenne = $user['note_moyenne'];
 $initials = strtoupper(substr($nom, 0, 1) . substr($prenom, 0, 1));
 
-// stagiaire / mentor: validated competences + badges
 $competences = [];
 $badges = [];
 $aide_count = 0;
@@ -41,14 +40,12 @@ if ($role === 'stagiaire' || $role === 'mentor') {
   $badges = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// mentor: aids given
 if ($role === 'mentor') {
   $stmt = $db->prepare("SELECT COUNT(*) FROM aide_effectuee WHERE id_mentor = ?");
   $stmt->execute([$id]);
   $aide_count = intval($stmt->fetchColumn());
 }
 
-// formateur: confirmed competences + attributed badges
 $confirmed_competences = [];
 $attributed_badges = [];
 if ($role === 'formateur') {
@@ -61,7 +58,6 @@ if ($role === 'formateur') {
   $attributed_badges = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// stats
 $comp_count = count($competences);
 $badge_count = count($badges);
 $confirmed_count = count($confirmed_competences);
