@@ -299,7 +299,7 @@ $showModalModif = (isset($_GET['edit']) && $editBadge) || !empty($modifErrors);
         <h2>Ajouter un badge</h2>
         <button class="modal-close" onclick="fermerModal('modalAjout')">&times;</button>
       </div>
-      <form method="POST" action="<?php $_SERVER["PHP_SELF"] ?>">
+      <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
         <div class="modal-body">
           <label class="modal-label">Nom du badge</label>
           <?php if (isset($err["nom"])) echo "<div class='err'>" . $err["nom"] . "</div>" ?>

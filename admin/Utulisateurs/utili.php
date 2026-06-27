@@ -89,12 +89,18 @@ $suspendus = $db->query("SELECT COUNT(*) FROM utilisateurs WHERE statut = 'suspe
         </svg>
         <input name="q" class="header-search-input" type="search" placeholder="Rechercher un stagiaire...">
       </form>
-      <div class="user-pill" data-email="<?php echo $email; ?>">
+      <div class="user-pill" data-email="<?php echo $_SESSION['email']; ?>">
         <div class="user-info">
-          <div class="user-name">Admin</div>
-          <div class="user-role">Administrateur</div>
+          <div class="user-name"><?php echo $_SESSION['nom'] . ' ' . $_SESSION['prenom']; ?></div>
+          <div class="user-role"><?php echo $_SESSION['role']; ?></div>
         </div>
-        <div class="user-avatar">Ad</div>
+        <?php
+        if ($_SESSION['photo']) {
+          echo '<img class="user-avatar" src="../../pagelogin/photo/' . $_SESSION['photo'] . '" alt="Photo de profil">';
+        } else {
+          echo '<div class="user-avatar">' . substr($_SESSION['nom'], 0, 1) . substr($_SESSION['prenom'], 0, 1) . '</div>';
+        }
+        ?>
       </div>
     </header>
 

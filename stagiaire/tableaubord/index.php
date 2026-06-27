@@ -262,7 +262,7 @@ try {
               else $timeAgo = "il y a " . floor($diff / 604800) . " sem";
               $statusClass = match ($d['status']) {
                 'resolu' => 'resolu',
-                'ferme' => 'ferme',
+                'en_coure' => 'en_coure',
                 default => 'ouvert'
               };
             ?>

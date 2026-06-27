@@ -130,12 +130,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" />
           </div>
           <div class="control-group right-group">
+          <div class="control-group right-group">
             <select name="filiere">
               <option value="all">Toutes les filières</option>
-              <option value="DEV" <?php echo (isset($_GET['filiere']) && $_GET['filiere'] == 'DEV') ? 'selected' : ''; ?>>
-                DEV</option>
-              <option value="CYBERSEC" <?php echo (isset($_GET['filiere']) && $_GET['filiere'] == 'CYBERSEC') ? 'selected' : ''; ?>>CYBERSEC</option>
-              <option value="DATA" <?php echo (isset($_GET['filiere']) && $_GET['filiere'] == 'DATA') ? 'selected' : ''; ?>>DATA</option>
+              <?php
+              include_once("../../database/config.php");
+              $filieres = $db->query("SELECT DISTINCT filiere FROM utilisateurs WHERE filiere IS NOT NULL AND filiere != '' ORDER BY filiere")->fetchAll(PDO::FETCH_COLUMN);
+              foreach ($filieres as $f): ?>
+                <option value="<?= htmlspecialchars($f) ?>" <?= (isset($_GET['filiere']) && $_GET['filiere'] === $f) ? 'selected' : '' ?>><?= htmlspecialchars($f) ?></option>
+              <?php endforeach; ?>
             </select>
 
             <button type="submit" class="filter-btn" id="filterBtn">
@@ -159,8 +162,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
       <div class="demandes-list">
         <?php
-        include("../../database/config.php");
         try {
+          if (!isset($db)) include("../../database/config.php");
           $searchCond = '';
           $filiereCond = '';
           $params = [];
@@ -169,8 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $s = '%' . $_GET['search'] . '%';
             $params = [$s, $s, $s];
           }
-          $filiereList = ['DEV', 'CYBERSEC', 'DATA'];
-          if (!empty($_GET['filiere']) && $_GET['filiere'] !== 'all' && in_array($_GET['filiere'], $filiereList)) {
+          if (!empty($_GET['filiere']) && $_GET['filiere'] !== 'all' && in_array($_GET['filiere'], $filieres)) {
             $filiereCond = " AND u.filiere = ?";
             $params[] = $_GET['filiere'];
           }

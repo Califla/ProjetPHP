@@ -28,7 +28,7 @@ $showModifier = false;
 
 $searchFilter = isset($_GET['q']) ? trim($_GET['q']) : '';
 $statusFilter = isset($_GET['status']) ? $_GET['status'] : '';
-$statusWhitelist = ['', 'ouvert', 'resolu', 'ferme'];
+$statusWhitelist = ['', 'ouvert', 'resolu'];
 if (!in_array($statusFilter, $statusWhitelist)) $statusFilter = '';
 ?>
 <!DOCTYPE html>
@@ -125,7 +125,7 @@ if (!in_array($statusFilter, $statusWhitelist)) $statusFilter = '';
             <option value="">Tous les statuts</option>
             <option value="ouvert" <?= $statusFilter === 'ouvert' ? 'selected' : '' ?>>Ouvert</option>
             <option value="resolu" <?= $statusFilter === 'resolu' ? 'selected' : '' ?>>Résolu</option>
-            <option value="ferme" <?= $statusFilter === 'ferme' ? 'selected' : '' ?>>Fermé</option>
+            <option value="resolu" <?= $statusFilter === 'resolu' ? 'selected' : '' ?>>Résolu</option>
           </select>
           <button type="submit" class="filter-btn" id="filterBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -146,7 +146,7 @@ if (!in_array($statusFilter, $statusWhitelist)) $statusFilter = '';
             || mb_strpos(mb_strtolower($d['tags'] ?? ''), $s) !== false;
         });
       }
-      if ($statusFilter === 'resolu' || $statusFilter === 'ferme') {
+      if ($statusFilter === 'resolu') {
         $aides_filtrees = [];
       } elseif ($statusFilter === 'ouvert') {
         $aides_filtrees = array_filter($aides_filtrees, function($d) use ($statusFilter) {

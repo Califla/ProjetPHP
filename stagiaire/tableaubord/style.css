@@ -122,6 +122,7 @@
       flex-shrink: 0;
     }
     .badge-status.resolu  { background: #dcfce7; color: #15803d; }
+    .badge-status.en_coure  { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
     .badge-status.ouvert  { background: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; }
 
     /* HELP BTN */

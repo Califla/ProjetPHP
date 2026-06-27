@@ -1,6 +1,8 @@
 <?php
 $msg = $_GET['msg'] ?? '';
 $error = $_GET['error'] ?? '';
+$rememberedEmail = $_COOKIE['remember_email'] ?? '';
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   extract($_POST);
   $err = [];
@@ -21,24 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       } elseif ($user['statut'] === 'en_attente') {
         header("Location: index.php?error=Votre compte est en attente de validation. Veuillez patienter ou contacter l'administrateur.");
         exit();
-
       }
-      if ($user["role"] === "stagiaire" || $user["role"] === "mentor") {
-        $_SESSION['id_user'] = $user['id_user'];
-        $_SESSION['nom'] = $user['nom'];
-        $_SESSION['prenom'] = $user['prenom'];
-        $_SESSION['email'] = $user['email'];
-        $_SESSION['role'] = $user['role'];
-        $_SESSION['score'] = $user['score'];
-        $_SESSION['photo'] = $user['photo'];
-        $_SESSION['filiere'] = $user['filiere'];
-        $_SESSION['statut'] = $user['statut'];
-        $_SESSION['note_moyenne'] = $user['note_moyenne'];
-        $_SESSION['date_inscription'] = $user['date_inscription'];
-        header("Location: ../../stagiaire/tableaubord/index.php?msg=Connexion réussie !");
-        exit();
-      }
-     elseif ($user["role"] === "admin" || $user["role"] === "formateur") {
+      if (!empty($remember))
+        setcookie('remember_email', $email, time() + 86400 * 30, '/', '', false, true);
+      else
+        setcookie('remember_email', '', time() - 3600, '/', '', false, true);
       $_SESSION['id_user'] = $user['id_user'];
       $_SESSION['nom'] = $user['nom'];
       $_SESSION['prenom'] = $user['prenom'];
@@ -48,19 +37,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $_SESSION['photo'] = $user['photo'];
       $_SESSION['filiere'] = $user['filiere'];
       $_SESSION['statut'] = $user['statut'];
+      $_SESSION['note_moyenne'] = $user['note_moyenne'];
       $_SESSION['date_inscription'] = $user['date_inscription'];
-      if ($user["role"] === "admin") {
-        header("Location: ../../admin/tableaubord/table.php?msg=Connexion réussie !");
-      } else {
-        header("Location: ../../formateur/tableaubord/tableaubord.php?msg=Connexion réussie !");
-      }
+      $redirect = match ($user['role']) {
+        'stagiaire','mentor' => '../../stagiaire/tableaubord/index.php',
+        'admin' => '../../admin/tableaubord/table.php',
+        'formateur' => '../../formateur/tableaubord/tableaubord.php'
+      };
+      header("Location: $redirect?msg=Connexion réussie !");
+      exit();
+    } else {
+      header("Location: index.php?error=Email ou mot de passe incorrect.");
       exit();
     }
-  } else {
-    header("Location: index.php?error=Email ou mot de passe incorrect.");
-    exit();
   }
-}
 }
 ?>
 <!DOCTYPE html>
@@ -140,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
           <div class="field">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="votre.email@ismo.ma" autocomplete="email" />
+            <input type="email" id="email" name="email" placeholder="votre.email@ismo.ma" autocomplete="email" value="<?= htmlspecialchars($rememberedEmail) ?>" />
             <?php if (isset($err['email']))
               echo '<div style="color: red;">' . htmlspecialchars($err['email']) . '</div>'; ?>
           </div>
@@ -163,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
       <div class="row-options">
         <label class="remember">
-          <input type="checkbox" id="remember" />
+          <input type="checkbox" name="remember" id="remember" <?= $rememberedEmail ? 'checked' : '' ?> />
           <span>Se souvenir de moi</span>
         </label>
         <a href="#" class="forgot">Mot de passe oublié ?</a>

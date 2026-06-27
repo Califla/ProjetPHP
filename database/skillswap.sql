@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `filiere` VARCHAR(100) DEFAULT NULL,
   `statut` ENUM('actif','en_attente','suspendu') DEFAULT NULL,
   `date_inscription` DATETIME DEFAULT NULL,
-  `note_moyenne` INT NOT NULL DEFAULT 0,
+  `note_moyenne` DECIMAL(3,1) NOT NULL DEFAULT 0.0,
   PRIMARY KEY (`id_user`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

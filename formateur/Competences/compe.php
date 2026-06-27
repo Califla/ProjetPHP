@@ -243,7 +243,7 @@ $showModalModif = $showModalModif || ($editCompetence && !isset($_POST['modif'])
         <h2>Ajouter une compétence</h2>
         <button class="modal-close" onclick="fermerModal('modalAjout')">&times;</button>
       </div>
-      <form method="POST" action="<?php $_SERVER["PHP_SELF"] ?>">
+      <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
         <div class="modal-body">
           <label class="modal-label">Nom de la compétence</label>
           <?php if (isset($err["nom"]))
@@ -278,7 +278,7 @@ $showModalModif = $showModalModif || ($editCompetence && !isset($_POST['modif'])
         <h2>Modifier la compétence</h2>
         <button class="modal-close" onclick="fermerModal('modalModif')">&times;</button>
       </div>
-      <form method="POST" action="<?php $_SERVER["PHP_SELF"] ?>">
+      <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
         <input type="hidden" name="id_competence"
           value="<?= $editCompetence ? $editCompetence['id_competence'] : '' ?>">
         <div class="modal-body">
