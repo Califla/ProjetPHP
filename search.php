@@ -5,7 +5,7 @@ $users = [];
 if ($q !== '') {
   try {
     include 'database/config.php';
-    $stmt = $db->prepare("SELECT id_user, nom, prenom, email, role, filiere, photo FROM utilisateurs WHERE role != 'admin' AND (CONCAT(nom, ' ', prenom) LIKE ? OR role LIKE ? OR filiere LIKE ?) LIMIT 30");
+    $stmt = $db->prepare("SELECT id_user, nom, prenom, email, role, filiere, photo FROM utilisateurs WHERE role != 'admin' and `statut` !='suspendu' AND (CONCAT(nom, ' ', prenom) LIKE ? OR role LIKE ? OR filiere LIKE ?) LIMIT 30");
     $like = '%' . $q . '%';
     $stmt->execute([$like, $like, $like]);
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -48,7 +48,7 @@ if ($q !== '') {
       <div class="sidebar-logo"><span>ISMO-SkillSwap</span></div>
       <nav class="sidebar-nav">
         <?php if (isset($_SESSION['role'])): ?>
-          <div class="nav-item" onclick="location.href='<?= $_SESSION['role'] === 'admin' ? 'admin/tableaubord/table.php' : ($_SESSION['role'] === 'formateur' ? 'formateur/tableaubord/tableaubord.php' : 'stagiaire/tableaubord/index.php') ?>'">
+          <div class="nav-item" onclick="location.href='<?= ($_SESSION['role'] === 'formateur' ? 'formateur/tableaubord/tableaubord.php' : 'stagiaire/tableaubord/index.php') ?>'">
             <span class="nav-icon">🏠</span><span>Tableau de bord</span>
           </div>
         <?php endif; ?>

@@ -21,7 +21,7 @@ try {
   $competencesVal->execute([$id_user]);
   $competencesVal = $competencesVal->fetchColumn();
 
-  $noteMoy = $db->prepare("SELECT note_moyenne FROM utilisateurs WHERE id_user = ?");
+  $noteMoy = $db->prepare("SELECT note_moyenne FROM utilisateurs WHERE id_user = ? and `role` != 'admin'");
   $noteMoy->execute([$id_user]);
   $noteMoy = $noteMoy->fetchColumn();
 
@@ -161,7 +161,7 @@ try {
 
       <div class="stat-card">
         <div class="stat-header">
-          <span class="stat-label">Points / Rang</span>
+          <span class="stat-label">Points</span>
           <svg class="stat-icon" viewBox="0 0 24 24">
             <polyline points="8 6 2 12 8 18" />
             <polyline points="16 6 22 12 16 18" />
@@ -170,7 +170,6 @@ try {
         <div class="stat-value"><?php echo $_SESSION['score']; ?></div>
 
       </div>
-
       <div class="stat-card">
         <div class="stat-header">
           <span class="stat-label">Note moyenne</span>

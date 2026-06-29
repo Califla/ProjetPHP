@@ -169,6 +169,9 @@ try {
                 $start_x = 60;
                 $chart_h = 300;
                 $base_y = 330;
+                if (empty($competences)){
+                  echo "Aucune donnée pour le moment";
+                }
                 foreach ($competences as $i => $comp):
                   $bar_h = round(($comp['total'] / $max_comp) * 250);
                   $x = $start_x + $i * $gap;

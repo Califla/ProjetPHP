@@ -113,7 +113,7 @@ $attributed_count = count($attributed_badges);
       <div class="pub-card">
         <div class="pub-avatar">
           <?php if ($photo): ?>
-            <img src="../pagelogin/photo/<?= htmlspecialchars($photo) ?>" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+            <img src="../pagelogin/photo/<?= htmlspecialchars($photo) ?>" alt="" style="width: 80px; height: 80px; object-fit:cover; border-radius:50%;">
           <?php else: ?>
             <?= $initials ?>
           <?php endif; ?>

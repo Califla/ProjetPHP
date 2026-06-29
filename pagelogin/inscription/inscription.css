@@ -52,6 +52,7 @@ body {
   display: flex;
   width: 100%;
   min-height: 100vh;
+   align-items: stretch;
 }
 
 .brand-wrapper {
@@ -70,9 +71,12 @@ body {
   flex-direction: column;
   justify-content: space-between;
   padding: 48px 52px;
-  position: relative;
+  position: sticky;
+  top: 0;
+  height: 100vh;
   overflow: hidden;
 }
+
 
 .left::before {
   content: '';
@@ -170,10 +174,11 @@ body {
   width: 58%;
   background: var(--gray-bg);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: 40px 24px;
   position: relative;
+  align-items: flex-start;
 }
 
 .step {
@@ -618,7 +623,7 @@ body {
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid var(--white);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .photo-upload.has-image .photo-upload-content {
@@ -684,4 +689,13 @@ body {
   .row-2 {
     grid-template-columns: 1fr;
   }
+}
+
+html,
+body {
+  background: var(--gray-bg);
+}
+
+body {
+  min-height: 100vh;
 }

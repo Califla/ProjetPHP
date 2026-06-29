@@ -101,14 +101,6 @@ try{
           <span class="stat-label">Publications signalées</span>
           <strong><?php echo count($result); ?></strong>
         </article>
-        <article class="stat-card">
-          <span class="stat-label">Approuvées ce mois</span>
-          <strong>12</strong>
-        </article>
-        <article class="stat-card danger">
-          <span class="stat-label">Supprimées ce mois</span>
-          <strong>3</strong>
-        </article>
       </div>
       <div class="moderation-items">
         <?php if (count($result) == 0): ?>

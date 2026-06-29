@@ -16,7 +16,7 @@ try {
 
     $competencesAValider = $db->query("SELECT vc.*, u.nom, u.prenom, c.nom AS nom_competence, vc.niveau FROM validation_competence vc JOIN utilisateurs u ON vc.id_user = u.id_user JOIN competences c ON vc.id_competence = c.id_competence WHERE vc.status='en_attente' ORDER BY vc.date_demande DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
 
-    $topStagiaires = $db->query("SELECT nom, prenom, score, filiere FROM utilisateurs WHERE role='stagiaire' AND statut='actif' ORDER BY score DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
+    $topStagiaires = $db->query("SELECT nom, prenom, score, filiere FROM utilisateurs WHERE statut='actif' AND (role='stagiaire' OR role='mentor') ORDER BY score DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
 
     $competencesDemandees = $db->query("SELECT c.nom, COUNT(vc.id_competence) AS total FROM competences c JOIN validation_competence vc ON vc.id_competence = c.id_competence GROUP BY c.id_competence ORDER BY total DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
     $maxDemande = $competencesDemandees ? max(array_column($competencesDemandees, 'total')) : 1;
